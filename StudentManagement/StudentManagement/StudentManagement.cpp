@@ -288,9 +288,9 @@ int CStudentManagement::delData(CStudent* List)	 //6.인원 삭제
 }
 int CStudentManagement::sortData(CStudent** List, bool isUp)	 //7.인원 정렬
 {
-	int i = 0,j=0, Count = 0;
+	int i = 0,j=0, indexMin = 0, Count = 0;
 	int input = 0;
-	CStudent* temp;
+	CStudent* temp1,*temp2;
 	CStudent* Current = NULL;
 	CStudent hold;
 	CStudent temp_for_append;
@@ -300,7 +300,7 @@ int CStudentManagement::sortData(CStudent** List, bool isUp)	 //7.인원 정렬
 	if (List != NULL)
 		Count = m_sll_list.countNodes(*List);
 
-	temp = (CStudent*)malloc(sizeof(CStudent)*Count);
+	//temp = (CStudent*)malloc(sizeof(CStudent)*Count);
 
 	
 	if (List == NULL) {
@@ -318,7 +318,34 @@ int CStudentManagement::sortData(CStudent** List, bool isUp)	 //7.인원 정렬
 		printf("\n총점으로 오름차순 정렬합니다.\n");
 	else
 		printf("\n총점으로 내림차순 정렬합니다.\n");
+	
+	//m_sll_list.findNode(*List, j);
 
+	for (i = 0; i < Count - 1; i++)
+	{
+		indexMin = i;
+		for (j = i + 1; j < Count; j++)
+		{
+			if (m_sll_list.findNode(*List, j)->total < m_sll_list.findNode(*List, indexMin)->total)
+			{
+				indexMin = j;
+			}
+		}
+
+		/*
+		temp = list[indexMin];
+		list[indexMin] = list[i];
+		list[i] = temp;
+		*/
+		temp1 = m_sll_list.findNode(*List, j);
+		temp2 = m_sll_list.findNode(*List, indexMin);
+		m_sll_list.swap(&temp1, &temp2);
+	}
+
+
+
+
+	/*
 	for (i = 0; i<Count; i++)
 	{
 		Current = m_sll_list.findNode(*List, i);
@@ -365,11 +392,11 @@ int CStudentManagement::sortData(CStudent** List, bool isUp)	 //7.인원 정렬
 		NewNode = m_sll_list.createNode(temp_for_append);
 		m_sll_list.appendNode(List, NewNode);
 	}
-
+	*/
 	g_iMenuNum = FIRSTSCREEN;
 
 
-	free(temp);
+	//free(temp);
 
 	return 0;
 }

@@ -23,8 +23,37 @@ public:
 	void  removeNode(T** Head, T* Remove);
 	T* findNode(T* Head, int Location) const;
 	int   countNodes(T* Head) const;
-
+	T* swap(T** node1, T** node2);
 };
+
+template <typename T>
+T* CList<T>::swap(T** node1, T** node2) {
+	T* temp;
+	temp = (*node1)->NextNode;
+	(*node1)->NextNode = (*node2)->NextNode;
+	(*node2)->NextNode = temp;
+
+	if ((*node1)->NextNode != NULL)
+		(*node1)->NextNode->PrevNode = (*node1);
+
+	if ((*node2)->NextNode != NULL)
+		(*node2)->NextNode->PrevNode = (*node2);
+
+	temp = (*node1)->PrevNode;
+	(*node1)->PrevNode = (*node2)->PrevNode;
+	(*node2)->PrevNode = temp;
+
+	if ((*node1)->PrevNode != NULL)
+		(*node1)->PrevNode->NextNode = (*node1);
+
+	if ((*node2)->PrevNode == NULL)
+		return (*node2);
+
+	(*node2)->PrevNode->NextNode = (*node2);
+
+	return (*node1);
+}
+
 template <typename T>
 T* CList<T>::createNode(T NewData)
 {
