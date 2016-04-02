@@ -1,2 +1,2 @@
 #wooden_dummy
-a wooden dummy for programming excercise
+an wooden dummy for programming excercise
