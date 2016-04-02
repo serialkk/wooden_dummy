@@ -25,7 +25,15 @@
 *.log
 *.sql
 *.sqlite
+
+# VS generated files #
+######################
 *.sdf
+*.obj
+*.ilk
+*.pdb
+*.tlog
+*.lastbuildstate
 
 # OS generated files #
 ######################
