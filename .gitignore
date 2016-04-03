@@ -35,6 +35,8 @@
 *.tlog
 *.lastbuildstate
 *.opensdf
+*.suo
+*.idb
 
 # OS generated files #
 ######################
