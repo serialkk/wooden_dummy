@@ -146,10 +146,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="StudentManagement\HashTable.cpp" />
     <ClCompile Include="StudentManagement\list.cpp" />
     <ClCompile Include="StudentManagement\StudentManagement.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="StudentManagement\HashTable.h" />
     <ClInclude Include="StudentManagement\list.h" />
     <ClInclude Include="StudentManagement\StudentManagement.h" />
   </ItemGroup>

@@ -2,7 +2,7 @@
 #define HOMEWORK9
 
 #include "list.h"
-
+#include "HashTable.h"
 
 //////////////////////////////////////////////
 // 객체 및 배열 할당과 삭제 및 소멸 매크로
@@ -70,7 +70,9 @@ private:
 	CStudent* m_List;
 	CStudent* m_Current ;
 
-	CList<CStudent> m_sll_list;
+	CList<CStudent> m_list_manage;
+
+	CHashTable* m_HT;
 
 	//////멤버함수
 private:

@@ -32,7 +32,7 @@ void CStudentManagement::saveToFile(CStudent* List) const {
 	
 	FILE *f;
 
-	Count = m_sll_list.countNodes(List);
+	Count = m_list_manage.countNodes(List);
 
 	f = fopen("StudentData.dat", "wt");
 
@@ -41,7 +41,7 @@ void CStudentManagement::saveToFile(CStudent* List) const {
 	
 	for (i = 0; i<Count; i++)
 	{
-		Current = m_sll_list.findNode(List, i);
+		Current = m_list_manage.findNode(List, i);
 		
 		if(i!=0)
 			strcat(buffer, "\n");
@@ -86,8 +86,8 @@ void CStudentManagement::loadToFile(CStudent** List) {
 		fgets(pBuffer, 256, fp_src);
 		sscanf(pBuffer, "%s\t%d\t%d\t%d\t%d\t%d\t%d\t%d", temp.Name, &temp.eng, &temp.math, &temp.sci, &temp.total, &temp.ranks, &temp.classroom, &temp.num);
 
-		NewNode = m_sll_list.createNode(temp);
-		m_sll_list.appendNode(List, NewNode);
+		NewNode = m_list_manage.createNode(temp);
+		m_list_manage.appendNode(List, NewNode);
 		
 	}
 
@@ -125,7 +125,7 @@ void CStudentManagement::printResult(CStudent* List) const {
 	CStudent* Current = NULL;
 
 	if(List!=NULL)
-		Count = m_sll_list.countNodes(List);
+		Count = m_list_manage.countNodes(List);
 
 
 	printf("=====================결과===================\n");
@@ -136,7 +136,7 @@ void CStudentManagement::printResult(CStudent* List) const {
 
 	for (i = 0; i<Count; i++)
 	{
-		Current = m_sll_list.findNode(List, i);
+		Current = m_list_manage.findNode(List, i);
 
 		if (Current != NULL)
 			cout<<*Current<<endl;
@@ -211,8 +211,8 @@ void CStudentManagement::inputMan(CStudent** List)	 //5.인원 추가
 	std::cin >> temp;
 
 
-	NewNode = m_sll_list.createNode(temp);
-	m_sll_list.appendNode(List, NewNode);
+	NewNode = m_list_manage.createNode(temp);
+	m_list_manage.appendNode(List, NewNode);
 
 
 	g_iMenuNum = FIRSTSCREEN;
@@ -244,8 +244,8 @@ void CStudentManagement::inputRandomMan(CStudent** List)	 //5.인원 추가
 	//std::cin >> temp;
 
 
-	NewNode = m_sll_list.createNode(temp);
-	m_sll_list.appendNode(List, NewNode);
+	NewNode = m_list_manage.createNode(temp);
+	m_list_manage.appendNode(List, NewNode);
 
 
 	g_iMenuNum = FIRSTSCREEN;
@@ -275,8 +275,8 @@ int CStudentManagement::delData(CStudent* List)	 //6.인원 삭제
 
 	if (Current != NULL)
 	{
-		m_sll_list.removeNode(&List, Current);
-		m_sll_list.destroyNode(Current);
+		m_list_manage.removeNode(&List, Current);
+		m_list_manage.destroyNode(Current);
 
 		printf("\n삭제 되었습니다.\n");
 	}
@@ -296,9 +296,8 @@ int CStudentManagement::sortData(CStudent** List, bool isUp)	 //7.인원 정렬
 	CStudent temp_for_append;
 	CStudent* NewNode = NULL;
 
-
 	if (List != NULL)
-		Count = m_sll_list.countNodes(*List);
+		Count = m_list_manage.countNodes(*List);
 
 	//temp = (CStudent*)malloc(sizeof(CStudent)*Count);
 
@@ -321,15 +320,23 @@ int CStudentManagement::sortData(CStudent** List, bool isUp)	 //7.인원 정렬
 	
 	//m_sll_list.findNode(*List, j);
 
-	for (i = 0; i < Count - 1; i++)
+	for (i = 0; i < Count -1 ; i++)
 	{
 		indexMin = i;
-		for (j = i + 1; j < Count; j++)
+		for (j = i + 1; j < Count ; j++)
 		{
-			if (m_sll_list.findNode(*List, j)->total < m_sll_list.findNode(*List, indexMin)->total)
-			{
-				indexMin = j;
+
+			if (input == 2) {
+				//오름차순
+				if (m_list_manage.findNode(*List, j)->total < m_list_manage.findNode(*List, indexMin)->total)
+					indexMin = j;
 			}
+			else {
+				//내림차순
+				if (m_list_manage.findNode(*List, j)->total > m_list_manage.findNode(*List, indexMin)->total)
+					indexMin = j;
+			}
+
 		}
 
 		/*
@@ -337,12 +344,11 @@ int CStudentManagement::sortData(CStudent** List, bool isUp)	 //7.인원 정렬
 		list[indexMin] = list[i];
 		list[i] = temp;
 		*/
-		temp1 = m_sll_list.findNode(*List, j);
-		temp2 = m_sll_list.findNode(*List, indexMin);
-		m_sll_list.swap(&temp1, &temp2);
+		temp1 = m_list_manage.findNode(*List, i);
+		temp2 = m_list_manage.findNode(*List, indexMin);
+
+		m_list_manage.swap(&temp1, &temp2);
 	}
-
-
 
 
 	/*
@@ -402,6 +408,7 @@ int CStudentManagement::sortData(CStudent** List, bool isUp)	 //7.인원 정렬
 }
 CStudent* CStudentManagement::findMan(CStudent* List) const	 //8.인원 검색
 {
+	/*
 	int i = 0, Count = 0;
 
 	char name[10] = { 0 };   //이름
@@ -421,15 +428,17 @@ CStudent* CStudentManagement::findMan(CStudent* List) const	 //8.인원 검색
 	scanf("%s", name);
 	
 	if (List != NULL)
-		Count = m_sll_list.countNodes(List);
+		Count = m_list_manage.countNodes(List);
 
 	for (i = 0; i<Count; i++)
 	{
-		Current = m_sll_list.findNode(List, i);
+		Current = m_list_manage.findNode(List, i);
 
 		if (strcmp(Current->Name, name) == 0)
 			return Current;
 	}
+	return 0;
+	*/
 	return 0;
 }
 CStudent* CStudentManagement::eraseAll(CStudent* List)	 //10.데이터 삭제
@@ -438,16 +447,16 @@ CStudent* CStudentManagement::eraseAll(CStudent* List)	 //10.데이터 삭제
 	int   Count = 0;
 	CStudent* Current = NULL;
 
-	Count = m_sll_list.countNodes(List);
+	Count = m_list_manage.countNodes(List);
 
 	for (i = 0; i<Count; i++)
 	{
-		Current = m_sll_list.findNode(List, 0);
+		Current = m_list_manage.findNode(List, 0);
 
 		if (Current != NULL)
 		{
-			m_sll_list.removeNode(&List, Current);
-			m_sll_list.destroyNode(Current);
+			m_list_manage.removeNode(&List, Current);
+			m_list_manage.destroyNode(Current);
 		}
 	}
 
@@ -590,7 +599,7 @@ void CStudentManagement::printResult(CStudent& List) const {
 	CStudent* Current = NULL;
 
 	//if (List != NULL)
-		Count = m_sll_list.countNodes(&List);
+		Count = m_list_manage.countNodes(&List);
 
 
 	printf("=====================결과===================\n");
@@ -601,7 +610,7 @@ void CStudentManagement::printResult(CStudent& List) const {
 
 	for (i = 0; i<Count; i++)
 	{
-		Current = (CStudent*)m_sll_list.findNode(&List, i);
+		Current = (CStudent*)m_list_manage.findNode(&List, i);
 
 		if (Current != NULL)
 			printf("%s\t%d\t%d\t%d\t%d\t%d\t%d\t%d\n", Current->Name, Current->eng, Current->math, Current->sci, Current->total, Current->ranks, Current->classroom, Current->num);
@@ -620,7 +629,7 @@ void CStudentManagement::saveToFile(CStudent& List) const {
 	char buffer2[256] = { 0 };
 	FILE *f;
 
-	Count = m_sll_list.countNodes(&List);
+	Count = m_list_manage.countNodes(&List);
 
 	f = fopen("StudentData.dat", "wt");
 
@@ -629,7 +638,7 @@ void CStudentManagement::saveToFile(CStudent& List) const {
 
 	for (i = 0; i<Count; i++)
 	{
-		Current = m_sll_list.findNode(&List, i);
+		Current = m_list_manage.findNode(&List, i);
 
 		if (i != 0)
 			strcat(buffer, "\n");
