@@ -37,6 +37,7 @@
 *.opensdf
 *.suo
 *.idb
+*.obj.enc
 
 # OS generated files #
 ######################
