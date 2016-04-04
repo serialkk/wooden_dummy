@@ -351,54 +351,6 @@ int CStudentManagement::sortData(CStudent** List, bool isUp)	 //7.인원 정렬
 	}
 
 
-	/*
-	for (i = 0; i<Count; i++)
-	{
-		Current = m_sll_list.findNode(*List, i);
-
-		if (Current != NULL)
-			memcpy(&temp[i], Current, sizeof(CStudent));
-
-	}
-
-	//Bubble Sort
-	for (i = 0; i < Count - 1; i++) {
-		for (j = 0; j < Count - 1 - i; j++) {
-
-			if (input == 2) {
-				if (temp[j].total > temp[j + 1].total) {
-
-					memcpy(&hold, &temp[j], sizeof(CStudent));
-
-					memcpy(&temp[j], &temp[j + 1], sizeof(CStudent));
-
-					memcpy(&temp[j + 1], &hold, sizeof(CStudent));
-				}
-			}
-			else {
-				if (temp[j].total < temp[j + 1].total) {
-
-					memcpy(&hold, &temp[j], sizeof(CStudent));
-
-					memcpy(&temp[j], &temp[j + 1], sizeof(CStudent));
-
-					memcpy(&temp[j + 1], &hold, sizeof(CStudent));
-				}
-			}
-		}
-	}
-
-	printf("\n정렬 완료.\n");
-
-	*List = eraseAll(*List);
-
-	for (i = 0; i < Count; i++) {
-		memset(&temp_for_append, 0, sizeof(CStudent));
-		memcpy(&temp_for_append, &temp[i], sizeof(CStudent));
-		NewNode = m_sll_list.createNode(temp_for_append);
-		m_sll_list.appendNode(List, NewNode);
-	}
-	*/
 	g_iMenuNum = FIRSTSCREEN;
 
 
@@ -408,6 +360,48 @@ int CStudentManagement::sortData(CStudent** List, bool isUp)	 //7.인원 정렬
 }
 CStudent* CStudentManagement::findMan(CStudent* List) const	 //8.인원 검색
 {
+	int i = 0, Count = 0;
+
+	char name[10] = { 0 };   //이름
+	int eng = 0;            //영어
+	int math = 0;           //수학
+	int sci = 0;            //과학
+	int classroom = 0;      //반번호
+
+	CStudent* Current = NULL;
+	CStudent* temp = NULL;
+
+	CHashTable<CStudent>* hash = NULL;
+
+	if (List == NULL) {
+		printf("\n데이터가 없습니다\n");
+		return 0;
+	}
+
+	printf("이름으로 검색 가능합니다. 이름을 입력해주세요 > ");
+	scanf("%s", name);
+
+
+	hash = hash->CreateHashTable(10);
+	/////////////////////////////////
+	
+	if (List != NULL)
+	Count = m_list_manage.countNodes(List);
+
+	for (i = 0; i<Count; i++)
+	{
+		temp = m_list_manage.findNode(List, i);
+		hash->Set(hash, &temp);
+	}
+	
+
+	return hash->Get(hash, name);
+	
+	/////////////////////////////////
+	hash->DestroyHashTable(hash);
+
+	return 0;
+
 	/*
 	int i = 0, Count = 0;
 

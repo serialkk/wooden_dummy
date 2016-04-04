@@ -72,7 +72,7 @@ private:
 
 	CList<CStudent> m_list_manage;
 
-	CHashTable* m_HT;
+	CHashTable<CStudent>* m_HT;
 
 	//////¸â¹öÇÔ¼ö
 private:
