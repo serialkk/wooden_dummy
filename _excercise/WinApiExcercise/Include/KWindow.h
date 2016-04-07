@@ -1,7 +1,6 @@
 #pragma once
 
-#include <windows.h>
-#include <tchar.h>
+#include "KStd.h"
 class KWindow
 {
 public:
