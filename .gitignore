@@ -28,16 +28,36 @@
 
 # VS generated files #
 ######################
-*.sdf
+*.cdf
+*.cache
 *.obj
 *.ilk
-*.pdb
+*.ipdb
+*.iobj
+*.resources
+*.tlb
+*.tli
+*.tlh
+*.tmp
+*.rsp
+*.pgc
+*.pgd
+*.meta
 *.tlog
-*.lastbuildstate
-*.opensdf
-*.suo
+*.manifest
+*.res
+*.pch
+*.exp
 *.idb
-*.obj.enc
+*.rep
+*.xdc
+*.pdb
+*_manifest.rc
+*.bsc
+*.sbr
+*.xml
+*.metagen
+*.bi
 
 # OS generated files #
 ######################
