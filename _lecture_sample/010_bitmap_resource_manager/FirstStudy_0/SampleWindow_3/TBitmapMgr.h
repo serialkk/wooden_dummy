@@ -1,14 +1,15 @@
 #pragma once
 #include "THashTable.h"
 #include "TBitmap.h"
-class TBitmapMgr
+class TBitmapMgr : public TSingleton<TBitmapMgr>
 {
 public:
-	static TBitmapMgr& GetInstance()
+	friend class TSingleton<TBitmapMgr>;
+	/*static TBitmapMgr& GetInstance()
 	{
 		static TBitmapMgr  mgr;
 		return mgr;
-	}
+	}*/
 public:
 	TLinkedList<TBitmap>   m_List;
 	THashTable<TBitmap>    m_Hash;
@@ -32,4 +33,4 @@ private:
 public:
 	~TBitmapMgr();
 };
-
+#define I_BimapMgr TBitmapMgr::GetInstance()

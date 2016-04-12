@@ -26,7 +26,7 @@ bool     TObject::Load(HDC hScreenDC,
 	HDC hOffScreenDC,
 	TCHAR* pFileName)
 {
-	m_pBitmap = TBitmapMgr::GetInstance().Load(pFileName);
+	m_pBitmap = I_BimapMgr.Load(pFileName);
 	if (m_pBitmap == NULL)
 	{
 		return false;

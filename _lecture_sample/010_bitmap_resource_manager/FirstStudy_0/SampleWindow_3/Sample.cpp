@@ -16,7 +16,7 @@ bool	 Sample::Init()
 	for (int iObj = 0; iObj < MAX_OBJECT; iObj++)
 	{
 		m_Object[iObj].SetPos(
-			rand()%m_rtClient.right/2,
+			rand() % m_rtClient.right/2,
 			rand() % m_rtClient.bottom/2, 
 			50.0f + rand() % 100);
 		m_Object[iObj].SetRect(46, 62, 68, 79);

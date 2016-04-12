@@ -2,7 +2,7 @@
 #include "TCore.h"
 #include "TEnemy.h"
 #include "THero.h"
-#define MAX_OBJECT 30
+#define MAX_OBJECT 10
 class Sample : public TCore
 {
 public:
