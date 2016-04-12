@@ -65,7 +65,8 @@ TBitmap*   TBitmapMgr::Load(TCHAR* pszLoadFile)
 	{
 		m_Hash.Insert(pData);
 		m_List.AddLink(pData);
-		return m_List.GetData(pData->m_szName);
+		//return m_List.GetData(pData->m_szName);
+		return m_Hash.Find(SaveName);
 	}	
 	return NULL;
 }

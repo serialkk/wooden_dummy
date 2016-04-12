@@ -8,6 +8,7 @@ public:
 	int					m_iLength;
 	int					Hash(TCHAR* pName);
 	void				Insert(T* newItem);
+	T*					Find(TCHAR* pszName);
 public:
 	THashTable(int iLength = 20);
 	~THashTable();
@@ -43,6 +44,13 @@ void THashTable<T>::Insert(T* newItem)
 	int iIndex = Hash(newItem->m_szName);
 	m_pArray[iIndex].AddLink(newItem);
 };
+template < class T >
+T* THashTable<T>::Find(TCHAR* pszName)
+{
+	int iIndex = Hash(pszName);
+	return m_pArray[iIndex].GetData(pszName);
+};
+
 template < class T >
 THashTable<T>::THashTable(int iLength)
 {

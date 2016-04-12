@@ -28,7 +28,7 @@ public:
 		TNode<TBitmap>* a,
 		TNode<TBitmap>* b);
 	TBitmap*  Find(TCHAR* pszName);
-private:
+public:
 	TBitmapMgr();
 public:
 	~TBitmapMgr();
