@@ -54,7 +54,6 @@
 *_manifest.rc
 *.bsc
 *.sbr
-*.xml
 *.metagen
 *.bi
 
