@@ -2,18 +2,17 @@
 #include <iostream>
 #include "tinyxml2.h"
 
-#include <Windows.h>
+//#include <Windows.h>
 #include <list>
 #include <tchar.h>
-
-#define _CRT_SECURE_NO_WARNINGS
+#include <memory.h>
 
 using namespace tinyxml2;
 using namespace std;
 
 class KImageRect {
 public:
-	char m_szName[MAX_PATH];
+	char m_szName[256];
 	int m_iX;
 	int m_iY;
 	int m_iWidth;
@@ -25,7 +24,7 @@ public:
 
 list<KImageRect> g_rtImage;
 
-/*
+
 void createSimpleDoc(const char* filename)
 {
 	XMLDocument doc;
@@ -79,17 +78,18 @@ void createMoreComplicatedDoc(const char* filename)
 
 	doc.SaveFile(filename); // writing document to a file
 }
-*/
+
 void dumpToStdout(const XMLAttribute* firstAttr, unsigned int indent)
 {
 	XMLAttribute* attr;
+	KImageRect temp;
 
 	for (attr = (XMLAttribute*)firstAttr; attr != 0; attr = (XMLAttribute*)attr->Next()) {
 		//for (int i = 0; i < indent + 1; i++) printf("    ");
 
 		//printf("%s: %s\n", attr->Name(), attr->Value());
 
-		KImageRect temp;
+		
 
 		if (strcmp(attr->Name(), "name") == 0) {
 			strcpy(temp.m_szName, attr->Value());
@@ -105,8 +105,13 @@ void dumpToStdout(const XMLAttribute* firstAttr, unsigned int indent)
 		}
 		else if (strcmp(attr->Name(), "height") == 0) {
 			temp.m_iHeight = atoi(attr->Value());
+
+			g_rtImage.push_back(temp);
+
+			memset(&temp, 0, sizeof(temp));
 		}
-		g_rtImage.push_back(temp);
+		else { continue; }
+		
 
 	}
 }
@@ -153,6 +158,8 @@ void dumpToStdout(const char* filename)
 
 int main() {
 	dumpToStdout("sheet.xml");
+
+	g_rtImage.max_size();
 
 	return 0;
 }
