@@ -2,10 +2,30 @@
 #include <iostream>
 #include "tinyxml2.h"
 
+#include <Windows.h>
+#include <list>
+#include <tchar.h>
+
+#define _CRT_SECURE_NO_WARNINGS
 
 using namespace tinyxml2;
 using namespace std;
 
+class KImageRect {
+public:
+	char m_szName[MAX_PATH];
+	int m_iX;
+	int m_iY;
+	int m_iWidth;
+	int m_iHeight;
+public:
+	KImageRect() {};
+	~KImageRect() {};
+};
+
+list<KImageRect> g_rtImage;
+
+/*
 void createSimpleDoc(const char* filename)
 {
 	XMLDocument doc;
@@ -59,14 +79,35 @@ void createMoreComplicatedDoc(const char* filename)
 
 	doc.SaveFile(filename); // writing document to a file
 }
-
+*/
 void dumpToStdout(const XMLAttribute* firstAttr, unsigned int indent)
 {
 	XMLAttribute* attr;
 
 	for (attr = (XMLAttribute*)firstAttr; attr != 0; attr = (XMLAttribute*)attr->Next()) {
-		for (int i = 0; i < indent + 1; i++) printf("    ");
-		printf("%s: %s\n", attr->Name(), attr->Value());
+		//for (int i = 0; i < indent + 1; i++) printf("    ");
+
+		//printf("%s: %s\n", attr->Name(), attr->Value());
+
+		KImageRect temp;
+
+		if (strcmp(attr->Name(), "name") == 0) {
+			strcpy(temp.m_szName, attr->Value());
+		}
+		else if (strcmp(attr->Name(), "x") == 0) {
+			temp.m_iX = atoi(attr->Value());
+		}
+		else if (strcmp(attr->Name(), "y") == 0) {
+			temp.m_iY = atoi(attr->Value());
+		}
+		else if (strcmp(attr->Name(), "width") == 0) {
+			temp.m_iWidth = atoi(attr->Value());
+		}
+		else if (strcmp(attr->Name(), "height") == 0) {
+			temp.m_iHeight = atoi(attr->Value());
+		}
+		g_rtImage.push_back(temp);
+
 	}
 }
 
@@ -85,11 +126,11 @@ void dumpToStdout(const XMLNode* parent, unsigned int indent = 0)
 	XMLText* text;
 
 	for (child = (XMLNode*)parent->FirstChild(); child != 0; child = (XMLNode*)child->NextSibling()) {
-		for (int i = 0; i < indent + 1; i++) printf("    ");
-		if (decl = child->ToDeclaration()) printf("<Declaration>");
-		if (elem = child->ToElement()) printf("<Element>");
-		if (comm = child->ToComment()) printf("<Comment>");
-		printf(" %s\n", child->Value());
+		//for (int i = 0; i < indent + 1; i++) printf("    ");
+		if (decl = child->ToDeclaration());// printf("<Declaration>");
+		if (elem = child->ToElement());// printf("<Element>");
+		if (comm = child->ToComment());// printf("<Comment>");
+		//printf(" %s\n", child->Value());
 		if (elem) {
 			attr = (XMLAttribute*)elem->FirstAttribute();
 			if (attr) dumpToStdout(attr, indent + 1);
@@ -102,11 +143,11 @@ void dumpToStdout(const char* filename)
 {
 	XMLDocument doc;
 	if (XML_NO_ERROR == doc.LoadFile(filename)) {
-		printf("\n<Document> %s:\n", filename);
+		//printf("\n<Document> %s:\n", filename);
 		dumpToStdout(&doc);
 	}
 	else {
-		printf("Failed to open: %s\n", filename);
+		//printf("Failed to open: %s\n", filename);
 	}
 }
 
