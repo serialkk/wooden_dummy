@@ -30,6 +30,7 @@
     <ClInclude Include="KObject.h" />
     <ClInclude Include="KSound.h" />
     <ClInclude Include="KMain.h" />
+    <ClInclude Include="KTinyXML2Parse.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="KBitmap.cpp" />
@@ -40,6 +41,7 @@
     <ClCompile Include="KObject.cpp" />
     <ClCompile Include="KSound.cpp" />
     <ClCompile Include="KMain.cpp" />
+    <ClCompile Include="KTinyXML2Parse.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{58F9280A-538B-4FCF-8BB6-DFF24F5DBAC3}</ProjectGuid>

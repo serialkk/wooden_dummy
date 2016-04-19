@@ -2,107 +2,16 @@
 #include "KSys.h"
 #include "KBitmapMgr.h"
 #include "KCollision.h"
+#include "KTinyXML2Parse.h"
 
-#include "tinyxml2.h"
-
-#include <list>
-#include <memory.h>
-
-using namespace tinyxml2;
-using namespace std;
-
-class KImageRect {
-public:
-	char m_szName[256];
-	int m_iX;
-	int m_iY;
-	int m_iWidth;
-	int m_iHeight;
-public:
-	KImageRect() {};
-	~KImageRect() {};
-};
-
-list<KImageRect> g_rtImage;
-
-void tinyxml2Parse(const XMLAttribute* firstAttr, unsigned int indent)
-{
-	XMLAttribute* attr;
-	KImageRect temp;
-
-	for (attr = (XMLAttribute*)firstAttr; attr != 0; attr = (XMLAttribute*)attr->Next()) {
-
-		if (strcmp(attr->Name(), "name") == 0) {
-			strcpy_s(temp.m_szName, attr->Value());
-		}
-		else if (strcmp(attr->Name(), "x") == 0) {
-			temp.m_iX = atoi(attr->Value());
-		}
-		else if (strcmp(attr->Name(), "y") == 0) {
-			temp.m_iY = atoi(attr->Value());
-		}
-		else if (strcmp(attr->Name(), "width") == 0) {
-			temp.m_iWidth = atoi(attr->Value());
-		}
-		else if (strcmp(attr->Name(), "height") == 0) {
-			temp.m_iHeight = atoi(attr->Value());
-
-			g_rtImage.push_back(temp);
-
-			memset(&temp, 0, sizeof(temp));
-		}
-		else { continue; }
-
-
-	}
-}
-
-
-
-void tinyxml2Parse(const XMLNode* parent, unsigned int indent = 0)
-{
-	if (!parent) return;
-
-	XMLNode* child;
-
-	XMLDeclaration* decl;
-	XMLElement* elem;
-	XMLComment* comm;
-	XMLAttribute* attr;
-	XMLText* text;
-
-	for (child = (XMLNode*)parent->FirstChild(); child != 0; child = (XMLNode*)child->NextSibling()) {
-
-		decl = child->ToDeclaration();
-		elem = child->ToElement();
-		comm = child->ToComment();
-
-		if (elem) {
-			attr = (XMLAttribute*)elem->FirstAttribute();
-			if (attr) tinyxml2Parse(attr, indent + 1);
-		}
-		tinyxml2Parse(child, indent + 1);
-	}
-}
-
-void tinyxml2Parse(const char* filename)
-{
-	TINYXMLDocument doc;
-	if (XML_NO_ERROR == doc.LoadFile(filename)) {
-		//printf("\n<Document> %s:\n", filename);
-		tinyxml2Parse(&doc);
-	}
-	else {
-		//printf("Failed to open: %s\n", filename);
-	}
-}
+extern list<KImageRect> g_rtImage;
 
 bool	 KMain::Init()
 {
-
+	//sheet.xml의 이미지 좌표 정보 파싱함.[start]
 	tinyxml2Parse("data/sheet.xml");
-
 	g_rtImage.max_size();
+	//sheet.xml의 이미지 좌표 정보 파싱함.[end]
 
 	m_pSound.Init();
 	int iIndex  = m_pSound.Load("../../data/OnlyLove.mp3");
@@ -114,12 +23,14 @@ bool	 KMain::Init()
 	m_BackGround.SetPos(0, 0, 0.0f);
 	m_BackGround.SetRect(0, 0, 800, 600);
 	m_Hero.SetPos(100, 100, 100.0f);
-	m_Hero.SetRect(90, 1, 42, 60);
+	
+	//m_Hero.SetRect(90, 1, 42, 60);
+	m_Hero.SetRect(g_rtImage.front().m_iX, g_rtImage.front().m_iY, g_rtImage.front().m_iWidth, g_rtImage.front().m_iHeight);
 
 	m_BackGround.Load(m_hScreenDC,
 		m_hOffScreenDC, L"../../data/bk.bmp");
 	m_Hero.Load(m_hScreenDC,
-		m_hOffScreenDC, L"../../data/Bitmap1.bmp");
+		m_hOffScreenDC, L"data/SpaceShooterRedux.bmp");
 
 	for (int iObj = 0; iObj < MAX_OBJECT; iObj++)
 	{
@@ -127,9 +38,10 @@ bool	 KMain::Init()
 			rand() % m_rtClient.right/2,
 			rand() % m_rtClient.bottom/2, 
 			50.0f + rand() % 100);
+		//m_Object[iObj].SetRect(46, 62, 68, 79);
 		m_Object[iObj].SetRect(46, 62, 68, 79);
 		m_Object[iObj].Load(m_hScreenDC,
-			m_hOffScreenDC, L"../../data/Bitmap1.bmp");
+			m_hOffScreenDC, L"data/SpaceShooterRedux.bmp");
 
 	}
 	return true;

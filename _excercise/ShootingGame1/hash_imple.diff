@@ -1,0 +1,132 @@
+diff --git a/_excercise/ShootingGame1/ShootingGame1/Include/KStd.h b/_excercise/ShootingGame1/ShootingGame1/Include/KStd.h
+index eae35d4..34c9f98 100644
+--- a/_excercise/ShootingGame1/ShootingGame1/Include/KStd.h
++++ b/_excercise/ShootingGame1/ShootingGame1/Include/KStd.h
+@@ -5,6 +5,7 @@
+ #include <map>
+ #include <list>
+ #include <string>
++
+ using namespace std;
+ 
+ struct KRect
+diff --git a/_excercise/ShootingGame1/ShootingGame1/ShootingGame/KCoreLib/KStd.h b/_excercise/ShootingGame1/ShootingGame1/ShootingGame/KCoreLib/KStd.h
+index eae35d4..34c9f98 100644
+--- a/_excercise/ShootingGame1/ShootingGame1/ShootingGame/KCoreLib/KStd.h
++++ b/_excercise/ShootingGame1/ShootingGame1/ShootingGame/KCoreLib/KStd.h
+@@ -5,6 +5,7 @@
+ #include <map>
+ #include <list>
+ #include <string>
++
+ using namespace std;
+ 
+ struct KRect
+diff --git a/_excercise/ShootingGame1/ShootingGame1/ShootingGame/main/KMain.cpp b/_excercise/ShootingGame1/ShootingGame1/ShootingGame/main/KMain.cpp
+index a4f4b96..6d538f0 100644
+--- a/_excercise/ShootingGame1/ShootingGame1/ShootingGame/main/KMain.cpp
++++ b/_excercise/ShootingGame1/ShootingGame1/ShootingGame/main/KMain.cpp
+@@ -4,13 +4,15 @@
+ #include "KCollision.h"
+ #include "KTinyXML2Parse.h"
+ 
+-extern list<KImageRect> g_rtImage;
++extern map<int, KImageRect*> g_mapImage;
+ 
+ bool	 KMain::Init()
+ {
+ 	//sheet.xml의 이미지 좌표 정보 파싱함.[start]
+ 	tinyxml2Parse("data/sheet.xml");
+-	g_rtImage.max_size();
++	
++	//g_rtImage.max_size();
++	
+ 	//sheet.xml의 이미지 좌표 정보 파싱함.[end]
+ 
+ 	m_pSound.Init();
+@@ -25,7 +27,21 @@ bool	 KMain::Init()
+ 	m_Hero.SetPos(100, 100, 100.0f);
+ 	
+ 	//m_Hero.SetRect(90, 1, 42, 60);
+-	m_Hero.SetRect(g_rtImage.front().m_iX, g_rtImage.front().m_iY, g_rtImage.front().m_iWidth, g_rtImage.front().m_iHeight);
++	int ikey = getHashKey("playerShip1_red.png");
++
++
++	//////////////////
++	std::map<int, KImageRect*>::iterator itor =
++		g_mapImage.find(ikey);
++	if (itor == g_mapImage.end()	) return NULL;
++	
++	//TSprite* pSprite = (*itor).first; // key
++	KImageRect* pSprite = (*itor).second;// data
++
++	//////////////////
++
++
++	m_Hero.SetRect(pSprite->m_iX, pSprite->m_iY, pSprite->m_iWidth, pSprite->m_iHeight);
+ 
+ 	m_BackGround.Load(m_hScreenDC,
+ 		m_hOffScreenDC, L"../../data/bk.bmp");
+diff --git a/_excercise/ShootingGame1/ShootingGame1/ShootingGame/main/KTinyXML2Parse.cpp b/_excercise/ShootingGame1/ShootingGame1/ShootingGame/main/KTinyXML2Parse.cpp
+index 19717fe..3567388 100644
+--- a/_excercise/ShootingGame1/ShootingGame1/ShootingGame/main/KTinyXML2Parse.cpp
++++ b/_excercise/ShootingGame1/ShootingGame1/ShootingGame/main/KTinyXML2Parse.cpp
+@@ -2,7 +2,15 @@
+ 
+ 
+ 
+-list<KImageRect> g_rtImage;
++map<int, KImageRect*> g_mapImage;
++
++
++int getHashKey(char* pszName)
++{
++
++	int iKey = std::hash<char*>()(pszName);
++	return iKey;
++}
+ 
+ 
+ 
+@@ -28,7 +36,14 @@ void tinyxml2Parse(const XMLAttribute* firstAttr, unsigned int indent)
+ 		else if (strcmp(attr->Name(), "height") == 0) {
+ 			temp.m_iHeight = atoi(attr->Value());
+ 
+-			g_rtImage.push_back(temp);
++
++			//g_rtImage.push_back(temp);
++			KImageRect* temp2 = new KImageRect;
++			memcpy(temp2, &temp, sizeof(KImageRect));
++
++			//hash키 구하는 함수
++			int key = getHashKey(temp2->m_szName);
++			g_mapImage.insert(make_pair(key, temp2));
+ 
+ 			memset(&temp, 0, sizeof(temp));
+ 		}
+diff --git a/_excercise/ShootingGame1/ShootingGame1/ShootingGame/main/KTinyXML2Parse.h b/_excercise/ShootingGame1/ShootingGame1/ShootingGame/main/KTinyXML2Parse.h
+index ff0f195..45ff010 100644
+--- a/_excercise/ShootingGame1/ShootingGame1/ShootingGame/main/KTinyXML2Parse.h
++++ b/_excercise/ShootingGame1/ShootingGame1/ShootingGame/main/KTinyXML2Parse.h
+@@ -1,7 +1,7 @@
+ #pragma once
+ #include "tinyxml2.h"
+ 
+-#include <list>
++#include <map>
+ #include <memory.h>
+ 
+ using namespace tinyxml2;
+@@ -24,10 +24,12 @@ public:
+ class KTinyXML2Parse
+ {
+ public:
++	friend int getHashKey(char* pszName);
+ 	friend void tinyxml2Parse(const XMLAttribute* firstAttr, unsigned int indent);
+ 	friend void tinyxml2Parse(const XMLNode* parent, unsigned int indent = 0);
+ 	friend void tinyxml2Parse(const char* filename);
+ 
++
+ public:
+ 	KTinyXML2Parse();
+ 	virtual ~KTinyXML2Parse();
