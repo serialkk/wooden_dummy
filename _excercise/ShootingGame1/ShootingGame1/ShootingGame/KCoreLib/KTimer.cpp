@@ -1,6 +1,6 @@
 #include "KTimer.h"
-
-float g_fSecondPerFrame = 0.0f;
+#include "KSys.h"
+float g_fSecondPerFrame=0.0f;
 bool     KTimer::Init()
 {
 	m_fSecondPerFrame = 0.0f;
@@ -11,8 +11,8 @@ bool     KTimer::Init()
 	m_dwBeforeTick = timeGetTime();
 	return true;
 }; // 초기화
-   //__imp__timeGetTime@0 외부 기호(참조 위치 : "publi
-   //winmm.lib
+//__imp__timeGetTime@0 외부 기호(참조 위치 : "publi
+//winmm.lib
 bool     KTimer::Frame() {
 	DWORD dwCurrentTick = timeGetTime();
 	DWORD dwElapseTick = dwCurrentTick - m_dwBeforeTick;
@@ -40,17 +40,21 @@ bool     KTimer::Render() {
 		_stprintf_s(m_csBuffer,
 			L"FPS=[%d] %10.4f %10.4f",
 			m_iFPS, m_fSecondPerFrame, m_fAccumulation);
-		OutputDebugString(m_csBuffer);
+		//OutputDebugString(m_csBuffer);
 		fTime = 0.0f;
 	}
-
+	//HDC hdc = GetDC(g_hWnd);
+	////SetBkMode(hdc, TRANSPARENT);
+	//TextOut(hdc, 0, 0, m_csBuffer,
+	//	_tcslen(m_csBuffer));	
+	//ReleaseDC(g_hWnd, hdc);
+	
 #endif
 	return true;
 };
 bool     KTimer::Release() {
 	return true;
 };
-
 
 KTimer::KTimer()
 {

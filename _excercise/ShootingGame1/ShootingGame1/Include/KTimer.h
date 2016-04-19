@@ -20,3 +20,4 @@ public:
 	KTimer();
 	virtual ~KTimer();
 };
+

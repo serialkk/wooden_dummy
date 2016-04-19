@@ -18,6 +18,29 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="KBitmap.h" />
+    <ClInclude Include="KBitmapMgr.h" />
+    <ClInclude Include="KCollision.h" />
+    <ClInclude Include="KEnemy.h" />
+    <ClInclude Include="KHashTable.h" />
+    <ClInclude Include="KHero.h" />
+    <ClInclude Include="KLinkedList.h" />
+    <ClInclude Include="KNode.h" />
+    <ClInclude Include="KObject.h" />
+    <ClInclude Include="KSound.h" />
+    <ClInclude Include="KMain.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="KBitmap.cpp" />
+    <ClCompile Include="KBitmapMgr.cpp" />
+    <ClCompile Include="KCollision.cpp" />
+    <ClCompile Include="KEnemy.cpp" />
+    <ClCompile Include="KHero.cpp" />
+    <ClCompile Include="KObject.cpp" />
+    <ClCompile Include="KSound.cpp" />
+    <ClCompile Include="KMain.cpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{58F9280A-538B-4FCF-8BB6-DFF24F5DBAC3}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
@@ -165,17 +188,6 @@
       <AdditionalDependencies>KCoreLib.lib;tinyxml2.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="KInput.cpp" />
-    <ClCompile Include="KTimer.cpp" />
-    <ClCompile Include="KMain.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="KInput.h" />
-    <ClInclude Include="KSys.h" />
-    <ClInclude Include="KTimer.h" />
-    <ClInclude Include="KMain.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

@@ -24,7 +24,16 @@
     <ClInclude Include="KCore.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="KInput.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
     <ClInclude Include="KStd.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="KSys.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="KTimer.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="KWindow.h">
@@ -36,6 +45,12 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="KCore.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="KInput.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="KTimer.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="KWindow.cpp">

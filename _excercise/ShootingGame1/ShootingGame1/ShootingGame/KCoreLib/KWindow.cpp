@@ -1,9 +1,9 @@
 #include "KWindow.h"
-
-//1>  TCoreLib.vcxproj->D:\MyProjects\FirstStudy
-//_0\TCoreLib\..
-/// .. / output / TCoreLib\TCoreLib.lib
-HWND g_hWnd = NULL;
+//1>  KCoreLib.vcxproj->D:\MyProjects\FirstStudy
+//_0\KCoreLib\..
+/// .. / output / KCoreLib\KCoreLib.lib
+HWND g_hWnd= NULL;
+HINSTANCE g_hInstance;
 void KWindow::SetRect(int iWidth, int iHeight)
 {
 	m_iWidth = iWidth;
@@ -16,7 +16,7 @@ LRESULT CALLBACK WndProc(HWND hWnd,
 	LPARAM lParam)// 부가적인 정보들
 {
 	switch (msg)
-	{
+	{	
 	case WM_SIZE:
 	{
 		if (wParam == SIZE_MINIMIZED)
@@ -45,11 +45,13 @@ LRESULT CALLBACK WndProc(HWND hWnd,
 	// 나머지 메세지는 운영체제가 알아서 처리해라.
 	return DefWindowProc(hWnd, msg, wParam, lParam);
 }
-bool KWindow::SetWindow(HINSTANCE hInstatnce,
+bool KWindow::SetWindow( HINSTANCE hInstatnce,
 	TCHAR* titleName,
 	int iX, int iY, int iWidth,
 	int iHeight)
 {
+	m_hInstance = hInstatnce;
+	g_hInstance = hInstatnce;
 	if (m_iWidth == 0 && m_iHeight == 0)
 	{
 		m_iWidth = iWidth;
@@ -75,7 +77,8 @@ bool KWindow::SetWindow(HINSTANCE hInstatnce,
 	{
 		return false;
 	}
-
+	RECT rt = { 0,0,m_iWidth ,m_iHeight };
+	AdjustWindowRect(&rt, WS_OVERLAPPEDWINDOW, FALSE);
 	// 2, 등록된 클래스 객체를 사용하여 윈도우 생성
 	m_hWnd = CreateWindowEx(
 		// 작업표시줄 상단에 배치해라.
@@ -85,8 +88,8 @@ bool KWindow::SetWindow(HINSTANCE hInstatnce,
 		WS_OVERLAPPEDWINDOW,//WS_OVERLAPPEDWINDOW, //WS_POPUPWINDOW, //DWORD dwStyle,
 		iX, //int X,
 		iY,//int Y,
-		m_iWidth,//int nWidth,
-		m_iHeight,//int nHeight,
+		rt.right - rt.left,//int nWidth,
+		rt.bottom - rt.top,//int nHeight,
 		NULL, //HWND hWndParent,
 		NULL,//HMENU hMenu,
 		hInstatnce,//HINSTANCE hInstance,
@@ -98,14 +101,33 @@ bool KWindow::SetWindow(HINSTANCE hInstatnce,
 	}
 	g_hWnd = m_hWnd;
 
-	GetWindowRect(m_hWnd, &m_rtWindow);
+	GetWindowRect(m_hWnd, &m_rKWindow);
+
+	CenterWindow();
+
+	GetWindowRect(m_hWnd, &m_rKWindow);
 	GetClientRect(m_hWnd, &m_rtClient);
 	return true;
 }
+void KWindow::CenterWindow()
+{
+	// 전체 스크린의 크기
+	int iScreenWidth = GetSystemMetrics(SM_CXSCREEN);
+	int iScreenHeight = GetSystemMetrics(SM_CYSCREEN);
+	int x = (iScreenWidth - (
+		m_rKWindow.right - m_rKWindow.left)) / 2;
+	int y = (iScreenHeight - (
+		m_rKWindow.bottom - m_rKWindow.top)) / 2;
 
 
+	MoveWindow(m_hWnd, x, y, 
+		m_rKWindow.right- m_rKWindow.left,
+		m_rKWindow.bottom- m_rKWindow.top, true);
+}
 KWindow::KWindow()
 {
+	m_iWidth = 0;
+	m_iHeight = 0;
 }
 
 

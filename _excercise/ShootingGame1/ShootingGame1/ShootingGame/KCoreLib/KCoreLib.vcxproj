@@ -171,12 +171,17 @@ copy "..\\..\\output\\KCoreLib\\KCoreLib.lib" "..\\..\\lib\\KCoreLib.lib"</Comma
   <ItemGroup>
     <ClInclude Include="KBase.h" />
     <ClInclude Include="KCore.h" />
+    <ClInclude Include="KInput.h" />
     <ClInclude Include="KStd.h" />
+    <ClInclude Include="KSys.h" />
+    <ClInclude Include="KTimer.h" />
     <ClInclude Include="KWindow.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="KBase.cpp" />
     <ClCompile Include="KCore.cpp" />
+    <ClCompile Include="KInput.cpp" />
+    <ClCompile Include="KTimer.cpp" />
     <ClCompile Include="KWindow.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

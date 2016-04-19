@@ -1,6 +1,8 @@
-#include <windows.h>
-#include <tchar.h>
 #include "KMain.h"
+#include "KSys.h"
+#include "KBitmapMgr.h"
+#include "KCollision.h"
+
 #include "tinyxml2.h"
 
 #include <list>
@@ -70,11 +72,11 @@ void tinyxml2Parse(const XMLNode* parent, unsigned int indent = 0)
 	XMLText* text;
 
 	for (child = (XMLNode*)parent->FirstChild(); child != 0; child = (XMLNode*)child->NextSibling()) {
-		
+
 		decl = child->ToDeclaration();
 		elem = child->ToElement();
 		comm = child->ToComment();
-									   
+
 		if (elem) {
 			attr = (XMLAttribute*)elem->FirstAttribute();
 			if (attr) tinyxml2Parse(attr, indent + 1);
@@ -95,67 +97,153 @@ void tinyxml2Parse(const char* filename)
 	}
 }
 
-
-
-
-void     KMain::MsgEvent(MSG msg)
+bool	 KMain::Init()
 {
-	m_Input.MsgEvent(msg);
-};
-bool KMain::Init()
-{
-	m_Timer.Init();
-	m_Input.Init();
 
 	tinyxml2Parse("data/sheet.xml");
 
 	g_rtImage.max_size();
 
-	return true;
-}
-bool KMain::Frame()
-{
-	m_Timer.Frame();
-	m_Input.Frame();
+	m_pSound.Init();
+	int iIndex  = m_pSound.Load("../../data/OnlyLove.mp3");
+	m_pSound.Play(iIndex, true);
 
-	if (m_Input.KeyCheck('W') == KEY_PUSH)
+	iIndex = m_pSound.Load("../../data/Gun1.wav");
+	iIndex = m_pSound.Load("../../data/Gun2.wav");	
+
+	m_BackGround.SetPos(0, 0, 0.0f);
+	m_BackGround.SetRect(0, 0, 800, 600);
+	m_Hero.SetPos(100, 100, 100.0f);
+	m_Hero.SetRect(90, 1, 42, 60);
+
+	m_BackGround.Load(m_hScreenDC,
+		m_hOffScreenDC, L"../../data/bk.bmp");
+	m_Hero.Load(m_hScreenDC,
+		m_hOffScreenDC, L"../../data/Bitmap1.bmp");
+
+	for (int iObj = 0; iObj < MAX_OBJECT; iObj++)
 	{
-		MessageBox(m_hWnd, L"W KEY_UP", L"KeyState", MB_OK);
-	}
-	if (m_Input.KeyCheck('S') == KEY_PUSH)
-	{
-		MessageBox(m_hWnd, L"S click", L"KeyState", MB_OK);
-	}
-	if (m_Input.KeyCheck('A') == KEY_PUSH)
-	{
-		MessageBox(m_hWnd, L"A click", L"KeyState", MB_OK);
-	}
-	if (m_Input.KeyCheck('D') == KEY_PUSH)
-	{
-		MessageBox(m_hWnd, L"D click", L"KeyState", MB_OK);
+		m_Object[iObj].SetPos(
+			rand() % m_rtClient.right/2,
+			rand() % m_rtClient.bottom/2, 
+			50.0f + rand() % 100);
+		m_Object[iObj].SetRect(46, 62, 68, 79);
+		m_Object[iObj].Load(m_hScreenDC,
+			m_hOffScreenDC, L"../../data/Bitmap1.bmp");
+
 	}
 	return true;
-}
-bool KMain::Render()
+};
+bool	 KMain::Frame()
 {
-	m_Timer.Render();
-	m_Input.Render();
-	HDC hdc = GetDC(this->m_hWnd);
-	//SetBkMode(hdc, TRANSPARENT);
-	TextOut(hdc, 0, 0, m_Timer.m_csBuffer,
-		_tcslen(m_Timer.m_csBuffer));
-	TextOut(hdc, 0, 25, m_Input.m_csBuffer,
-		_tcslen(m_Input.m_csBuffer));
-	ReleaseDC(m_hWnd, hdc);
+	if (m_Input.KeyCheck(VK_HOME) == KEY_PUSH)
+	{
+		m_pSound.Stop(0);
+	}
+	if (m_Input.KeyCheck(VK_END) == KEY_PUSH)
+	{
+		m_pSound.Paused(0);
+	}
+	if (m_Input.KeyCheck(VK_INSERT) == KEY_HOLD)
+	{
+		m_pSound.Volume(0, g_fSecondPerFrame , true);
+	}
+	if (m_Input.KeyCheck(VK_DELETE) == KEY_HOLD)
+	{
+		m_pSound.Volume(0, g_fSecondPerFrame, false);
+	}
+
+	if (m_Input.KeyCheck('W') == KEY_HOLD)
+	{
+		m_Hero.Up();
+	}
+	if (m_Input.KeyCheck('S') == KEY_HOLD)
+	{
+		m_Hero.Down();
+	}
+	if (m_Input.KeyCheck('A') == KEY_HOLD)
+	{
+		m_Hero.Left();
+	}
+	if (m_Input.KeyCheck('D') == KEY_HOLD)
+	{
+		m_Hero.Right();
+	}
+	m_Hero.Frame();
+
+	for (int iObj = 0; iObj < MAX_OBJECT; iObj++)
+	{
+		m_Object[iObj].Frame();
+	}
+	for (int iObj = 0; iObj < MAX_OBJECT; iObj++)
+	{
+		if (m_Input.m_dwMouseState[0] == TRUE
+			&& m_Object[iObj].m_bUsed ==true)
+		{
+			
+			if (RectInPt( m_Object[iObj].m_rtCollide, 
+				      m_Input.m_MovePt))
+			{
+				m_Object[iObj].m_bUsed = false;
+				OutputDebugString(L"Frame\n");
+			}
+		}
+	}
+	for (int iObj = 0; iObj < MAX_OBJECT; iObj++)
+	{
+		if ( m_Object[iObj].m_bUsed == true)
+		{
+			if (RectInRect(m_Object[iObj].m_rtCollide,
+				m_Hero.m_rtCollide))
+			{
+				//m_pSound.Play(1, true);
+				m_Object[iObj].m_bUsed = false;
+			}
+		}
+	}
+	
+	
+	/*if (m_Input.KeyCheck(VK_SPACE) == KEY_HOLD)
+	{
+		m_Hero.SetSpeed(30.0f);
+	}
+	else
+	{
+		m_Hero.SetSpeed(-100.0f);
+	}*/
 	return true;
-}
-bool KMain::Release()
+};
+bool	 KMain::Render() {
+	m_BackGround.Draw();
+	for (int iObj = 0; iObj < MAX_OBJECT; iObj++)
+	{
+		m_Object[iObj].Render();
+	}
+	m_Hero.Render();
+	return true;
+};
+bool	 KMain::Release()
+{	
+	KBitmapMgr::GetInstance().Release();
+	m_BackGround.Release();
+	m_Hero.Release();
+	for (int iObj = 0; iObj < MAX_OBJECT; iObj++)
+	{
+		m_Object[iObj].Release();
+	}
+	return true;
+};
+
+KMain::KMain()
 {
-	m_Timer.Release();
-	m_Input.Release();
-	return true;
+	m_iX = 0;
+	m_iY = 0;
 }
 
+
+KMain::~KMain()
+{
+}
 int WINAPI wWinMain(
 	HINSTANCE hInstatnce,
 	HINSTANCE hPrevInstatnce,
@@ -163,14 +251,9 @@ int WINAPI wWinMain(
 	int      nCmdShow)
 {
 	KMain win;
-	//win.SetRect(1024, 768);
 	if (win.SetWindow(hInstatnce) == true)
 	{
 		win.Run();
 	}
 	return 0;
 }
-
-
-KMain::KMain() {}
-KMain::~KMain() {}
