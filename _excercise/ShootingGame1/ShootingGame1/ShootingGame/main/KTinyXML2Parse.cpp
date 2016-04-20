@@ -2,7 +2,7 @@
 
 
 
-list<KImageRect> g_rtImage;
+vector<KImageRect> g_vectorImage;
 
 
 
@@ -28,7 +28,7 @@ void tinyxml2Parse(const XMLAttribute* firstAttr, unsigned int indent)
 		else if (strcmp(attr->Name(), "height") == 0) {
 			temp.m_iHeight = atoi(attr->Value());
 
-			g_rtImage.push_back(temp);
+			g_vectorImage.push_back(temp);
 
 			memset(&temp, 0, sizeof(temp));
 		}

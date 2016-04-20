@@ -4,13 +4,19 @@
 #include "KCollision.h"
 #include "KTinyXML2Parse.h"
 
-extern list<KImageRect> g_rtImage;
+extern vector<KImageRect> g_vectorImage;
+
+int g_iGlobalPosX;
+int g_iGlobalPosY;
+
 
 bool	 KMain::Init()
 {
+	g_iGlobalPosX = 0;
+	g_iGlobalPosY = 0;
 	//sheet.xml의 이미지 좌표 정보 파싱함.[start]
 	tinyxml2Parse("data/sheet.xml");
-	g_rtImage.max_size();
+	g_vectorImage.max_size();
 	//sheet.xml의 이미지 좌표 정보 파싱함.[end]
 
 	m_pSound.Init();
@@ -22,13 +28,23 @@ bool	 KMain::Init()
 
 	m_BackGround.SetPos(0, 0, 0.0f);
 	m_BackGround.SetRect(0, 0, 800, 600);
-	m_Hero.SetPos(100, 100, 100.0f);
+	m_Hero.SetPos(350, 250, 100.0f);
 	
 	//m_Hero.SetRect(90, 1, 42, 60);
-	m_Hero.SetRect(g_rtImage.front().m_iX, g_rtImage.front().m_iY, g_rtImage.front().m_iWidth, g_rtImage.front().m_iHeight);
+
+
+	for (int i = 0; i < (int)g_vectorImage.size(); i++) 
+	{
+		if (strcmp(g_vectorImage[i].m_szName, "playerShip1_red.png") == 0) {
+			m_Hero.SetRect(g_vectorImage[i].m_iX, g_vectorImage[i].m_iY, g_vectorImage[i].m_iWidth, g_vectorImage[i].m_iHeight);
+			break;
+		}
+	}
+
+
 
 	m_BackGround.Load(m_hScreenDC,
-		m_hOffScreenDC, L"../../data/bk.bmp");
+		m_hOffScreenDC, L"data/purple.bmp");
 	m_Hero.Load(m_hScreenDC,
 		m_hOffScreenDC, L"data/SpaceShooterRedux.bmp");
 
@@ -39,7 +55,15 @@ bool	 KMain::Init()
 			rand() % m_rtClient.bottom/2, 
 			50.0f + rand() % 100);
 		//m_Object[iObj].SetRect(46, 62, 68, 79);
-		m_Object[iObj].SetRect(46, 62, 68, 79);
+		
+		for (int i = 0; i < (int)g_vectorImage.size(); i++)
+		{
+			if (strcmp(g_vectorImage[i].m_szName, "enemyGreen1.png") == 0) {
+				m_Object[iObj].SetRect(g_vectorImage[i].m_iX, g_vectorImage[i].m_iY, g_vectorImage[i].m_iWidth, g_vectorImage[i].m_iHeight);
+				break;
+			}
+		}
+
 		m_Object[iObj].Load(m_hScreenDC,
 			m_hOffScreenDC, L"data/SpaceShooterRedux.bmp");
 
@@ -67,19 +91,23 @@ bool	 KMain::Frame()
 
 	if (m_Input.KeyCheck('W') == KEY_HOLD)
 	{
-		m_Hero.Up();
+		//m_Hero.Up();
+		g_iGlobalPosY += g_fSecondPerFrame * 100.0f;
 	}
 	if (m_Input.KeyCheck('S') == KEY_HOLD)
 	{
-		m_Hero.Down();
+		//m_Hero.Down();
+		g_iGlobalPosY -= g_fSecondPerFrame * 100.0f;
 	}
 	if (m_Input.KeyCheck('A') == KEY_HOLD)
 	{
-		m_Hero.Left();
+		//m_Hero.Left();
+		g_iGlobalPosX -= g_fSecondPerFrame * 100.0f;
 	}
 	if (m_Input.KeyCheck('D') == KEY_HOLD)
 	{
-		m_Hero.Right();
+		//m_Hero.Right();
+		g_iGlobalPosX += g_fSecondPerFrame * 100.0f;
 	}
 	m_Hero.Frame();
 

@@ -1,7 +1,7 @@
 #pragma once
 #include "tinyxml2.h"
 
-#include <list>
+#include <vector>
 #include <memory.h>
 
 using namespace tinyxml2;

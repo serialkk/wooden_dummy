@@ -1,8 +1,11 @@
 #include "KEnemy.h"
 #include "KSys.h"
 
+extern int g_iGlobalPosX;
+extern int g_iGlobalPosY;
+
 bool KEnemy::Frame()
-{
+{/*
 	if (m_fPosX < 0)
 	{
 		m_fDirection[0] *= -1.0f;
@@ -25,7 +28,9 @@ bool KEnemy::Frame()
 	}
 	m_fPosX += m_fDirection[0] * m_fSpeed * g_fSecondPerFrame;
 	m_fPosY += m_fDirection[1] * m_fSpeed * g_fSecondPerFrame;
-
+*/
+	m_fPosX += g_iGlobalPosX;
+	m_fPosY += g_iGlobalPosY;
 	m_rtCollide.x = m_fPosX - (m_rt.w / 2);
 	m_rtCollide.y = m_fPosY - (m_rt.h / 2);
 	m_rtCollide.w = m_rtCollide.x + m_rt.w;
