@@ -23,8 +23,8 @@ bool KHero::Init()
 
 bool KHero::Frame()
 {
-	m_rtCollide.x = m_fPosX - (m_rt.w / 2);
-	m_rtCollide.y = m_fPosY - (m_rt.h / 2);
+	m_rtCollide.x = m_fPosX;// -(m_rt.w / 2);
+	m_rtCollide.y = m_fPosY;// -(m_rt.h / 2);
 	m_rtCollide.w = m_rtCollide.x + m_rt.w;
 	m_rtCollide.h = m_rtCollide.y + m_rt.h;
 	return true;

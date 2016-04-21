@@ -63,7 +63,7 @@ bool KObject::Render()
 	if (m_bUsed == true)
 	{
 		BitBlt(m_pBitmap->m_hOffScreenDC,
-			m_fPosX, m_fPosY,
+			m_rtCollide.x, m_rtCollide.y,
 			m_rt.w,
 			m_rt.h,
 			m_pBitmap->m_hMemDC,

@@ -6,14 +6,9 @@
 
 extern vector<KImageRect> g_vectorImage;
 
-int g_iGlobalPosX;
-int g_iGlobalPosY;
-
-
 bool	 KMain::Init()
 {
-	g_iGlobalPosX = 0;
-	g_iGlobalPosY = 0;
+
 	//sheet.xml의 이미지 좌표 정보 파싱함.[start]
 	tinyxml2Parse("data/sheet.xml");
 	g_vectorImage.max_size();
@@ -27,7 +22,7 @@ bool	 KMain::Init()
 	iIndex = m_pSound.Load("../../data/Gun2.wav");	
 
 	m_BackGround.SetPos(0, 0, 0.0f);
-	m_BackGround.SetRect(0, 0, 800, 600);
+	m_BackGround.SetRect(0, 0, 256, 256);
 	m_Hero.SetPos(350, 250, 100.0f);
 	
 	//m_Hero.SetRect(90, 1, 42, 60);
@@ -92,22 +87,28 @@ bool	 KMain::Frame()
 	if (m_Input.KeyCheck('W') == KEY_HOLD)
 	{
 		//m_Hero.Up();
-		g_iGlobalPosY += g_fSecondPerFrame * 100.0f;
+		
+		m_BackGround.Move(0, g_fSecondPerFrame * 100.0f);
+		for (int iObj = 0; iObj < MAX_OBJECT; iObj++){ m_Object[iObj].Move(0,g_fSecondPerFrame * 100.0f); }
 	}
 	if (m_Input.KeyCheck('S') == KEY_HOLD)
 	{
 		//m_Hero.Down();
-		g_iGlobalPosY -= g_fSecondPerFrame * 100.0f;
+		m_BackGround.Move(0, g_fSecondPerFrame * -100.0f);
+		for (int iObj = 0; iObj < MAX_OBJECT; iObj++) { m_Object[iObj].Move(0, g_fSecondPerFrame * -100.0f); }
 	}
 	if (m_Input.KeyCheck('A') == KEY_HOLD)
 	{
 		//m_Hero.Left();
-		g_iGlobalPosX -= g_fSecondPerFrame * 100.0f;
+		m_BackGround.Move(g_fSecondPerFrame * 100.0f, 0);
+		for (int iObj = 0; iObj < MAX_OBJECT; iObj++) { m_Object[iObj].Move(g_fSecondPerFrame * 100.0f,0 ); }
 	}
 	if (m_Input.KeyCheck('D') == KEY_HOLD)
 	{
 		//m_Hero.Right();
-		g_iGlobalPosX += g_fSecondPerFrame * 100.0f;
+		m_BackGround.Move(g_fSecondPerFrame * -100.0f, 0);
+		for (int iObj = 0; iObj < MAX_OBJECT; iObj++) { m_Object[iObj].Move(g_fSecondPerFrame * -100.0f, 0); }
+
 	}
 	m_Hero.Frame();
 
@@ -117,15 +118,14 @@ bool	 KMain::Frame()
 	}
 	for (int iObj = 0; iObj < MAX_OBJECT; iObj++)
 	{
-		if (m_Input.m_dwMouseState[0] == TRUE
+		if (m_Input.m_dwMouseState[0]
 			&& m_Object[iObj].m_bUsed ==true)
 		{
 			
-			if (RectInPt( m_Object[iObj].m_rtCollide, 
-				      m_Input.m_MovePt))
+			if (RectInPt(m_Object[iObj].m_rtCollide,
+				m_Input.m_MovePt))
 			{
 				m_Object[iObj].m_bUsed = false;
-				OutputDebugString(L"Frame\n");
 			}
 		}
 	}

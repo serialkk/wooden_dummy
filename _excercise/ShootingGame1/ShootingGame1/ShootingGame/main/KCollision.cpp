@@ -46,26 +46,23 @@ bool     RectInPt(RECT& rt, POINT& pt)
 	}
 	return false;
 };
-bool     RectInRect(RECT& s1,
-	RECT& s2)
+bool     RectInRect(RECT& rtDesk,
+	RECT& rtSrc)
 {
-	POINT cS1, cS2;
-	cS1.x = (s1.right + s1.left) / 2;
-	cS1.y = (s1.top + s1.bottom) / 2;
-	cS2.x = (s2.right + s2.left) / 2;
-	cS2.y = (s2.top + s2.bottom) / 2;
-
-	POINT  Radius, RadiusS1, RadiusS2;
-	Radius.x = abs(cS1.x - cS2.x);
-	Radius.y = abs(cS1.y - cS2.y);
-
-	RadiusS1.x = (s1.right - s1.left ) / 2;
-	RadiusS1.y = (s1.bottom - s1.top) / 2;
-	RadiusS2.x = (s2.right - s2.left) / 2;
-	RadiusS2.y = (s2.bottom - s2.top) / 2;
-
-	if (Radius.x <= ( RadiusS1.x + RadiusS2.x) &&
-		Radius.y <= ( RadiusS1.y + RadiusS2.y))
+	// °¡·Î
+	POINT  cDesk, cSrc, Radius, DeskRadius, SrcRadius;
+	cDesk.x = (rtDesk.left + rtDesk.right) / 2;
+	cDesk.y = (rtDesk.top + rtDesk.bottom) / 2;
+	cSrc.x = (rtSrc.left + rtSrc.right) / 2;
+	cSrc.y = (rtSrc.top + rtSrc.bottom) / 2;
+	Radius.x = abs(cDesk.x - cSrc.x);
+	Radius.y = abs(cDesk.y - cSrc.y);
+	DeskRadius.x = (rtDesk.right - rtDesk.left) / 2;
+	DeskRadius.y = (rtDesk.bottom - rtDesk.top) / 2;
+	SrcRadius.x = (rtSrc.right - rtSrc.left) / 2;
+	SrcRadius.y = (rtSrc.bottom - rtSrc.top) / 2;
+	if (Radius.x <= (DeskRadius.x + SrcRadius.x) &&
+		Radius.y <= (DeskRadius.y + SrcRadius.y))
 	{
 		return true;
 	}
