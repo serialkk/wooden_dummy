@@ -1,37 +1,59 @@
-#define  _WINSOCK_DEPRECATED_NO_WARNINGS
+//#define  _WINSOCK_DEPRECATED_NO_WARNINGS
+#define _CRT_SECURE_NO_WARNINGS
 #include <winsock2.h>
 #include <stdio.h>
 #include <process.h>
 #pragma comment(lib, "ws2_32.lib")
 
+typedef struct _TUser {
+	SOCKET client;
+	SOCKADDR_IN  clientaddr;
+} TUser;
+
 UINT WINAPI ClientThread(LPVOID arg)
 {
-	SOCKET sock = (SOCKET)arg;
+	TUser* user = (TUser*)arg;
+	//SOCKET sock = (SOCKET)arg;
 	char buf[256] = { 0, };
+	char buf2[256] = { 0, };
 	//printf("\n 보낼 데이터 입력하시오?");
-	SOCKADDR_IN  clientaddr;
+	//SOCKADDR_IN  clientaddr;
+	int length = 0;
+
 	while (1)
 	{
 		ZeroMemory(&buf, sizeof(char) * 256);
-		int iRecvByte = recv(sock, buf, 256, 0);
+		ZeroMemory(&buf2, sizeof(char) * 256);
+		length = 0;
+		int iRecvByte = recv(user->client, buf, 256, 0);
 		if (iRecvByte == 0 || iRecvByte == SOCKET_ERROR)
 		{
-			printf("클라이언트 접속 종료\n");
+			printf("IP:[%s]: 클라이언트 접속 종료\n", inet_ntoa(user->clientaddr.sin_addr));
 			//printf("클라이언트 접속 종료 : IP:%s, PORT:%d\n",
 			//	inet_ntoa(clientaddr.sin_addr),
 			//	ntohs(clientaddr.sin_port));
 			break; // 클라이언트 종료
 		}
-		buf[iRecvByte] = 0;
-		printf("\n%s", buf);
-		int iSendByte = send(sock, buf, iRecvByte, 0);
+		strcpy(buf2, "[");
+		strcat(buf2, inet_ntoa(user->clientaddr.sin_addr));
+		strcat(buf2, "]");
+		strcat(buf2, ":");
+		strcat(buf2, buf);
+		
+		strcat(buf2, "\0");
+		length = strlen(buf2);
+		//buf[length] = 0;
+		printf("%s\n", buf2);
+		int iSendByte = send(user->client, buf2, length, 0);
 		if (iRecvByte == 0 || iRecvByte == SOCKET_ERROR)
 		{
-			printf("클라이언트 접속 종료\n");
+			printf("IP:[%s]: 클라이언트 접속 종료\n", inet_ntoa(user->clientaddr.sin_addr));
 			break; // 클라이언트 종료
 		}
 	}
-	closesocket(sock);
+	closesocket(user->client);
+	delete user;
+
 	return 0;
 }
 
@@ -65,19 +87,21 @@ int main(int argc, char* argv[])
 			if (iRet == SOCKET_ERROR) return -1;
 			iRet = listen(listenSock, SOMAXCONN);
 			if (iRet == SOCKET_ERROR) return -1;
-			SOCKADDR_IN  clientaddr;
-			SOCKET client;
+			//SOCKADDR_IN  clientaddr;
+			//SOCKET client;
 			while (1)
 			{
-				int addlen = sizeof(clientaddr);
-				client = accept(listenSock, (SOCKADDR*)&clientaddr, &addlen);
-				printf("클라이언트 접속 : IP:%s, PORT:%d\n",
-					inet_ntoa(clientaddr.sin_addr), ntohs(clientaddr.sin_port));
+				TUser* user = new TUser;
+
+				int addlen = sizeof(user->clientaddr);
+				user->client = accept(listenSock, (SOCKADDR*)&(user->clientaddr), &addlen);
+				printf("IP:[%s], PORT:[%d], 클라이언트 접속\n",
+					inet_ntoa(user->clientaddr.sin_addr), ntohs(user->clientaddr.sin_port));
 
 				DWORD dwRecvThreadID;
 				hThread = (HANDLE)_beginthreadex(0, 0,
 					ClientThread,
-					(LPVOID)client,
+					(LPVOID)user,
 					0,
 					(unsigned int*)&dwRecvThreadID);
 			}
