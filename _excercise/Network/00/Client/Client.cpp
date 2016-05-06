@@ -11,7 +11,6 @@ UINT WINAPI SendThreadFunc(void *arg)
 	while (1)
 	{
 		ZeroMemory(buf, sizeof(char) * 256);
-		printf("입력하세여> ");
 		fgets(buf, 256, stdin);
 		if (buf[strlen(buf) - 1] == '\n')
 			buf[strlen(buf) - 1] = 0;
@@ -50,6 +49,9 @@ int main(int argc, char* argv[])
 			iRet = connect(sock, (SOCKADDR*)&sa, sizeof(sa));
 			if (iRet == SOCKET_ERROR) { return 1; }
 			DWORD dwRecvThreadID;
+
+			printf("입력하세요 > ");
+
 			hThread = (HANDLE)_beginthreadex(0, 0, SendThreadFunc, (void*)sock, 0, (unsigned int*)&dwRecvThreadID);
 			{
 				char buf[256] = { 0, };
@@ -67,6 +69,7 @@ int main(int argc, char* argv[])
 					}
 					buf[iRecvByte] = '\n';
 					printf("\n%s", buf);
+					printf("입력하세요 > ");
 				}
 			}
 		}

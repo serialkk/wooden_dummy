@@ -1,9 +1,8 @@
+#define  _WINSOCK_DEPRECATED_NO_WARNINGS
 #include <winsock2.h>
 #include <stdio.h>
+#include <process.h>
 #pragma comment(lib, "ws2_32.lib")
-// 소켓 생성
-// 연결형, TCP프로토콜(SOCK_STREAM,IPPROTO_TCP)
-// 비연결형, UDP 프로토콜(SOCK_DGRAM,IPPROTO_UDP)
 
 UINT WINAPI ClientThread(LPVOID arg)
 {
@@ -36,6 +35,9 @@ UINT WINAPI ClientThread(LPVOID arg)
 	return 0;
 }
 
+// 소켓 생성
+// 연결형, TCP프로토콜(SOCK_STREAM,IPPROTO_TCP)
+// 비연결형, UDP 프로토콜(SOCK_DGRAM,IPPROTO_UDP)
 int main(int argc, char* argv[])
 {
 	/*if (argc != 2)
@@ -48,6 +50,7 @@ int main(int argc, char* argv[])
 								 // 윈도우 소켓(윈속) 초기화
 	WSADATA wsa;
 	int iRet;
+	HANDLE hThread;
 	if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0) { return 1; }
 	{
 		SOCKET listenSock = socket(AF_INET, SOCK_STREAM, 0);
@@ -70,23 +73,13 @@ int main(int argc, char* argv[])
 				client = accept(listenSock, (SOCKADDR*)&clientaddr, &addlen);
 				printf("클라이언트 접속 : IP:%s, PORT:%d\n",
 					inet_ntoa(clientaddr.sin_addr), ntohs(clientaddr.sin_port));
-				char buf[256] = { 0, };
-				int iLen = 0;
-				while (1)
-				{
-					int iRecvByte = recv(client, buf, 256, 0);
-					if (iRecvByte == 0 || iRecvByte == SOCKET_ERROR)
-					{
-						printf("클라이언트 접속 종료 : IP:%s, PORT:%d\n",
-							inet_ntoa(clientaddr.sin_addr),
-							ntohs(clientaddr.sin_port));
-						break; // 클라이언트 종료
-					}
-					buf[iRecvByte] = '\n';
-					printf("\n%s", buf);
-					int iSendByte = send(client, buf, iRecvByte, 0);
-				}
-				closesocket(client);
+
+				DWORD dwRecvThreadID;
+				hThread = (HANDLE)_beginthreadex(0, 0,
+					ClientThread,
+					(LPVOID)client,
+					0,
+					(unsigned int*)&dwRecvThreadID);
 			}
 		}
 		closesocket(listenSock);
