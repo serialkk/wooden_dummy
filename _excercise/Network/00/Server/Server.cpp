@@ -3,12 +3,22 @@
 #include <winsock2.h>
 #include <stdio.h>
 #include <process.h>
+#include <list>
 #pragma comment(lib, "ws2_32.lib")
+
+using namespace std;
+
+
+
+CRITICAL_SECTION cs;
+
 
 typedef struct _TUser {
 	SOCKET client;
 	SOCKADDR_IN  clientaddr;
 } TUser;
+
+list<TUser*> g_listUser;
 
 UINT WINAPI ClientThread(LPVOID arg)
 {
@@ -19,9 +29,10 @@ UINT WINAPI ClientThread(LPVOID arg)
 	//printf("\n 보낼 데이터 입력하시오?");
 	//SOCKADDR_IN  clientaddr;
 	int length = 0;
-
+	
 	while (1)
 	{
+
 		ZeroMemory(&buf, sizeof(char) * 256);
 		ZeroMemory(&buf2, sizeof(char) * 256);
 		length = 0;
@@ -32,6 +43,7 @@ UINT WINAPI ClientThread(LPVOID arg)
 			//printf("클라이언트 접속 종료 : IP:%s, PORT:%d\n",
 			//	inet_ntoa(clientaddr.sin_addr),
 			//	ntohs(clientaddr.sin_port));
+
 			break; // 클라이언트 종료
 		}
 		strcpy(buf2, "[");
@@ -39,20 +51,52 @@ UINT WINAPI ClientThread(LPVOID arg)
 		strcat(buf2, "]");
 		strcat(buf2, ":");
 		strcat(buf2, buf);
-		
+
 		strcat(buf2, "\0");
 		length = strlen(buf2);
 		//buf[length] = 0;
 		printf("%s\n", buf2);
-		int iSendByte = send(user->client, buf2, length, 0);
+
+		EnterCriticalSection(&cs);
+		list<TUser*>::iterator _F = g_listUser.begin();
+		list<TUser*>::iterator _L = g_listUser.end();
+
+		for (; _F != _L; ++_F)
+		{
+			if((*_F)!=0){
+				int iSendByte = send((*_F)->client, buf2, length, 0);
+			}
+		}
+		LeaveCriticalSection(&cs);
+
 		if (iRecvByte == 0 || iRecvByte == SOCKET_ERROR)
 		{
 			printf("IP:[%s]: 클라이언트 접속 종료\n", inet_ntoa(user->clientaddr.sin_addr));
+			
+
+
 			break; // 클라이언트 종료
+
 		}
 	}
-	closesocket(user->client);
-	delete user;
+
+	EnterCriticalSection(&cs);
+	list<TUser*>::iterator _F = g_listUser.begin();
+	list<TUser*>::iterator _L = g_listUser.end();
+
+	for (; _F != _L; ++_F)
+	{
+		if (user == (*_F)) {
+			closesocket((*_F)->client);
+			delete (*_F);
+			*_F = 0;
+		}
+	}
+	LeaveCriticalSection(&cs);
+
+
+	//closesocket(user->client);
+	//delete user;
 
 	return 0;
 }
@@ -62,6 +106,8 @@ UINT WINAPI ClientThread(LPVOID arg)
 // 비연결형, UDP 프로토콜(SOCK_DGRAM,IPPROTO_UDP)
 int main(int argc, char* argv[])
 {
+
+	InitializeCriticalSection(&cs);
 	/*if (argc != 2)
 	{
 	printf("\n[사용방법] xxx.exe [port]");
@@ -98,12 +144,29 @@ int main(int argc, char* argv[])
 				printf("IP:[%s], PORT:[%d], 클라이언트 접속\n",
 					inet_ntoa(user->clientaddr.sin_addr), ntohs(user->clientaddr.sin_port));
 
+				g_listUser.push_back(user);
+
 				DWORD dwRecvThreadID;
 				hThread = (HANDLE)_beginthreadex(0, 0,
 					ClientThread,
 					(LPVOID)user,
 					0,
 					(unsigned int*)&dwRecvThreadID);
+
+				EnterCriticalSection(&cs);
+				list<TUser*>::iterator _F = g_listUser.begin();
+				while (_F != g_listUser.end())
+				{
+					if (*_F == 0) {
+
+						_F = g_listUser.erase(_F);
+					}
+					else {
+						_F++;
+					}
+				}
+				LeaveCriticalSection(&cs);
+
 			}
 		}
 		closesocket(listenSock);

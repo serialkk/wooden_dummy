@@ -67,8 +67,8 @@ int main(int argc, char* argv[])
 						printf("서버 종료");
 						break;
 					}
-					buf[iRecvByte] = '\n';
-					printf("\n%s", buf);
+					buf[iRecvByte] = '\0';
+					printf("\n%s\n", buf);
 					printf("입력하세요 > ");
 				}
 			}
