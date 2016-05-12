@@ -17,7 +17,7 @@ UINT WINAPI SendThreadFunc(void *arg)
 		if (strlen(buf) == 0) break; // 엔터는 종료!
 		int iSendByte = send(sock, buf, strlen(buf), 0);
 		if (iSendByte == SOCKET_ERROR) break;
-		printf("\t%d 바이트를 전송하였습니다.", iSendByte);
+		//printf("\t%d 바이트를 전송하였습니다.", iSendByte);
 	}
 	return 0;
 }

@@ -39,7 +39,8 @@ UINT WINAPI ClientThread(LPVOID arg)
 		int iRecvByte = recv(user->client, buf, 256, 0);
 		if (iRecvByte == 0 || iRecvByte == SOCKET_ERROR)
 		{
-			printf("IP:[%s]: 클라이언트 접속 종료\n", inet_ntoa(user->clientaddr.sin_addr));
+			printf("IP:[%s], PORT:[%d], 클라이언트 접속 종료\n",
+				inet_ntoa(user->clientaddr.sin_addr), ntohs(user->clientaddr.sin_port));
 			//printf("클라이언트 접속 종료 : IP:%s, PORT:%d\n",
 			//	inet_ntoa(clientaddr.sin_addr),
 			//	ntohs(clientaddr.sin_port));
@@ -71,9 +72,8 @@ UINT WINAPI ClientThread(LPVOID arg)
 
 		if (iRecvByte == 0 || iRecvByte == SOCKET_ERROR)
 		{
-			printf("IP:[%s]: 클라이언트 접속 종료\n", inet_ntoa(user->clientaddr.sin_addr));
-			
-
+			printf("IP:[%s], PORT:[%d], 클라이언트 접속 종료\n",
+				inet_ntoa(user->clientaddr.sin_addr), ntohs(user->clientaddr.sin_port));
 
 			break; // 클라이언트 종료
 
