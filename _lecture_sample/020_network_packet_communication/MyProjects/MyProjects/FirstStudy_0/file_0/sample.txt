@@ -1,0 +1,30 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <cstdio>
+#include <memory.h>
+void main()
+{
+	FILE* fp = NULL;
+	fp = fopen("sample.txt", "w");
+	if (fp == NULL) return;
+
+	FILE* fpRead = NULL;
+	fpRead = fopen("Sample.cpp", "r");
+	if (fpRead == NULL) return;
+	while(!feof(fpRead))
+	{ 
+		//char szBuffer[256] = { 0, };
+		char szBuffer[256];
+		memset(szBuffer, 0, sizeof(char)*256);
+		fgets(szBuffer, 256, fpRead);
+		//fscanf(fpRead, "%s", szBuffer);
+		//printf("%s", szBuffer);
+		fprintf(fp, "%s", szBuffer);
+	}	
+	fclose(fpRead);
+	fclose(fp);
+	/*FILE* fp = NULL;
+	fp = fopen("text.txt", "w");
+	fprintf(fp, "%s", "KGCA");
+	fclose(fp);*/
+	getchar();
+}
