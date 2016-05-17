@@ -10,6 +10,40 @@ std::list<TUser*>     g_allClientList;
 TPacketPool			  g_PacketList;
 int		g_iNumClient = 0;
 
+
+///////////////////////////////////////////////
+// 3초당 보낸 횟수, 보낸 바이트를 출력하기위함.
+
+#ifdef _WIN64
+volatile LONG64 g_iSendCount = 0;
+volatile LONG64 g_iSendByte = 0;
+#else
+volatile LONG g_iSendCount = 0;
+volatile LONG g_iSendByte = 0;
+#endif
+
+
+///////////////////////////////////////////////
+
+
+DWORD WINAPI PrintThread(LPVOID arg)
+{
+	while(1){
+		printf(" \n3초당 [보낸 횟수]:%d 번 [보낸 바이트]:%d byte", g_iSendCount, g_iSendByte);
+
+#ifdef _WIN64
+		InterlockedExchange64(&g_iSendCount,0);
+		InterlockedExchange64(&g_iSendByte, 0);
+#else
+
+		InterlockedExchange(&g_iSendCount, 0);
+		InterlockedExchange(&g_iSendByte, 0);
+#endif	
+		Sleep(3000);
+	}
+}
+
+
 int SendMsg(TUser* pUser, char* msg, WORD type)
 {
 	UPACKET sendmsg;
@@ -48,6 +82,18 @@ DWORD WINAPI WorkThread(LPVOID arg)
 					int iSendByte = send(pSendUser->m_Socket, (char*)pPacket,
 						pPacket->ph.len, 0);
 					
+					if (iSendByte != -1) {
+#ifdef _WIN64
+					InterlockedIncrement64(&g_iSendCount);
+					InterlockedExchange64(&g_iSendByte, g_iSendByte+= iSendByte);
+#else
+					InterlockedIncrement(&g_iSendCount);
+					InterlockedExchange(&g_iSendByte, g_iSendByte += iSendByte);
+#endif
+
+					}
+
+
 					if (iSendByte == SOCKET_ERROR)
 					{
 						printf("소켓 오류\n");
@@ -142,6 +188,10 @@ int main(int argc, char* argv[])
 		return 1;
 	}
 	InitializeCriticalSection(&g_crit);
+
+
+	DWORD dwPrintThreadID;
+	CloseHandle(CreateThread(0, 0, PrintThread, (LPVOID)0, 0, &dwPrintThreadID));
 
 	unsigned short iPort = 10000;// atoi(argv[1]);
 								 // 윈도우 소켓(윈속) 초기화
