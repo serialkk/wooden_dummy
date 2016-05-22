@@ -6,6 +6,39 @@
 #define BUF_SIZE 1024
 void ErrorHandling(char *message);
 
+
+///////////////////////////////////////////////
+// 3초당 보낸 횟수, 보낸 바이트를 출력하기위함.
+
+#ifdef _WIN64
+volatile LONG64 g_iSendCount = 0;
+volatile LONG64 g_iSendByte = 0;
+#else
+volatile LONG g_iSendCount = 0;
+volatile LONG g_iSendByte = 0;
+#endif
+
+
+DWORD WINAPI PrintThread(LPVOID arg)
+{
+	while (1) {
+		printf("3초당 [보낸 횟수]:%d 번 [보낸 바이트]:%d byte\n", g_iSendCount, g_iSendByte);
+
+#ifdef _WIN64
+		InterlockedExchange64(&g_iSendCount, 0);
+		InterlockedExchange64(&g_iSendByte, 0);
+#else
+
+		InterlockedExchange(&g_iSendCount, 0);
+		InterlockedExchange(&g_iSendByte, 0);
+#endif	
+		Sleep(3000);
+	}
+}
+///////////////////////////////////////////////
+
+
+
 int main(int argc, char *argv[])
 {
 	WSADATA wsaData;
@@ -15,7 +48,7 @@ int main(int argc, char *argv[])
 	fd_set reads, cpyReads;
 
 	int adrSz;
-	int strLen, fdNum, i;
+	int strLen, fdNum, i, j;
 	char buf[BUF_SIZE];
 
 	//if(argc!=2) {
@@ -41,6 +74,9 @@ int main(int argc, char *argv[])
 	FD_ZERO(&reads);
 	FD_SET(hServSock, &reads);
 
+	DWORD dwPrintThreadID;
+	CloseHandle(CreateThread(0, 0, PrintThread, (LPVOID)0, 0, &dwPrintThreadID));
+
 	while(1)
 	{
 		cpyReads=reads;
@@ -63,7 +99,10 @@ int main(int argc, char *argv[])
 					hClntSock=
 						accept(hServSock, (SOCKADDR*)&clntAdr, &adrSz);
 					FD_SET(hClntSock, &reads);
-					printf("connected client: %d \n", hClntSock);
+					//printf("connected client: %d \n", hClntSock);
+
+					printf("IP:[%s], PORT:[%d], 클라이언트 접속\n",
+						inet_ntoa(clntAdr.sin_addr), ntohs(clntAdr.sin_port));
 				}
 				else    // read message!
 				{
@@ -76,7 +115,22 @@ int main(int argc, char *argv[])
 					}
 					else
 					{
-						send(reads.fd_array[i], buf, strLen, 0);    // echo!
+						//send(reads.fd_array[i], buf, strLen, 0);    // echo!
+
+						// broadcast
+						for (j = 0; j < reads.fd_count; j++)
+						{
+							int iSendByte = send(reads.fd_array[j], buf, strLen, 0);
+							if (iSendByte != -1) {
+#ifdef _WIN64
+								InterlockedIncrement64(&g_iSendCount);
+								InterlockedExchange64(&g_iSendByte, g_iSendByte += iSendByte);
+#else
+								InterlockedIncrement(&g_iSendCount);
+								InterlockedExchange(&g_iSendByte, g_iSendByte += iSendByte);
+#endif
+							}
+						}
 					}
 				}
 			}
