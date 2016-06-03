@@ -31,3 +31,4 @@
 26.<2016-05-27> IOCP 서버 라이브러리 구현 & 로그인 서버 만들기 1
 27.<2016-05-27> IOCP 서버 라이브러리 구현 & 로그인 서버 만들기 2
 28.<2016-06-03> 6/2~3 강의 내용. UdpRecv, UdpSend, MulticastingRecv, MulticastingSend, RTTI 프로젝트
+29.<2016-06-03> rtti_1 프로젝트 (RTTI 내용 클래스화, 스마트 포인터)
