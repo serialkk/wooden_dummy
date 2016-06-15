@@ -1,0 +1,41 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TCoreDx_0", "TCoreDx_0\TCoreDx_0.vcxproj", "{EBC1D09E-04BC-4138-B731-48EF8BD4BD60}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Lib_Sample_0", "Lib_Sample_0\Lib_Sample_0.vcxproj", "{A896F2A5-0CA2-4F2A-861F-182308D6AD7F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EBC1D09E-04BC-4138-B731-48EF8BD4BD60}.Debug|x64.ActiveCfg = Debug|x64
+		{EBC1D09E-04BC-4138-B731-48EF8BD4BD60}.Debug|x64.Build.0 = Debug|x64
+		{EBC1D09E-04BC-4138-B731-48EF8BD4BD60}.Debug|x86.ActiveCfg = Debug|Win32
+		{EBC1D09E-04BC-4138-B731-48EF8BD4BD60}.Debug|x86.Build.0 = Debug|Win32
+		{EBC1D09E-04BC-4138-B731-48EF8BD4BD60}.Release|x64.ActiveCfg = Release|x64
+		{EBC1D09E-04BC-4138-B731-48EF8BD4BD60}.Release|x64.Build.0 = Release|x64
+		{EBC1D09E-04BC-4138-B731-48EF8BD4BD60}.Release|x86.ActiveCfg = Release|Win32
+		{EBC1D09E-04BC-4138-B731-48EF8BD4BD60}.Release|x86.Build.0 = Release|Win32
+		{A896F2A5-0CA2-4F2A-861F-182308D6AD7F}.Debug|x64.ActiveCfg = Debug|x64
+		{A896F2A5-0CA2-4F2A-861F-182308D6AD7F}.Debug|x64.Build.0 = Debug|x64
+		{A896F2A5-0CA2-4F2A-861F-182308D6AD7F}.Debug|x86.ActiveCfg = Debug|Win32
+		{A896F2A5-0CA2-4F2A-861F-182308D6AD7F}.Debug|x86.Build.0 = Debug|Win32
+		{A896F2A5-0CA2-4F2A-861F-182308D6AD7F}.Release|x64.ActiveCfg = Release|x64
+		{A896F2A5-0CA2-4F2A-861F-182308D6AD7F}.Release|x64.Build.0 = Release|x64
+		{A896F2A5-0CA2-4F2A-861F-182308D6AD7F}.Release|x86.ActiveCfg = Release|Win32
+		{A896F2A5-0CA2-4F2A-861F-182308D6AD7F}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		VisualSVNWorkingCopyRoot = .
+	EndGlobalSection
+EndGlobal
