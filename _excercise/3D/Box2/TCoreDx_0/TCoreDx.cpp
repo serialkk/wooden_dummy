@@ -28,8 +28,8 @@ bool TCoreDx::GameInit()
 bool TCoreDx::GameRelease()
 {
 	Release();	
-	//m_Timer.Release();
-	//m_Input.Release();
+	m_Timer.Release();
+	m_Input.Release();
 	//TDxState::Release();
 	//TDevice::Release();	
 	//m_Write.Release();
@@ -37,8 +37,8 @@ bool TCoreDx::GameRelease()
 }
 bool TCoreDx::GameFrame()
 {
-	//m_Timer.Frame();
-	//m_Input.Frame();
+	m_Timer.Frame();
+	m_Input.Frame();
 	//PreFrame();
 	Frame();
 	//PostFrame();

@@ -26,6 +26,7 @@ class Sample : public TCoreDx
 		D3DXMATRIX mProjection;
 	};
 
+	ConstantBuffer cb, cb_game;
 
 	//--------------------------------------------------------------------------------------
 	// Global Variables
