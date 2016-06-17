@@ -5,7 +5,7 @@
 #include "TTimer.h"
 
 #include <D3Dcompiler.h>
-
+#include <assert.h>
 //--------------------------------------------------------------------------------------
 // Structures
 //--------------------------------------------------------------------------------------
@@ -26,6 +26,20 @@ struct ConstantBuffer
 class TDevice : public TWindow
 {
 public:
+	BOOL					m_IsFullScreenMode;	// 풀스크린 디바이스 여부판단
+	IDXGIFactory*			g_pGIFactory;		// DXGI 객체
+	D3D11_VIEWPORT			g_ViewPort;
+	//DXGI_SWAP_CHAIN_DESC	g_SwapChainDesc;
+	HRESULT			CreateDevice();
+	void			SetFullScreenFlag(BOOL bFlag);
+	HRESULT			CreateSwapChain(HWND hWnd, UINT iWidth, UINT iHeight, BOOL IsFullScreen);
+	IDXGIFactory*	GetGIFactory();
+	HRESULT			CreateGIFactory();
+	bool			ResizeClient(UINT iWidth, UINT iHeight);
+	HRESULT			SetRenderTargetView();
+	HRESULT			SetViewPort();
+
+public:
 
 
 	TInput m_Input;
@@ -39,13 +53,7 @@ public:
 	ID3D11DeviceContext*    g_pImmediateContext = NULL;
 	IDXGISwapChain*         g_pSwapChain = NULL;
 	ID3D11RenderTargetView* g_pRenderTargetView = NULL;
-	ID3D11VertexShader*     g_pVertexShader = NULL;
-	ID3D11PixelShader*      g_pPixelShader = NULL;
-	ID3D11InputLayout*      g_pVertexLayout = NULL;
-	ID3D11Buffer*           g_pVertexBuffer = NULL;
-	//아래 2개 인터페이스가 추가가됨.(필요한 버퍼: 정점, 인덱스, 상수 버퍼.)
-	ID3D11Buffer*           g_pIndexBuffer = NULL; //인덱스 버퍼
-	ID3D11Buffer*           g_pConstantBuffer = NULL; //상수 버퍼
+
 
 	D3DXMATRIX                g_World;
 	D3DXMATRIX                g_View;
@@ -60,6 +68,7 @@ public:
 
 
 	HRESULT InitDevice();
+	//HRESULT InitDevice(HWND hWnd, UINT iWidth, UINT iHeight, BOOL IsFullScreen);
 	void	CleanupDevice();
 	HRESULT CompileShaderFromFile(WCHAR* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3DBlob** ppBlobOut);
 

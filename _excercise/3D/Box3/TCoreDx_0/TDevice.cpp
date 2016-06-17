@@ -4,8 +4,135 @@
 // Create Direct3D device and swap chain
 //--------------------------------------------------------------------------------------
 
-HRESULT TDevice::InitDevice()
+bool  TDevice::ResizeClient(UINT iWidth, UINT iHeight)
 {
+	if (g_pSwapChain == NULL || g_pd3dDevice == NULL) return true;
+	
+	HRESULT hr;
+
+	//--------------------------------------------------------------------------------------
+	// 랜더타켓과 깊이스텐실 버퍼를 해제한다.
+	//--------------------------------------------------------------------------------------
+	g_pImmediateContext->OMSetRenderTargets(0, NULL, NULL);
+	if (g_pRenderTargetView) g_pRenderTargetView->Release();
+
+	//--------------------------------------------------------------------------------------
+	// 백버퍼의 크기를 조정한다.
+	//--------------------------------------------------------------------------------------
+	DXGI_SWAP_CHAIN_DESC CurrentSD;
+	g_pSwapChain->GetDesc(&CurrentSD);
+	hr = g_pSwapChain->ResizeBuffers(CurrentSD.BufferCount,
+		iWidth, iHeight,
+		CurrentSD.BufferDesc.Format,
+		CurrentSD.Flags);
+	if (FAILED(hr))
+	{
+		//DXTRACE_ERR_MSGBOX( DXGetErrorDescription(hr),hr);
+	}
+
+	// 랜더타켓뷰 생성 및 적용한다.
+	if (FAILED(hr = SetRenderTargetView()))
+	{
+		return hr;
+	}
+	// 뷰포트를 세팅하고 적용한다.
+	if (FAILED(hr = SetViewPort()))
+	{
+		return hr;
+	}
+	return S_OK;
+}
+
+//--------------------------------------------------------------------------------------
+// DXGIFactory 인터페이스를 생성한다.
+//--------------------------------------------------------------------------------------
+HRESULT TDevice::CreateGIFactory()
+{
+	HRESULT hr;
+	if (g_pd3dDevice == NULL) return E_FAIL;
+	if (FAILED(hr = CreateDXGIFactory(__uuidof(IDXGIFactory),
+		(void**)&g_pGIFactory)))
+	{
+		//DXTRACE_ERR_MSGBOX( DXGetErrorDescription(hr),hr);
+	}
+
+	//HRESULT hr;// = CreateDXGIFactory(__uuidof(IDXGIFactory), (void**)(&m_pGIFactory) );
+	//IDXGIDevice * pDXGIDevice;
+	//hr = m_pd3dDevice->QueryInterface(__uuidof(IDXGIDevice), (void **)&pDXGIDevice);
+	//     
+	//IDXGIAdapter * pDXGIAdapter;
+	//hr = pDXGIDevice->GetParent(__uuidof(IDXGIAdapter), (void **)&pDXGIAdapter);
+
+	//IDXGIFactory * pIDXGIFactory;
+	//pDXGIAdapter->GetParent(__uuidof(IDXGIFactory), (void **)&m_pGIFactory);
+	//
+	//pDXGIDevice->Release();
+	//pDXGIAdapter->Release();
+	return hr;
+}
+
+HRESULT		TDevice::SetRenderTargetView()
+{
+	HRESULT hr = S_OK;
+	// Create a render target view
+	ID3D11Texture2D* pBackBuffer;
+	hr = g_pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer);
+	if (FAILED(hr))
+		return hr;
+
+	hr = g_pd3dDevice->CreateRenderTargetView(pBackBuffer, NULL, &g_pRenderTargetView);
+	pBackBuffer->Release();
+	if (FAILED(hr))
+		return hr;
+
+	g_pImmediateContext->OMSetRenderTargets(1, &g_pRenderTargetView, NULL);
+
+	return hr;
+
+
+	//// Create a render target view
+	//ID3D11Texture2D* pBackBuffer = NULL;
+	//hr = g_pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer);
+	//if (FAILED(hr))
+	//	return hr;
+
+	//hr = g_pd3dDevice->CreateRenderTargetView(pBackBuffer, NULL, &g_pRenderTargetView);
+	//pBackBuffer->Release();
+	//if (FAILED(hr))
+	//	return hr;
+
+	//g_pImmediateContext->OMSetRenderTargets(1, &g_pRenderTargetView, NULL);
+}
+HRESULT		TDevice::SetViewPort()
+{
+	HRESULT hr = S_OK;
+
+	DXGI_SWAP_CHAIN_DESC Desc;
+	g_pSwapChain->GetDesc(&Desc);
+
+	// Setup the viewport    
+	g_ViewPort.Width = Desc.BufferDesc.Width;
+	g_ViewPort.Height = Desc.BufferDesc.Height;
+	g_ViewPort.MinDepth = 0.0f;
+	g_ViewPort.MaxDepth = 1.0f;
+	g_ViewPort.TopLeftX = 0;
+	g_ViewPort.TopLeftY = 0;
+	g_pImmediateContext->RSSetViewports(1, &g_ViewPort);
+
+
+	//// Setup the viewport
+	//D3D11_VIEWPORT vp;
+	//vp.Width = (FLOAT)width;
+	//vp.Height = (FLOAT)height;
+	//vp.MinDepth = 0.0f;
+	//vp.MaxDepth = 1.0f;
+	//vp.TopLeftX = 0;
+	//vp.TopLeftY = 0;
+	//g_pImmediateContext->RSSetViewports(1, &vp);
+
+	return hr;
+}
+HRESULT TDevice::CreateDevice() {
 	HRESULT hr = S_OK;
 
 	RECT rc;
@@ -59,158 +186,24 @@ HRESULT TDevice::InitDevice()
 	}
 	if (FAILED(hr))
 		return hr;
+}
+HRESULT TDevice::InitDevice()
+{
+	
 
-	// Create a render target view
-	ID3D11Texture2D* pBackBuffer = NULL;
-	hr = g_pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer);
-	if (FAILED(hr))
-		return hr;
 
-	hr = g_pd3dDevice->CreateRenderTargetView(pBackBuffer, NULL, &g_pRenderTargetView);
-	pBackBuffer->Release();
-	if (FAILED(hr))
-		return hr;
+	BOOL IsFullScreen = true;
+	RECT rc;
 
-	g_pImmediateContext->OMSetRenderTargets(1, &g_pRenderTargetView, NULL);
+	GetClientRect(m_hWnd, &rc);
+	UINT iWidth = rc.right - rc.left;
+	UINT iHeight = rc.bottom - rc.top;
 
-	// Setup the viewport
-	D3D11_VIEWPORT vp;
-	vp.Width = (FLOAT)width;
-	vp.Height = (FLOAT)height;
-	vp.MinDepth = 0.0f;
-	vp.MaxDepth = 1.0f;
-	vp.TopLeftX = 0;
-	vp.TopLeftY = 0;
-	g_pImmediateContext->RSSetViewports(1, &vp);
 
-	// Compile the vertex shader
-	ID3DBlob* pVSBlob = NULL;
-	hr = CompileShaderFromFile(L"Tutorial04.fx", "VS", "vs_4_0", &pVSBlob);
-	if (FAILED(hr))
-	{
-		MessageBox(NULL,
-			L"The FX file cannot be compiled.  Please run this executable from the directory that contains the FX file.", L"Error", MB_OK);
-		return hr;
-	}
 
-	// Create the vertex shader
-	hr = g_pd3dDevice->CreateVertexShader(pVSBlob->GetBufferPointer(), pVSBlob->GetBufferSize(), NULL, &g_pVertexShader);
-	if (FAILED(hr))
-	{
-		pVSBlob->Release();
-		return hr;
-	}
 
-	// Define the input layout
-	D3D11_INPUT_ELEMENT_DESC layout[] =
-	{
-		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-	};
-	UINT numElements = ARRAYSIZE(layout);
 
-	// Create the input layout
-	hr = g_pd3dDevice->CreateInputLayout(layout, numElements, pVSBlob->GetBufferPointer(),
-		pVSBlob->GetBufferSize(), &g_pVertexLayout);
-	pVSBlob->Release();
-	if (FAILED(hr))
-		return hr;
 
-	// Set the input layout
-	g_pImmediateContext->IASetInputLayout(g_pVertexLayout);
-
-	// Compile the pixel shader
-	ID3DBlob* pPSBlob = NULL;
-	hr = CompileShaderFromFile(L"Tutorial04.fx", "PS", "ps_4_0", &pPSBlob);
-	if (FAILED(hr))
-	{
-		MessageBox(NULL,
-			L"The FX file cannot be compiled.  Please run this executable from the directory that contains the FX file.", L"Error", MB_OK);
-		return hr;
-	}
-
-	// Create the pixel shader
-	hr = g_pd3dDevice->CreatePixelShader(pPSBlob->GetBufferPointer(), pPSBlob->GetBufferSize(), NULL, &g_pPixelShader);
-	pPSBlob->Release();
-	if (FAILED(hr))
-		return hr;
-
-	// Create vertex buffer
-	SimpleVertex vertices[] =
-	{
-		{ D3DXVECTOR3(-1.0f, 1.0f, -1.0f), D3DXVECTOR4(0.0f, 0.0f, 1.0f, 1.0f) },//0
-		{ D3DXVECTOR3(1.0f, 1.0f, -1.0f), D3DXVECTOR4(0.0f, 1.0f, 0.0f, 1.0f) }, //1
-		{ D3DXVECTOR3(1.0f, 1.0f, 1.0f), D3DXVECTOR4(0.0f, 1.0f, 1.0f, 1.0f) },  //2
-		{ D3DXVECTOR3(-1.0f, 1.0f, 1.0f), D3DXVECTOR4(1.0f, 0.0f, 0.0f, 1.0f) }, //3
-		{ D3DXVECTOR3(-1.0f, -1.0f, -1.0f), D3DXVECTOR4(1.0f, 0.0f, 1.0f, 1.0f) },//4
-		{ D3DXVECTOR3(1.0f, -1.0f, -1.0f), D3DXVECTOR4(1.0f, 1.0f, 0.0f, 1.0f) }, //5
-		{ D3DXVECTOR3(1.0f, -1.0f, 1.0f), D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f) }, //6
-		{ D3DXVECTOR3(-1.0f, -1.0f, 1.0f), D3DXVECTOR4(0.0f, 0.0f, 0.0f, 1.0f) }, //7
-	};
-	D3D11_BUFFER_DESC bd;
-	ZeroMemory(&bd, sizeof(bd));
-	bd.Usage = D3D11_USAGE_DEFAULT;
-	bd.ByteWidth = sizeof(SimpleVertex) * 8;
-	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-	bd.CPUAccessFlags = 0;
-	D3D11_SUBRESOURCE_DATA InitData;
-	ZeroMemory(&InitData, sizeof(InitData));
-	InitData.pSysMem = vertices;
-	hr = g_pd3dDevice->CreateBuffer(&bd, &InitData, &g_pVertexBuffer);
-	if (FAILED(hr))
-		return hr;
-
-	// Set vertex buffer
-	UINT stride = sizeof(SimpleVertex);
-	UINT offset = 0;
-	g_pImmediateContext->IASetVertexBuffers(0, 1, &g_pVertexBuffer, &stride, &offset);
-
-	// Create index buffer
-	WORD indices[] =
-	{
-		3,1,0,
-		2,1,3,
-
-		0,5,4,
-		1,5,0,
-
-		3,4,7,
-		0,4,3,
-
-		1,6,5,
-		2,6,1,
-
-		2,7,6,
-		3,7,2,
-
-		6,4,5,
-		7,4,6,
-	};
-
-	//인덱스버퍼와 정점버퍼의 차이는 크기와 데이터만 달라진다
-	bd.Usage = D3D11_USAGE_DEFAULT;
-	bd.ByteWidth = sizeof(WORD) * 36;        // 36 vertices needed for 12 triangles in a triangle list
-	bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
-	bd.CPUAccessFlags = 0; // CPU가 GPU의 메모리에 엑세스 할 수 있는지에 대한 flag .
-	InitData.pSysMem = indices;
-	hr = g_pd3dDevice->CreateBuffer(&bd, &InitData, &g_pIndexBuffer);
-	if (FAILED(hr))
-		return hr;
-
-	// Set index buffer
-	g_pImmediateContext->IASetIndexBuffer(g_pIndexBuffer, DXGI_FORMAT_R16_UINT, 0);
-
-	// Set primitive topology
-	g_pImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-	// Create the constant buffer
-	bd.Usage = D3D11_USAGE_DEFAULT;
-	bd.ByteWidth = sizeof(ConstantBuffer);
-	bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	bd.CPUAccessFlags = 0;
-	hr = g_pd3dDevice->CreateBuffer(&bd, NULL, &g_pConstantBuffer);
-	if (FAILED(hr))
-		return hr;
 
 	// Initialize the world matrix
 	D3DXMatrixIdentity(&g_World);
@@ -222,30 +215,106 @@ HRESULT TDevice::InitDevice()
 	D3DXMatrixLookAtLH(&g_View, &Eye, &At, &Up);
 
 	// Initialize the projection matrix
-	D3DXMatrixPerspectiveFovLH(&g_Projection, D3DX_PI * 0.5f, width / (FLOAT)height, 0.01f, 100.0f);
+	D3DXMatrixPerspectiveFovLH(&g_Projection, D3DX_PI * 0.5f, iWidth / (FLOAT)iHeight, 0.01f, 100.0f);
 
 
+
+
+
+
+
+
+	HRESULT hr = S_OK;
+	if (FAILED(hr = CreateDevice()))
+	{
+		MessageBox(0, _T("CreateDevice  실패"), _T("Fatal error"), MB_OK);
+		return hr;
+	}
+
+	if (FAILED(hr = CreateSwapChain(m_hWnd, iWidth, iHeight, IsFullScreen)))
+	{
+		MessageBox(0, _T("CreateSwapChain  실패"), _T("Fatal error"), MB_OK);
+		return hr;
+	}
+
+	if (FAILED(hr = SetRenderTargetView()))
+	{
+		MessageBox(0, _T("SetRenderTargetView  실패"), _T("Fatal error"), MB_OK);
+		return hr;
+	}
+	if (FAILED(hr = SetViewPort()))
+	{
+		MessageBox(0, _T("SetViewPort  실패"), _T("Fatal error"), MB_OK);
+		return hr;
+	}
+
+	// Alt + Enter 키를 막는다.
+	//if (FAILED(hr = g_pGIFactory->MakeWindowAssociation(m_hWnd, DXGI_MWA_NO_WINDOW_CHANGES | DXGI_MWA_NO_ALT_ENTER)))
+	//{
+	//	return hr;
+	//}
 
 	return S_OK;
 }
+IDXGIFactory* TDevice::GetGIFactory()
+{
+	assert(g_pGIFactory);
+	return g_pGIFactory;
+}
+void TDevice::SetFullScreenFlag(BOOL bFlag)
+{
+	m_IsFullScreenMode = bFlag;
+}
+//--------------------------------------------------------------------------------------
+// DXGIFactory 인터페이스로부터 IDXGISwapChain 인터페이스를 생성한다.
+//--------------------------------------------------------------------------------------
+HRESULT TDevice::CreateSwapChain(HWND hWnd, UINT iWidth, UINT iHeight, BOOL IsFullScreen)
+{
+	HRESULT hr = S_OK;
+	SetFullScreenFlag(IsFullScreen);
+	if (g_pGIFactory == NULL) return S_FALSE;
+	DXGI_SWAP_CHAIN_DESC sd;
+	ZeroMemory(&sd, sizeof(sd));
+	sd.BufferCount = 1;
+	sd.BufferDesc.Width = iWidth;
+	sd.BufferDesc.Height = iHeight;
+	sd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	sd.BufferDesc.RefreshRate.Numerator = 60;
+	sd.BufferDesc.RefreshRate.Denominator = 1;
+	sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+	sd.OutputWindow = hWnd;
+	sd.SampleDesc.Count = 1;
+	sd.SampleDesc.Quality = 0;
+	sd.Windowed = !m_IsFullScreenMode;
+	// 추가
+	sd.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
 
+	if (FAILED(hr = g_pGIFactory->CreateSwapChain(g_pd3dDevice, &sd, &g_pSwapChain)))
+	{
+		return hr;
+	}
+	return hr;
+}
 //--------------------------------------------------------------------------------------
 // Clean up the objects we've created
 //--------------------------------------------------------------------------------------
 void	TDevice::CleanupDevice()
 {
-	if (g_pImmediateContext) g_pImmediateContext->ClearState();
+	// 초기 풀스크린윈도우에서 응용프로그램이 닫히는 경우에는 윈도우 전환 후에 
+	// 객체들을 소멸해야 한다. (메모리 누수를 막을 수 있다.)
+	g_pSwapChain->SetFullscreenState(false, NULL);
 
-	if (g_pConstantBuffer) g_pConstantBuffer->Release();
-	if (g_pVertexBuffer) g_pVertexBuffer->Release();
-	if (g_pIndexBuffer) g_pIndexBuffer->Release();
-	if (g_pVertexLayout) g_pVertexLayout->Release();
-	if (g_pVertexShader) g_pVertexShader->Release();
-	if (g_pPixelShader) g_pPixelShader->Release();
+	if (g_pImmediateContext) g_pImmediateContext->ClearState();
 	if (g_pRenderTargetView) g_pRenderTargetView->Release();
 	if (g_pSwapChain) g_pSwapChain->Release();
 	if (g_pImmediateContext) g_pImmediateContext->Release();
 	if (g_pd3dDevice) g_pd3dDevice->Release();
+
+	g_pd3dDevice = NULL;
+	g_pSwapChain = NULL;
+	g_pRenderTargetView = NULL;
+	g_pImmediateContext = NULL;
+	g_pGIFactory = NULL;
 }
 //--------------------------------------------------------------------------------------
 // Helper for compiling shaders with D3DX11
@@ -332,6 +401,8 @@ bool	TDevice::Render() {
 }
 
 bool	TDevice::GameRun() { 
+	m_Timer.Frame();
+	m_Input.Frame();
 	PreRender();
 	Frame();
 	Render();
@@ -367,6 +438,13 @@ bool	TDevice::Release() {
 
 TDevice::TDevice()
 {
+	g_driverType = D3D_DRIVER_TYPE_NULL;
+	//g_FeatureLevel = D3D_FEATURE_LEVEL_11_0;
+	g_pd3dDevice = NULL;
+	g_pSwapChain = NULL;
+	g_pRenderTargetView = NULL;
+	g_pImmediateContext = NULL;
+	g_pGIFactory = NULL;
 }
 
 
