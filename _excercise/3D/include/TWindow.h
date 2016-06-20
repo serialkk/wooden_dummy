@@ -15,6 +15,7 @@ public:
 		DWORD dwStyle = WS_OVERLAPPEDWINDOW);
 	bool	Run();
 	bool	Release();
+	virtual	 bool   ResizeDevice(UINT iWidth, UINT iHeight);
 	virtual  bool   ResizeClient(UINT iWidth, UINT iHeight);
 	virtual  bool	GameRun() { return true; };
 	virtual  void   MsgEvent(MSG msg) {};

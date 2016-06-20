@@ -4,44 +4,83 @@
 // Create Direct3D device and swap chain
 //--------------------------------------------------------------------------------------
 
-bool  TDevice::ResizeClient(UINT iWidth, UINT iHeight)
+bool   TDevice::ResizeDevice(UINT iWidth, UINT iHeight)
 {
-	if (g_pSwapChain == NULL || g_pd3dDevice == NULL) return true;
+		if (g_pSwapChain == NULL || g_pd3dDevice == NULL) return true;
+		
+		HRESULT hr;
 	
-	HRESULT hr;
-
-	//--------------------------------------------------------------------------------------
-	// 랜더타켓과 깊이스텐실 버퍼를 해제한다.
-	//--------------------------------------------------------------------------------------
-	g_pImmediateContext->OMSetRenderTargets(0, NULL, NULL);
-	if (g_pRenderTargetView) g_pRenderTargetView->Release();
-
-	//--------------------------------------------------------------------------------------
-	// 백버퍼의 크기를 조정한다.
-	//--------------------------------------------------------------------------------------
-	DXGI_SWAP_CHAIN_DESC CurrentSD;
-	g_pSwapChain->GetDesc(&CurrentSD);
-	hr = g_pSwapChain->ResizeBuffers(CurrentSD.BufferCount,
-		iWidth, iHeight,
-		CurrentSD.BufferDesc.Format,
-		CurrentSD.Flags);
-	if (FAILED(hr))
-	{
-		//DXTRACE_ERR_MSGBOX( DXGetErrorDescription(hr),hr);
-	}
-
-	// 랜더타켓뷰 생성 및 적용한다.
-	if (FAILED(hr = SetRenderTargetView()))
-	{
-		return hr;
-	}
-	// 뷰포트를 세팅하고 적용한다.
-	if (FAILED(hr = SetViewPort()))
-	{
-		return hr;
-	}
-	return S_OK;
+		//--------------------------------------------------------------------------------------
+		// 랜더타켓과 깊이스텐실 버퍼를 해제한다.
+		//--------------------------------------------------------------------------------------
+		g_pImmediateContext->OMSetRenderTargets(0, NULL, NULL);
+		if (g_pRenderTargetView) g_pRenderTargetView->Release();
+	
+		//--------------------------------------------------------------------------------------
+		// 백버퍼의 크기를 조정한다.
+		//--------------------------------------------------------------------------------------
+		DXGI_SWAP_CHAIN_DESC CurrentSD;
+		g_pSwapChain->GetDesc(&CurrentSD);
+		hr = g_pSwapChain->ResizeBuffers(CurrentSD.BufferCount,
+			iWidth, iHeight,
+			CurrentSD.BufferDesc.Format,
+			CurrentSD.Flags);
+		if (FAILED(hr))
+		{
+			//DXTRACE_ERR_MSGBOX( DXGetErrorDescription(hr),hr);
+		}
+	
+		// 랜더타켓뷰 생성 및 적용한다.
+		if (FAILED(hr = SetRenderTargetView()))
+		{
+			return hr;
+		}
+		// 뷰포트를 세팅하고 적용한다.
+		if (FAILED(hr = SetViewPort()))
+		{
+			return hr;
+		}
+		return S_OK;
 }
+
+//bool  TDevice::ResizeClient(UINT iWidth, UINT iHeight)
+//{
+//	if (g_pSwapChain == NULL || g_pd3dDevice == NULL) return true;
+//	
+//	HRESULT hr;
+//
+//	//--------------------------------------------------------------------------------------
+//	// 랜더타켓과 깊이스텐실 버퍼를 해제한다.
+//	//--------------------------------------------------------------------------------------
+//	g_pImmediateContext->OMSetRenderTargets(0, NULL, NULL);
+//	if (g_pRenderTargetView) g_pRenderTargetView->Release();
+//
+//	//--------------------------------------------------------------------------------------
+//	// 백버퍼의 크기를 조정한다.
+//	//--------------------------------------------------------------------------------------
+//	DXGI_SWAP_CHAIN_DESC CurrentSD;
+//	g_pSwapChain->GetDesc(&CurrentSD);
+//	hr = g_pSwapChain->ResizeBuffers(CurrentSD.BufferCount,
+//		iWidth, iHeight,
+//		CurrentSD.BufferDesc.Format,
+//		CurrentSD.Flags);
+//	if (FAILED(hr))
+//	{
+//		//DXTRACE_ERR_MSGBOX( DXGetErrorDescription(hr),hr);
+//	}
+//
+//	// 랜더타켓뷰 생성 및 적용한다.
+//	if (FAILED(hr = SetRenderTargetView()))
+//	{
+//		return hr;
+//	}
+//	// 뷰포트를 세팅하고 적용한다.
+//	if (FAILED(hr = SetViewPort()))
+//	{
+//		return hr;
+//	}
+//	return S_OK;
+//}
 
 //--------------------------------------------------------------------------------------
 // DXGIFactory 인터페이스를 생성한다.

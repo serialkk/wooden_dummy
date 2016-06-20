@@ -35,10 +35,10 @@ public:
 	HRESULT			CreateSwapChain(HWND hWnd, UINT iWidth, UINT iHeight, BOOL IsFullScreen);
 	IDXGIFactory*	GetGIFactory();
 	HRESULT			CreateGIFactory();
-	bool			ResizeClient(UINT iWidth, UINT iHeight);
+	//bool			ResizeClient(UINT iWidth, UINT iHeight);
 	HRESULT			SetRenderTargetView();
 	HRESULT			SetViewPort();
-
+	bool			ResizeDevice(UINT iWidth, UINT iHeight);
 public:
 
 

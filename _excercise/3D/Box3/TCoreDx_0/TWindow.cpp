@@ -73,11 +73,16 @@ void TWindow::CenterWindow()
 		rt.right-rt.left,
 		rt.bottom-rt.top, true);
 }
+
+bool  TWindow::ResizeDevice(UINT iWidth, UINT iHeight) {
+	return true;
+}
+
 bool	TWindow::ResizeClient(UINT iWidth, UINT iHeight)
 {
 	GetClientRect(m_hWnd, &m_rtWindow);
 	g_rtWindow = m_rtWindow;
-	return true;
+	return ResizeDevice(iWidth, iHeight);
 }
 // char 멀티바이트 => CHAR
 //      유티코드   => WCHAR
