@@ -1,0 +1,12 @@
+boost빌드관련
+http://jacking.tistory.com/986
+http://egloos.zum.com/anster/v/2157882
+http://mindgear.tistory.com/203
+http://www.viper.pe.kr/cgi-bin/moin.cgi/Boost
+
+md5모델로딩 관련
+http://kevino.tistory.com/entry/MD5-Model-Loader-source-with-CMake
+http://www.3dgep.com/loading-and-animating-md5-models-with-opengl/
+http://www.gamedev.net/topic/408803-md5-model-loader/
+http://tfc.duke.free.fr/coding/md5-specs-en.html
+http://stackoverflow.com/questions/14881377/mesh-animation-at-directx
