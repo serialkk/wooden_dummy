@@ -19,33 +19,34 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{6B1E6A50-F5FB-4DB6-ABDF-5644B70EC4CC}</ProjectGuid>
+    <ProjectGuid>{46E150BF-F0C3-41AC-B345-670605806A91}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>TCoreLib</RootNamespace>
+    <RootNamespace>SampleWin</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <ProjectName>KCoreSample</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -70,20 +71,18 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>../../output</OutDir>
-    <IntDir>../../output/TCoreLib</IntDir>
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>../../output/</OutDir>
+    <IntDir>../../output/SampleWin</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>../../output/Debug</OutDir>
-    <IntDir>../../output/Debug/TCoreLib</IntDir>
+    <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>../../output/Release</OutDir>
-    <IntDir>../../output/Release/TCoreLib</IntDir>
+    <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>../../output/Release/</OutDir>
-    <IntDir>../../output/Release/TCoreLib</IntDir>
+    <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -91,22 +90,16 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>../../dx/include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../include;../../dx/include;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>../../lib;../../dx/lib/x86;</AdditionalLibraryDirectories>
+      <AdditionalDependencies>d3d11.lib;d3dcompiler.lib;d3dx11d.lib;d3dx9d.lib;dxerr.lib;dxguid.lib;winmm.lib;comctl32.lib;KCoreLib32_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
-    <PostBuildEvent>
-      <Command>copy "*.h" "..\\..\\include"
-copy "TCoreLib32_d.lib" "..\\..\\Lib\\"</Command>
-    </PostBuildEvent>
-    <Lib>
-      <OutputFile>TCoreLib32_d.lib</OutputFile>
-      <AdditionalLibraryDirectories>../../dx/lib/x86;</AdditionalLibraryDirectories>
-    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -114,20 +107,13 @@ copy "TCoreLib32_d.lib" "..\\..\\Lib\\"</Command>
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
-    <Lib>
-      <OutputFile>TCoreLib64_d.lib</OutputFile>
-    </Lib>
-    <PostBuildEvent>
-      <Command>copy "*.h" "..\\..\\include"
-copy "TCoreLib64_d.lib" "..\\..\\Lib"</Command>
-    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -137,7 +123,7 @@ copy "TCoreLib64_d.lib" "..\\..\\Lib"</Command>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
     </ClCompile>
     <Link>
@@ -145,14 +131,8 @@ copy "TCoreLib64_d.lib" "..\\..\\Lib"</Command>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>d3d11.lib;d3dcompiler.lib;d3dx11d.lib;d3dx9d.lib;dxerr.lib;dxguid.lib;winmm.lib;comctl32.lib;KCoreLib32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
-    <PostBuildEvent>
-      <Command>copy "*.h" "..\\..\\include"
-copy "TCoreLib32.lib" "..\\..\\Lib\\x86\\Release"</Command>
-    </PostBuildEvent>
-    <Lib>
-      <OutputFile>TCoreLib32.lib</OutputFile>
-    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -162,7 +142,7 @@ copy "TCoreLib32.lib" "..\\..\\Lib\\x86\\Release"</Command>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
     </ClCompile>
     <Link>
@@ -171,41 +151,17 @@ copy "TCoreLib32.lib" "..\\..\\Lib\\x86\\Release"</Command>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
-    <PostBuildEvent>
-      <Command>copy "*.h" "..\\..\\include"
-copy "TCoreLib64.lib" "..\\..\\Lib\\x64\\Release"</Command>
-    </PostBuildEvent>
-    <Lib>
-      <OutputFile>TCoreLib64.lib</OutputFile>
-    </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <Text Include="ReadMe.txt" />
+    <ClInclude Include="Sample.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="TBitmap.h" />
-    <ClInclude Include="TCore.h" />
-    <ClInclude Include="TDevice.h" />
-    <ClInclude Include="TImage.h" />
-    <ClInclude Include="TImageMgr.h" />
-    <ClInclude Include="TInput.h" />
-    <ClInclude Include="TObject.h" />
-    <ClInclude Include="TStd.h" />
-    <ClInclude Include="TTimer.h" />
-    <ClInclude Include="TWindow.h" />
-    <ClInclude Include="TWrite.h" />
+    <ClCompile Include="Sample.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="TBitmap.cpp" />
-    <ClCompile Include="TCore.cpp" />
-    <ClCompile Include="TDevice.cpp" />
-    <ClCompile Include="TImage.cpp" />
-    <ClCompile Include="TImageMgr.cpp" />
-    <ClCompile Include="TInput.cpp" />
-    <ClCompile Include="TObject.cpp" />
-    <ClCompile Include="TTimer.cpp" />
-    <ClCompile Include="TWindow.cpp" />
-    <ClCompile Include="TWrite.cpp" />
+    <FxCompile Include="hlsl.xx">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
