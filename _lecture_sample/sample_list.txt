@@ -38,5 +38,5 @@
 32.<2016-06-21> 3D input( 첫째시간까지 완료한 내용)
 33.<2016-06-21> 3D input( 두번째시간까지 완료한 내용)
 34.<2016-06-23> 3D TCore refactoring. 헬퍼클래스 TDXHelper 구현 ( 첫째시간까지 완료한 내용)
-35.<2016-06-24> 3D Constant Buffer and Resterize Stage
-
+35.<2016-06-24> 3D Constant Buffer and Resterize Stage 첫째시간까지
+36.<2016-06-24> 3D Constant Buffer and Resterize Stage 두번째시간까지
