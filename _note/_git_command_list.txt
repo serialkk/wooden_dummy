@@ -1,0 +1,17 @@
+ git init
+ git config --global user.email "serialkk@naver.com"
+ git config --global user.name "Tom Jaejoon Lee"
+ 
+ git add .
+ git commit -a
+ git remote add origin https://github.com/serialkk/studentmanagement.git
+ git push -u origin master
+ git log
+ git commit --amend
+ git push -u origin master
+
+ git mergetool -t vimdiff
+ 
+ git remote add origin https://github.com/serialkk/studentman1.git
+ 
+ git clone https://github.com/serialkk/wooden_dummy.git
