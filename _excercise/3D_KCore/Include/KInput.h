@@ -14,11 +14,13 @@ enum KeyState {
 #define KEYSTATECOUNT 256
 //#define WIN_KEY_USE
 
-class KInput
+class KInput : public KSingleton<KInput>
 {
+private:
+	friend class KSingleton<KInput>;
 public:
 	//  인풋 객체
-	LPDIRECTINPUT8		  m_pDI;
+	LPDIRECTINPUT8		m_pDI;
 	LPDIRECTINPUTDEVICE8  m_pKeyDevice; // 키보드
 	LPDIRECTINPUTDEVICE8  m_pMouseDevice;// 마우스
 	BYTE				  m_KeyState[KEYSTATECOUNT];
@@ -42,8 +44,9 @@ public:
 	// 클래스 멤버 변수 소멸을 담당한다.
 	bool		Release();
 	void		MsgEvent(MSG msg);
-public:
+private:
 	KInput();
+public:
 	virtual ~KInput();
 };
-
+#define I_Input KInput::GetInstance()

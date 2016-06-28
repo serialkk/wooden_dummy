@@ -1,4 +1,7 @@
 #include "KDevice.h"
+
+ID3D11Device*	g_pd3dDevice = nullptr;
+
 HRESULT  KDevice::DeleteDXResouce()
 {
 	g_pImmediateContext->OMSetRenderTargets(0, NULL, NULL);
@@ -12,7 +15,7 @@ HRESULT  KDevice::CreateDXResouce()
 bool   KDevice::ResizeDevice(UINT iWidth, UINT iHeight)
 {
 	HRESULT hr;
-	if (g_pd3dDevice == NULL || g_pSwapChain == NULL) return true;
+	if (m_pd3dDevice == NULL || g_pSwapChain == NULL) return true;
 	// 사전에 생성된 객체들을 삭제
 	DeleteDXResouce();
 	m_dwWidth = iWidth;
@@ -51,7 +54,7 @@ HRESULT KDevice::SetRenderTarget()
 	if (FAILED(hr))
 		return hr;
 
-	hr = g_pd3dDevice->CreateRenderTargetView(pBackBuffer,
+	hr = m_pd3dDevice->CreateRenderTargetView(pBackBuffer,
 		NULL, &g_pRenderTargetView);
 	pBackBuffer->Release();
 	if (FAILED(hr))
@@ -80,28 +83,28 @@ HRESULT KDevice::CreateGIFactory()
 	{
 		return  hr;
 	}
-	UINT i = 0;
-	IDXGIAdapter * pAdapter;
-	std::vector <IDXGIAdapter*> vAdapters;
-	while (g_pGIFactory->EnumAdapters(i, &pAdapter) != DXGI_ERROR_NOT_FOUND)
-	{
-		vAdapters.push_back(pAdapter);
-		++i;
-	}
-	DXGI_ADAPTER_DESC desc;
-	vAdapters[0]->GetDesc(&desc);
+	//UINT i = 0;
+	//IDXGIAdapter * pAdapter;
+	//std::vector <IDXGIAdapter*> vAdapters;
+	//while (g_pGIFactory->EnumAdapters(i, &pAdapter) != DXGI_ERROR_NOT_FOUND)
+	//{
+	//	vAdapters.push_back(pAdapter);
+	//	++i;
+	//}
+	//DXGI_ADAPTER_DESC desc;
+	//vAdapters[0]->GetDesc(&desc);
 
-	i = 0;
-	IDXGIOutput * pOutput;
-	std::vector<IDXGIOutput*> vOutputs;
-	while (vAdapters[0]->EnumOutputs(i, &pOutput) != DXGI_ERROR_NOT_FOUND)
-	{
-		vOutputs.push_back(pOutput);
-		++i;
-	}
-	DXGI_OUTPUT_DESC od;
-	vOutputs[0]->GetDesc(&od);
-	vOutputs[1]->GetDesc(&od);
+	//i = 0;
+	//IDXGIOutput * pOutput;
+	//std::vector<IDXGIOutput*> vOutputs;
+	//while (vAdapters[0]->EnumOutputs(i, &pOutput) != DXGI_ERROR_NOT_FOUND)
+	//{
+	//	vOutputs.push_back(pOutput);
+	//	++i;
+	//}
+	//DXGI_OUTPUT_DESC od;
+	//vOutputs[0]->GetDesc(&od);
+	//vOutputs[1]->GetDesc(&od);
 	return hr;
 }
 HRESULT KDevice::InitSwapChain()
@@ -127,13 +130,13 @@ HRESULT KDevice::InitSwapChain()
 	sd.Windowed = TRUE;
 	sd.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
 
-	if (FAILED(hr = g_pGIFactory->CreateSwapChain(g_pd3dDevice, &sd, &g_pSwapChain)))
+	if (FAILED(hr = g_pGIFactory->CreateSwapChain(m_pd3dDevice, &sd, &g_pSwapChain)))
 	{
 		return hr;
 	}
 	return hr;
 }
-HRESULT KDevice::IniKDevice()
+HRESULT KDevice::InitDevice()
 {
 	HRESULT hr = S_OK;
 #pragma region Device
@@ -171,14 +174,15 @@ HRESULT KDevice::IniKDevice()
 			g_driverType, NULL, createDeviceFlags,
 			featureLevels, numFeatureLevels,
 			D3D11_SDK_VERSION,
-			&g_pd3dDevice, &g_featureLevel,
+			&m_pd3dDevice, &g_featureLevel,
 			&g_pImmediateContext);
 		if (SUCCEEDED(hr))
 			break;
 	}
+	if( pAdapter ) pAdapter->Release();
 	if (FAILED(hr))
 		return hr;
-
+	g_pd3dDevice = m_pd3dDevice;
 #pragma endregion 
 	return S_OK;
 }
@@ -187,12 +191,11 @@ HRESULT KDevice::IniKDevice()
 //--------------------------------------------------------------------------------------
 void KDevice::CleanupDevice()
 {
-	if (g_pImmediateContext) g_pImmediateContext->ClearState();
-	
+	if (g_pImmediateContext) g_pImmediateContext->ClearState();	
 	if (g_pRenderTargetView) g_pRenderTargetView->Release();
 	if (g_pSwapChain) g_pSwapChain->Release();
 	if (g_pImmediateContext) g_pImmediateContext->Release();
-	if (g_pd3dDevice) g_pd3dDevice->Release();
+	if (m_pd3dDevice) m_pd3dDevice->Release();
 	if (g_pGIFactory) g_pGIFactory->Release();
 }
 

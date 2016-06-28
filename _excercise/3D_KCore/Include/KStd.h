@@ -7,49 +7,18 @@
 	#include <vector>
 	#include <map>
 	#include <list>
-	#include <string>
-	#include <d3d11.h>
-	#include <d3dx11.h>
-	#include <d3dcompiler.h>
-	//#include <xnamath.h>
-	#include <d3dx10math.h>
+	#include <string>	
+	#include "KDxHelper.h"
 
-	using namespace std;
+	using namespace std;		
 	#pragma comment( lib, "ws2_32.lib")
 	#pragma comment( lib, "winmm.lib")
-	#pragma comment	(lib, "dxgi.lib")
-
-	struct KGAME_INPUT_MAP
-	{
-		bool bUpKey;
-		bool bDownKey;
-		bool bLeftKey;
-		bool bRightKey;
 	
-		bool bWKey;
-		bool bSKey;
-		bool bAKey;
-		bool bDKey;
-		bool bQKey;
-		bool bEKey;
-	
-		bool bLeftClick;
-		bool bRightClick;
-		bool bMiddleClick;
-	
-		bool bExit;
-		bool bSpace; // 카메라의 이동가속도를 증가시킨다.
-	
-		int  iMouseValue[3];
-	
-		bool bFullScreen;
-		bool bChangeFillMode;
-		bool bChangePrimitive;
-		bool bChangeCullMode;
-		bool bChangeCameraType;
-		bool bDebugRender;
-	};
-	extern KGAME_INPUT_MAP g_InputData;
+#ifdef _DEBUG
+	#pragma comment( lib, "KCoreLib32_d.lib")
+#else
+	#pragma comment( lib, "KCoreLib32_r.lib")
+#endif	
 
 	typedef basic_string<TCHAR> T_STR;
 	typedef basic_string<wchar_t> W_STG;
@@ -149,42 +118,6 @@
 #define randf2(x,off) (off+x*rand()/(float)RAND_MAX)
 #define randstep(fMin,fMax) (fMin+((float)fMax-(float)fMin)*rand()/(float)RAND_MAX)
 #define clamp(x,MinX,MaxX) if (x>MaxX) x=MaxX; else if (x<MinX) x=MinX;
-	//////////////////////////////////////////////
-	// 객체 및 배열 할당과 삭제 및 소멸 매크로
-	//////////////////////////////////////////////
-#ifndef SAFE_ZERO
-#define SAFE_ZERO(A)				{ A = 0; }
-#endif
-
-#ifndef SAFE_NEW
-#define SAFE_NEW(A, B)				{ if (!A) A = new B; }
-#endif 
-
-#ifndef SAFE_DEL
-#define SAFE_DEL(A)					{ if (A) delete A; (A)=NULL; }
-#endif 
-
-#ifndef SAFE_NEW_ARRAY
-#define SAFE_NEW_ARRAY(A, B, C)		{ if (!A && C) A = new B[C]; }
-#endif 
-
-#ifndef SAFE_DELETE_ARRAY
-#define SAFE_DELETE_ARRAY(A)		{ if (A) delete [] A; (A)=NULL; }
-#endif 
-
-#ifndef SAFE_RELEASE
-#define SAFE_RELEASE(A)				{ if(A) { (A)->Release(); (A)=NULL; } }
-#endif 
-
-#ifndef SAFE_NEW_CLEAR
-#define SAFE_NEW_CLEAR( A, B )			{ if (!A) A = new B; if(A) memset( A, 0, sizeof(B) ); };
-#endif 
-
-#ifndef SAFE_NEW_ARRAY_CLEAR
-#define SAFE_NEW_ARRAY_CLEAR( A, B, C )	{ if (!A && C) A = new B[C]; if(A) memset( A, 0, sizeof(B)*C ); };
-#endif
-	// 추가
-#define COUNTOF(a) ( sizeof( a ) / sizeof( ( a )[0] ) )
 
 	static void T_ERR_EXIT(TCHAR *msg)
 	{

@@ -2,11 +2,12 @@
 
 bool KCore::GameInit()
 {
+	HRESULT hr;
 	if (FAILED(CreateGIFactory()))
 	{
 		return 0;
 	}
-	if (FAILED(IniKDevice()))
+	if (FAILED(InitDevice()))
 	{
 		CleanupDevice();
 		return 0;
@@ -23,32 +24,37 @@ bool KCore::GameInit()
 	{
 		return 0;
 	}
+	KDxState::SetState(g_pd3dDevice);
 
 	m_Timer.Init();
-	m_Input.Init();
+	I_Input.Init();
 
-	m_fontDefault = CreateFont( 20, 0, 0, FW_BOLD, 
-		0,0,0,0,
-		HANGEUL_CHARSET, 3,2,1, 
-		VARIABLE_PITCH | FF_ROMAN, 
-		_T("°íµñ"));
-	m_fontDefaultOld = (HFONT)SelectObject(m_hOffScreenDC, m_fontDefault);
+	// font 
+	IDXGISurface1*  pSurface;
+	hr = g_pSwapChain->GetBuffer(0,
+		__uuidof(IDXGISurface1),
+		(LPVOID*)&pSurface);
+	m_Font.Set(pSurface);
+	pSurface->Release();
+
 	Init();
 	return true;
 }
 bool KCore::GameRelease()
 {
+	KDxState::Release();
 	Release();
-	DeleteObject(m_fontDefault);	
 	m_Timer.Release();
-	m_Input.Release();
+	I_Input.Release();
+	m_Font.Release();
 	CleanupDevice();
 	return true;
 }
 bool KCore::GameFrame()
 {
 	m_Timer.Frame();
-	m_Input.Frame();
+	
+	I_Input.Frame();
 	PreFrame();
 		Frame();
 	PostFrame();
@@ -56,14 +62,14 @@ bool KCore::GameFrame()
 }
 bool KCore::PreRender()
 {
-	//float ClearColor[4] = { 1.0f, 1.0f,1.0f, 1.0f }; //red,green,blue,alpha
-	float ClearColor[4] = { 0.5f, 0.5f,0.0f, 1.0f }; //red,green,blue,alpha
-
+	float ClearColor[4] = { 1.0f, 1.0f,1.0f, 1.0f }; //red,green,blue,alpha
 	g_pImmediateContext->ClearRenderTargetView(
 		g_pRenderTargetView,
 		ClearColor);
 	g_pImmediateContext->OMSetRenderTargets(1, &g_pRenderTargetView, NULL);
-
+	// Set primitive topology
+	g_pImmediateContext->IASetPrimitiveTopology(
+		D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	return true;
 }
 bool KCore::PostRender()
@@ -77,17 +83,14 @@ bool KCore::DrawDebug(TCHAR* pString, int iX, int iY)
 }
 bool KCore::DrawDebug()
 {
-	//RECT rect;
-	//if (m_hOffScreenDC != NULL)
-	//{
-	//	GetClientRect(m_hWnd, &rect);
-	//	SetBkColor(m_hOffScreenDC, RGB(255, 0, 0));
-	//	SetTextColor(m_hOffScreenDC, RGB(0, 0, 255));
-	//	SetBkMode(m_hOffScreenDC, TRANSPARENT);
-	//	// ±×¸®±â
-	//	DrawText(m_hOffScreenDC, m_Timer.m_csBuffer, -1,
-	//		&rect, DT_LEFT | DT_VCENTER);	
-	//}
+	if (I_Input.KeyCheck(DIK_V) == KEY_HOLD)
+	{	
+		m_Font.Begin();
+		RECT  rt = { 0, 0, 800, 600 };
+		m_Font.m_TextFormat->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
+		m_Font.DrawText(rt, m_Timer.m_csBuffer, D2D1::ColorF(0, 0, 0, 1.0f));
+		m_Font.End();		
+	}
 	return true;
 }
 bool KCore::GameRender()
@@ -95,7 +98,7 @@ bool KCore::GameRender()
 	PreRender();
 		Render();
 		m_Timer.Render();	
-		m_Input.Render();
+		I_Input.Render();
 		DrawDebug();
 	PostRender();
 	return true;
@@ -108,7 +111,7 @@ bool KCore::GameRun()
 };
 void KCore::MsgEvent(MSG msg)
 {
-	m_Input.MsgEvent(msg);
+	I_Input.MsgEvent(msg);
 };
 KCore::KCore()
 {

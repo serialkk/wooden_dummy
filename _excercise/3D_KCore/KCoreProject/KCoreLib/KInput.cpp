@@ -1,5 +1,4 @@
 #include "KInput.h"
-KGAME_INPUT_MAP g_InputData;
 
 bool   KInput::InitDirectInput()
 {
@@ -70,25 +69,26 @@ BYTE KInput::KeyCheck(BYTE dwKey)
 	// 0x8000 =  10000000 00000000
 	if (sKey & 0x80)
 	{
-		if (m_KeyState[dwKey] == KEY_FREE)
-			m_KeyState[dwKey] = KEY_PUSH;
+		if (m_KeyStateOld[dwKey] == KEY_FREE)
+			m_KeyStateOld[dwKey] = KEY_PUSH;
 		else
-			m_KeyState[dwKey] = KEY_HOLD;
+			m_KeyStateOld[dwKey] = KEY_HOLD;
 	}
 	else
 	{
-		if (m_KeyState[dwKey] == KEY_PUSH ||
-			m_KeyState[dwKey] == KEY_HOLD  )
-			m_KeyState[dwKey] = KEY_UP;
+		if (m_KeyStateOld[dwKey] == KEY_PUSH ||
+			m_KeyStateOld[dwKey] == KEY_HOLD  )
+			m_KeyStateOld[dwKey] = KEY_UP;
 		else
-			m_KeyState[dwKey] = KEY_FREE;
+			m_KeyStateOld[dwKey] = KEY_FREE;
 	}
-	return m_KeyState[dwKey];
+	return m_KeyStateOld[dwKey];
 }
 	// 클래스 멤버 변수 초기화
 bool		KInput::Init()
 {
 	ZeroMemory(m_KeyState, sizeof(BYTE) * 256);
+	ZeroMemory(m_KeyStateOld, sizeof(BYTE) * 256);
 	ZeroMemory(m_MouseState, sizeof(BYTE) * 3);
 	ZeroMemory(m_BeforeMouseState, sizeof(BYTE) * 3);
 #ifndef WIN_KEY_USE

@@ -73,6 +73,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>../../output</OutDir>
     <IntDir>../../output/KCoreLib</IntDir>
+    <TargetName>$(ProjectName)_d</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>../../output/Debug</OutDir>
@@ -81,6 +82,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>../../output/Release</OutDir>
     <IntDir>../../output/Release/TCoreLib</IntDir>
+    <TargetName>$(ProjectName)_r</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>../../output/Release/</OutDir>
@@ -149,7 +151,7 @@ copy "TCoreLib64_d.lib" "..\\..\\Lib"</Command>
     </Link>
     <PostBuildEvent>
       <Command>copy "*.h" "..\\..\\include"
-copy "KCoreLib32.lib" "..\\..\\Lib\\x86\\Release"</Command>
+copy "KCoreLib32_r.lib" "..\\..\\Lib\\x86\\Release"</Command>
     </PostBuildEvent>
     <Lib>
       <OutputFile>KCoreLib32.lib</OutputFile>
@@ -184,26 +186,25 @@ copy "TCoreLib64.lib" "..\\..\\Lib\\x64\\Release"</Command>
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="KBitmap.h" />
     <ClInclude Include="KCore.h" />
     <ClInclude Include="KDevice.h" />
-    <ClInclude Include="KImage.h" />
-    <ClInclude Include="KImageMgr.h" />
+    <ClInclude Include="KDxHelper.h" />
+    <ClInclude Include="KDxHelperEX.h" />
     <ClInclude Include="KInput.h" />
-    <ClInclude Include="KObject.h" />
     <ClInclude Include="KStd.h" />
+    <ClInclude Include="KTexture.h" />
+    <ClInclude Include="KTextureMgr.h" />
     <ClInclude Include="KTimer.h" />
     <ClInclude Include="KWindow.h" />
     <ClInclude Include="KWrite.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="KBitmap.cpp" />
     <ClCompile Include="KCore.cpp" />
     <ClCompile Include="KDevice.cpp" />
-    <ClCompile Include="KImage.cpp" />
-    <ClCompile Include="KImageMgr.cpp" />
+    <ClCompile Include="KDxHelperEX.cpp" />
     <ClCompile Include="KInput.cpp" />
-    <ClCompile Include="KObject.cpp" />
+    <ClCompile Include="KTexture.cpp" />
+    <ClCompile Include="KTextureMgr.cpp" />
     <ClCompile Include="KTimer.cpp" />
     <ClCompile Include="KWindow.cpp" />
     <ClCompile Include="KWrite.cpp" />

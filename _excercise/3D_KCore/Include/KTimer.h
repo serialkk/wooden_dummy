@@ -1,44 +1,32 @@
 #pragma once
-#include <windows.h>
-
+#include "KStd.h"
 class KTimer
 {
-private:
-	LARGE_INTEGER	m_Frequency;	// 초당 주파수 
-	LARGE_INTEGER	m_Current;		// 현재 시간 
-	LARGE_INTEGER	m_Frame;		// 이전 프레임의 시간 체크 
-	float			m_fSecPerFrame;	// 프레임 경과 시간 
-
-	LARGE_INTEGER	m_FPS;				// FPS 체크 타이머		
-	int				m_iFramePerSecond;	// 초당 프레임	
-	int				m_iFPSElapse;		// 초당 경과된 프레임 
-
-
-	LARGE_INTEGER	m_Start;		// 이벤트 타이머 시작 시간
-	LARGE_INTEGER	m_Elapse;		// 이베트 타이머 경과 시간
-	bool			m_bStarted;			// 이벤트 타이머 작동여부
-	float			m_fEventTime;
-
+public:
+	LARGE_INTEGER   m_Frequency; // 초당 주파수
+	LARGE_INTEGER   m_Current; // 초당 주파수
+	LARGE_INTEGER   m_Frame; // 초당 주파수
 
 public:
-	// 엔진코어에서 사용하는 지원함수
-	bool	Init();
-	bool	Frame();
-	bool	Render();
-	bool	Release();
+	TCHAR		m_csBuffer[MAX_PATH];
+	int			m_iFPS;// 1초당 프레임 개수
+	float		m_fSecondPerFrame; // 1프레임의 경과시간
+	float		m_fAccumulation;// 실행된 경과 시간
 
-	// 경과한 시간에 대한 지원 함수들
-	void	Reset();
-	void	Start();
-	void	Stop();
-	bool	IsStarted() const;
-	float	GetElapsedTime();
-
-	// FPS
-	int				GetFPS();
-	float			GetSPF();
-
+	DWORD		m_dwBeforeTick;
+	float		m_fFrameTime; // 임시변수
+	DWORD		m_dwFrameCnt;
+public:
+	// 클래스 멤버 변수 초기화
+	bool		Init();
+	// 매 프레임에서 계산을 담당한다.
+	bool		Frame();
+	// 매 프레임에서 드로우를 담당한다.
+	bool		Render();
+	// 클래스 멤버 변수 소멸을 담당한다.
+	bool		Release();
 public:
 	KTimer();
-	~KTimer();
+	virtual ~KTimer();
 };
+

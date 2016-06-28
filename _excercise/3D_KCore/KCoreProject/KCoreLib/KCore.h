@@ -1,23 +1,15 @@
 #pragma once
 #include "KWindow.h"
+#include "KDxHelperEx.h"
 #include "KTimer.h"
 #include "KInput.h"
+#include "KWrite.h"
+using namespace DX;
 class KCore : public KWindow
 {
 public:
 	KTimer		m_Timer;
-	KInput		m_Input;
-	HDC			m_hScreenDC;   // 전면 버퍼
-	HBITMAP		m_hOldBitmap; // 후면버퍼의 이미지
-
-	HDC			m_hOffScreenDC;// 후면 버퍼
-	HBITMAP		m_hOffScreenBitmap; // 후면버퍼의 이미지	
-
-	HBRUSH		m_hbrBack;
-	HBRUSH		m_hbrOld;
-
-	HFONT		m_fontDefault;
-	HFONT		m_fontDefaultOld;
+	KWrite		m_Font;
 public:
 	bool	GameRun();
 	bool	GameInit();	
