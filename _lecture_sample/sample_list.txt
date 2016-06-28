@@ -42,3 +42,4 @@
 36.<2016-06-24> 3D Constant Buffer and Resterize Stage 두번째시간까지
 37.<2016-06-27> 3D TCore refactoring ( 첫째시간까지 완료한 내용)
 38.<2016-06-27> 3D texture ( 두번째시간까지 완료한 내용)
+39.<2016-06-28> 3D texture mapping ( 첫째시간까지 완료한 내용)
