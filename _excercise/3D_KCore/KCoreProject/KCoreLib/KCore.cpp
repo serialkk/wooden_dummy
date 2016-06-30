@@ -62,7 +62,7 @@ bool KCore::GameFrame()
 }
 bool KCore::PreRender()
 {
-	float ClearColor[4] = { 1.0f, 1.0f,1.0f, 1.0f }; //red,green,blue,alpha
+	float ClearColor[4] = { 0.5f, 0.5f,1.0f, 1.0f }; //red,green,blue,alpha
 	g_pImmediateContext->ClearRenderTargetView(
 		g_pRenderTargetView,
 		ClearColor);

@@ -65,7 +65,7 @@ bool	Sample::Init()
 	
 	if (FAILED(hr = D3DX11CreateShaderResourceViewFromFile(
 		g_pd3dDevice,
-		L"../../data/checker_with_numbers.bmp", 
+		L"../../data/pdori.bmp",//L"../../data/checker_with_numbers.bmp", 
 		NULL, NULL, &m_pTexSRV, 
 		NULL)))
 	{
@@ -127,4 +127,4 @@ Sample::Sample()
 Sample::~Sample()
 {
 }
-KCORE_RUN(_T("Sample Lib"), 800, 600)
+KCORE_RUN(KCore Sample, 800, 600)
