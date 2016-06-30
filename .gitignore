@@ -26,6 +26,7 @@
 
 # VS generated files #
 ######################
+*.sdf
 *.cdf
 *.cache
 *.obj
