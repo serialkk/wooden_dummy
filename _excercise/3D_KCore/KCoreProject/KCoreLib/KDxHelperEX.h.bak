@@ -1,8 +1,8 @@
 #pragma once
-#include "TDxHelper.h"
+#include "KDxHelper.h"
 namespace DX
 {
-	class TDxState
+	class KDxState
 	{
 	public:
 		static ID3D11RasterizerState*   g_pWireFrameRS;
@@ -42,11 +42,11 @@ namespace DX
 		D3D11_BIND_FLAG bindFlag,
 		bool bDynamic = false);
 
-	class TDXHelper
+	class KDXHelper
 	{
 	public:
-		TDXHelper::TDXHelper();
-		TDXHelper::~TDXHelper();
+		KDXHelper::KDXHelper();
+		KDXHelper::~KDXHelper();
 		ID3D11Buffer*		g_pVertexBuffer;
 		ID3D11Buffer*		g_pIndexBuffer;
 		ID3D11Buffer*		g_pConstantBuffer;

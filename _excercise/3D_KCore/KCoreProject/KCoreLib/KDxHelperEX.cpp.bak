@@ -1,5 +1,5 @@
-#include "TDXHelperEx.h"
-#include "TInput.h"
+#include "KDXHelperEx.h"
+#include "KInput.h"
 
 //ID3D11Buffer*		DX::g_pVertexBuffer;
 //ID3D11Buffer*		DX::g_pIndexBuffer;
@@ -161,13 +161,13 @@ ID3D11Buffer* DX::CreateBuffer(
 
 namespace DX
 {
-	ID3D11RasterizerState*   TDxState::g_pWireFrameRS = 0;
-	ID3D11RasterizerState*   TDxState::g_pBackSolidRS = 0;
-	ID3D11RasterizerState*   TDxState::g_pFrontSolidRS = 0;
-	ID3D11RasterizerState*   TDxState::g_pNoneSolidRS = 0;
-	ID3D11RasterizerState*   TDxState::g_pCullSolidRS[3] = { 0, };
+	ID3D11RasterizerState*   KDxState::g_pWireFrameRS = 0;
+	ID3D11RasterizerState*   KDxState::g_pBackSolidRS = 0;
+	ID3D11RasterizerState*   KDxState::g_pFrontSolidRS = 0;
+	ID3D11RasterizerState*   KDxState::g_pNoneSolidRS = 0;
+	ID3D11RasterizerState*   KDxState::g_pCullSolidRS[3] = { 0, };
 
-	HRESULT TDxState::SetState(ID3D11Device* pDevice)
+	HRESULT KDxState::SetState(ID3D11Device* pDevice)
 	{
 		HRESULT hr = S_OK;
 		D3D11_RASTERIZER_DESC rd;
@@ -209,7 +209,7 @@ namespace DX
 		g_pCullSolidRS[0] = g_pNoneSolidRS;
 		return hr;
 	}
-	bool TDxState::Release()
+	bool KDxState::Release()
 	{
 		if (g_pWireFrameRS) g_pWireFrameRS->Release();
 		if (g_pBackSolidRS) g_pBackSolidRS->Release();
@@ -220,7 +220,7 @@ namespace DX
 	}
 
 
-	TDXHelper::TDXHelper()
+	KDXHelper::KDXHelper()
 	{
 		g_pVertexBuffer = NULL;
 		g_pIndexBuffer = NULL;
@@ -233,11 +233,11 @@ namespace DX
 		m_iPrimitiveType = 4;
 		m_iCullMode = 0;
 	}
-	TDXHelper::~TDXHelper()
+	KDXHelper::~KDXHelper()
 	{
 		Release();
 	}
-	bool TDXHelper::Frame()
+	bool KDXHelper::Frame()
 	{
 		if (I_Input.KeyCheck(DIK_1) == KEY_UP)
 		{
@@ -263,14 +263,14 @@ namespace DX
 		}
 		return true;
 	}
-	bool TDXHelper::Render(
+	bool KDXHelper::Render(
 		ID3D11DeviceContext*    pContext,
 		UINT VertexSize, UINT VertexCount)
 	{
 
-		ApplyRS(pContext, TDxState::g_pCullSolidRS[m_iCullMode]);
+		ApplyRS(pContext, KDxState::g_pCullSolidRS[m_iCullMode]);
 		if( m_bWireFrameRender)
-			ApplyRS(pContext, TDxState::g_pWireFrameRS);
+			ApplyRS(pContext, KDxState::g_pWireFrameRS);
 
 
 		pContext->IASetPrimitiveTopology(
@@ -290,7 +290,7 @@ namespace DX
 		pContext->DrawIndexed(VertexCount, 0, 0);
 		return true;
 	}
-	void  TDXHelper::Release()
+	void  KDXHelper::Release()
 	{
 		if (g_pVertexBuffer) g_pVertexBuffer->Release();
 		if (g_pIndexBuffer) g_pIndexBuffer->Release();

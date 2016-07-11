@@ -5,7 +5,7 @@ ID3D11Device*	g_pd3dDevice = nullptr;
 HRESULT  KDevice::DeleteDXResouce()
 {
 	g_pImmediateContext->OMSetRenderTargets(0, NULL, NULL);
-	if(g_pRenderTargetView ) g_pRenderTargetView->Release();
+	m_DefaultRT.Release();	
 	return S_OK;
 }
 HRESULT  KDevice::CreateDXResouce()
@@ -55,8 +55,16 @@ HRESULT KDevice::SetRenderTarget()
 		return hr;
 
 	hr = m_pd3dDevice->CreateRenderTargetView(pBackBuffer,
-		NULL, &g_pRenderTargetView);
+		NULL, &m_DefaultRT.m_pRenderTargetView);
 	pBackBuffer->Release();
+
+	g_pSwapChain->GetDesc(&m_sd);
+
+	hr = m_DefaultRT.CreateDSV(
+		m_pd3dDevice,
+		m_sd.BufferDesc.Width,
+		m_sd.BufferDesc.Height);	
+
 	if (FAILED(hr))
 		return hr;
 
@@ -66,14 +74,14 @@ HRESULT KDevice::SetViewPort()
 {
 	HRESULT hr = S_OK;
 	// Setup the viewport
-	D3D11_VIEWPORT vp;
-	vp.Width = (FLOAT)m_dwWidth;
-	vp.Height = (FLOAT)m_dwHeight;
-	vp.MinDepth = 0.0f;
-	vp.MaxDepth = 1.0f;
-	vp.TopLeftX = 0;
-	vp.TopLeftY = 0;
-	g_pImmediateContext->RSSetViewports(1, &vp);
+	
+	m_vp.Width = (FLOAT)m_dwWidth;
+	m_vp.Height = (FLOAT)m_dwHeight;
+	m_vp.MinDepth = 0.0f;
+	m_vp.MaxDepth = 1.0f;
+	m_vp.TopLeftX = 0;
+	m_vp.TopLeftY = 0;
+	
 	return hr;
 }
 HRESULT KDevice::CreateGIFactory()
@@ -192,7 +200,8 @@ HRESULT KDevice::InitDevice()
 void KDevice::CleanupDevice()
 {
 	if (g_pImmediateContext) g_pImmediateContext->ClearState();	
-	if (g_pRenderTargetView) g_pRenderTargetView->Release();
+	m_DefaultRT.Release();
+
 	if (g_pSwapChain) g_pSwapChain->Release();
 	if (g_pImmediateContext) g_pImmediateContext->Release();
 	if (m_pd3dDevice) m_pd3dDevice->Release();

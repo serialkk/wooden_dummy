@@ -100,7 +100,37 @@ ID3D11PixelShader*   DX::LoadPixelShaderFile(
 	}
 	return pPixelShader;
 }
+ID3D11GeometryShader*   DX::LoadGeometryShaderFile(
+	ID3D11Device*  pd3dDevice,
+	TCHAR* pLoadShaderFile)
+{
+	HRESULT hr = S_OK;
+	ID3D11GeometryShader* pShader = NULL;
+	ID3DBlob* pPSBlob = NULL;
+	hr = CompileShaderFromFile(
+		pLoadShaderFile,
+		"GS",
+		"gs_5_0",
+		&pPSBlob);
+	if (FAILED(hr))
+	{
+		H(hr);
+		return NULL;
+	}
 
+	// Create the pixel shader
+	hr = pd3dDevice->CreateGeometryShader(
+		pPSBlob->GetBufferPointer(),
+		pPSBlob->GetBufferSize(), NULL,
+		&pShader);
+	pPSBlob->Release();
+	if (FAILED(hr))
+	{
+		H(hr);
+		return NULL;
+	}
+	return pShader;
+}
 ID3D11InputLayout* DX::CreateInputlayout(
 	ID3D11Device*  pd3dDevice,
 	D3D11_INPUT_ELEMENT_DESC layout[],
@@ -166,6 +196,8 @@ namespace DX
 	ID3D11RasterizerState*   KDxState::g_pFrontSolidRS = 0;
 	ID3D11RasterizerState*   KDxState::g_pNoneSolidRS = 0;
 	ID3D11RasterizerState*   KDxState::g_pCullSolidRS[3] = { 0, };
+	ID3D11DepthStencilState* KDxState::g_pDepthEnable = 0; // 깊이 버퍼링 할성화
+	ID3D11DepthStencilState* KDxState::g_pDepthDisable = 0;// 비활성화
 
 	HRESULT KDxState::SetState(ID3D11Device* pDevice)
 	{
@@ -174,6 +206,7 @@ namespace DX
 		ZeroMemory(&rd, sizeof(D3D11_RASTERIZER_DESC));
 		rd.FillMode = D3D11_FILL_WIREFRAME;
 		rd.CullMode = D3D11_CULL_BACK;
+		rd.DepthClipEnable = TRUE;
 		if (FAILED(hr = pDevice->CreateRasterizerState(&rd,
 			&g_pWireFrameRS)))
 		{
@@ -207,6 +240,25 @@ namespace DX
 			return false;
 		};
 		g_pCullSolidRS[0] = g_pNoneSolidRS;
+
+
+		D3D11_DEPTH_STENCIL_DESC dsd;
+		ZeroMemory(&dsd, sizeof(dsd));
+		dsd.DepthEnable = TRUE;
+		dsd.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+		dsd.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;
+		if (FAILED(hr = pDevice->CreateDepthStencilState(
+			&dsd, &g_pDepthEnable)))
+		{
+			return true;
+		}
+
+		dsd.DepthEnable = FALSE;
+		if (FAILED(hr = pDevice->CreateDepthStencilState(
+			&dsd, &g_pDepthDisable)))
+		{
+			return true;
+		}
 		return hr;
 	}
 	bool KDxState::Release()
@@ -215,6 +267,8 @@ namespace DX
 		if (g_pBackSolidRS) g_pBackSolidRS->Release();
 		if (g_pFrontSolidRS) g_pFrontSolidRS->Release();
 		if (g_pNoneSolidRS) g_pNoneSolidRS->Release();
+		if (g_pDepthEnable) g_pDepthEnable->Release();
+		if (g_pDepthDisable) g_pDepthDisable->Release();
 	
 		return true;
 	}
@@ -286,6 +340,7 @@ namespace DX
 		pContext->VSSetConstantBuffers(0, 1, &g_pConstantBuffer);
 
 		pContext->VSSetShader(g_pVertexShader, NULL, 0);
+		pContext->GSSetShader(g_pGeometryShader, NULL, 0);
 		pContext->PSSetShader(g_pPixelShader, NULL, 0);
 		pContext->DrawIndexed(VertexCount, 0, 0);
 		return true;
@@ -306,5 +361,48 @@ namespace DX
 		g_pPixelShader = NULL;
 		g_pInputlayout = NULL;
 		g_pVSBlob = NULL;
+	}
+
+
+
+	HRESULT KDxRT::CreateDSV(
+		ID3D11Device*  pd3dDevice,
+		UINT iWidth, UINT iHeight)
+	{
+		HRESULT hr;
+		ID3D11Texture2D* pTex = NULL;
+		D3D11_TEXTURE2D_DESC  td;
+		td.Width = iWidth;
+		td.Height = iHeight;
+		td.MipLevels = 1;
+		td.ArraySize = 1;
+		td.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+		td.SampleDesc.Count = 1;
+		td.SampleDesc.Quality = 0;
+		td.Usage = D3D11_USAGE_DEFAULT;
+		td.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+		td.CPUAccessFlags = 0;
+		td.MiscFlags = 0;
+		if (FAILED(hr = pd3dDevice->CreateTexture2D(&td, NULL, &pTex)))
+		{
+			H(hr);
+			return hr;
+		}
+
+
+		D3D11_DEPTH_STENCIL_VIEW_DESC dsd;
+		ZeroMemory(&dsd, sizeof(dsd));
+		dsd.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+		dsd.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+
+		if (FAILED(hr = pd3dDevice->CreateDepthStencilView(
+			pTex, &dsd, &m_pDSV)))
+		{
+			return hr;
+		}
+
+
+
+		return hr;
 	}
 }

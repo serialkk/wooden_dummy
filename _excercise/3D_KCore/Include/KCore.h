@@ -1,6 +1,6 @@
 #pragma once
 #include "KWindow.h"
-#include "KDxHelperEx.h"
+//#include "KDxHelperEx.h"
 #include "KTimer.h"
 #include "KInput.h"
 #include "KWrite.h"
