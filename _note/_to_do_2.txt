@@ -120,4 +120,24 @@ xbox 컨트롤러 입력 구현
 투영행렬 계산해보기
 뎁스버퍼 예제 이해하기
 뎁스버퍼 엔진에 기본장착
+-----------------------------------------
+//3d스튜디오업로드
+//모델파일업로드
 
+x파일
+
+예제 직접쳐볼것
+
+DX11 튜토리얼 이해
+
+인터넷,TV바꿀것
+
+주석달기. Dx11예제, 세가책예제
+
+예제 직접 구현 해보기(결과 비교.. 소스참고)
+
+평면,박스,원,원통,구
+
+legacy_stdio_definitions.lib
+
+C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Samples\C++\Direct3D\SkinnedMesh
