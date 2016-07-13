@@ -3,11 +3,7 @@
 	//#include <WinSock2.h>
 	#include <windows.h>
 	#include <time.h>
-	#include <tchar.h>
-	#include <vector>
-	#include <map>
-	#include <list>
-	#include <string>	
+	
 	#include "KDxHelper.h"
 
 	using namespace std;		

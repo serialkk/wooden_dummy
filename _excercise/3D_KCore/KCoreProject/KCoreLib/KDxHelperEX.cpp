@@ -71,16 +71,32 @@ ID3D11VertexShader*   DX::LoadVertexShaderFile(
 };
 ID3D11PixelShader*   DX::LoadPixelShaderFile(
 	ID3D11Device*  pd3dDevice,
-	TCHAR* pLoadShaderFile)
+	TCHAR* pLoadShaderFile, 
+	char* csEntry)
 {
 	HRESULT hr = S_OK;
+
 	ID3D11PixelShader* pPixelShader = NULL;
 	ID3DBlob* pPSBlob = NULL;
-	hr = CompileShaderFromFile(
-		pLoadShaderFile,
-		"PS",
-		"ps_5_0",
-		&pPSBlob);
+	
+	if (csEntry != 0)
+	{
+		hr = CompileShaderFromFile(
+			pLoadShaderFile,
+			csEntry,
+			"ps_5_0",
+			&pPSBlob);
+	}
+	else
+	{
+		hr = CompileShaderFromFile(
+			pLoadShaderFile,
+			"PS",
+			"ps_5_0",
+			&pPSBlob);
+	}
+	
+	
 	if (FAILED(hr))
 	{
 		H(hr);
@@ -189,6 +205,23 @@ ID3D11Buffer* DX::CreateBuffer(
 	return pBuffer;
 }
 
+ID3D11ShaderResourceView* DX::CreateShaderResourceView(
+	ID3D11Device*  pd3dDevice,
+	TCHAR* szFileName)
+{
+	HRESULT hr;
+	ID3D11ShaderResourceView* srv = nullptr;
+	if (FAILED(hr = D3DX11CreateShaderResourceViewFromFile(
+		pd3dDevice,
+		szFileName,
+		NULL, NULL, &srv,
+		NULL)))
+	{
+		H(hr);
+		return nullptr;
+	}
+	return srv;
+}
 namespace DX
 {
 	ID3D11RasterizerState*   KDxState::g_pWireFrameRS = 0;
@@ -196,8 +229,9 @@ namespace DX
 	ID3D11RasterizerState*   KDxState::g_pFrontSolidRS = 0;
 	ID3D11RasterizerState*   KDxState::g_pNoneSolidRS = 0;
 	ID3D11RasterizerState*   KDxState::g_pCullSolidRS[3] = { 0, };
-	ID3D11DepthStencilState* KDxState::g_pDepthEnable = 0; // 깊이 버퍼링 할성화
-	ID3D11DepthStencilState* KDxState::g_pDepthDisable = 0;// 비활성화
+	ID3D11DepthStencilState* KDxState::g_pDepthStencilAddDSS = 0; // 깊이 버퍼링 할성화
+	ID3D11DepthStencilState* KDxState::g_pDepthStencilDisableDSS = 0;// 비활성화
+	ID3D11SamplerState*		 KDxState::g_pSamplerState=0;
 
 	HRESULT KDxState::SetState(ID3D11Device* pDevice)
 	{
@@ -247,17 +281,59 @@ namespace DX
 		dsd.DepthEnable = TRUE;
 		dsd.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
 		dsd.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;
+
+		dsd.StencilEnable = TRUE;
+		dsd.StencilReadMask = 0xffffffff;
+		dsd.StencilWriteMask = 0xffffffff;
+
+		dsd.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+		// 스텐실 연산이 실폐 했을 경우의 처리
+		dsd.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+		// 깊이 연산이  실폐 했을 경우의 처리
+		dsd.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_KEEP;
+		// 스텐실 연산이 성공 했을 경우
+		dsd.FrontFace.StencilPassOp = D3D11_STENCIL_OP_INCR;
+
+		dsd.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+		// 스텐실 연산이 실폐 했을 경우의 처리
+		dsd.BackFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+		// 깊이 연산이  실폐 했을 경우의 처리
+		dsd.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP_KEEP;
+		// 스텐실 연산이 성공 했을 경우
+		dsd.BackFace.StencilPassOp = D3D11_STENCIL_OP_INCR;
+
 		if (FAILED(hr = pDevice->CreateDepthStencilState(
-			&dsd, &g_pDepthEnable)))
+			&dsd, &g_pDepthStencilAddDSS)))
 		{
 			return true;
 		}
 
 		dsd.DepthEnable = FALSE;
+		dsd.StencilEnable = FALSE;
 		if (FAILED(hr = pDevice->CreateDepthStencilState(
-			&dsd, &g_pDepthDisable)))
+			&dsd, &g_pDepthStencilDisableDSS)))
 		{
 			return true;
+		}
+
+		D3D11_SAMPLER_DESC sd;
+		ZeroMemory(&sd, sizeof(D3D11_SAMPLER_DESC));
+		sd.Filter = D3D11_FILTER_ANISOTROPIC;
+		sd.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+		sd.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+		sd.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+		sd.BorderColor[0] = 0.0f;
+		sd.BorderColor[1] = 0.0f;
+		sd.BorderColor[2] = 0.0f;
+		sd.BorderColor[3] = 1.0f;
+		sd.MaxAnisotropy = 16;
+		sd.MinLOD = 0;
+		sd.MaxLOD = 0;
+		if (FAILED(hr = pDevice->CreateSamplerState(&sd,
+			&g_pSamplerState)))
+		{
+			H(hr);
+			return false;
 		}
 		return hr;
 	}
@@ -267,14 +343,16 @@ namespace DX
 		if (g_pBackSolidRS) g_pBackSolidRS->Release();
 		if (g_pFrontSolidRS) g_pFrontSolidRS->Release();
 		if (g_pNoneSolidRS) g_pNoneSolidRS->Release();
-		if (g_pDepthEnable) g_pDepthEnable->Release();
-		if (g_pDepthDisable) g_pDepthDisable->Release();
-	
+		if (g_pDepthStencilAddDSS) g_pDepthStencilAddDSS->Release();
+		if (g_pDepthStencilDisableDSS) g_pDepthStencilDisableDSS->Release();
+		
+		if (g_pSamplerState) g_pSamplerState->Release();
+
 		return true;
 	}
 
 
-	KDXHelper::KDXHelper()
+	KDXObject::KDXObject()
 	{
 		g_pVertexBuffer = NULL;
 		g_pIndexBuffer = NULL;
@@ -287,11 +365,11 @@ namespace DX
 		m_iPrimitiveType = 4;
 		m_iCullMode = 0;
 	}
-	KDXHelper::~KDXHelper()
+	KDXObject::~KDXObject()
 	{
 		Release();
 	}
-	bool KDXHelper::Frame()
+	bool KDXObject::Frame()
 	{
 		if (I_Input.KeyCheck(DIK_1) == KEY_UP)
 		{
@@ -309,17 +387,17 @@ namespace DX
 		if (I_Input.KeyCheck(DIK_3) == KEY_UP)
 		{
 			++m_iCullMode;
-			if (m_iCullMode > 3)
+			if (m_iCullMode > 2)
 			{
-				m_iCullMode = 1;
+				m_iCullMode = 0;
 			}
-			m_iCullMode = min(m_iCullMode, 3);
+			m_iCullMode = min(m_iCullMode, 2);
 		}
 		return true;
 	}
-	bool KDXHelper::Render(
+	bool KDXObject::Render(
 		ID3D11DeviceContext*    pContext,
-		UINT VertexSize, UINT VertexCount)
+		UINT VertexSize, UINT Count)
 	{
 
 		ApplyRS(pContext, KDxState::g_pCullSolidRS[m_iCullMode]);
@@ -327,25 +405,21 @@ namespace DX
 			ApplyRS(pContext, KDxState::g_pWireFrameRS);
 
 
-		pContext->IASetPrimitiveTopology(
-			(D3D11_PRIMITIVE_TOPOLOGY)m_iPrimitiveType);
-
-		pContext->IASetInputLayout(
-			g_pInputlayout);
-		// Set vertex buffer
+		pContext->IASetPrimitiveTopology((D3D11_PRIMITIVE_TOPOLOGY)m_iPrimitiveType);
+		pContext->IASetInputLayout(	g_pInputlayout);
 		UINT stride = VertexSize;
 		UINT offset = 0;
 		pContext->IASetVertexBuffers(0, 1, &g_pVertexBuffer, &stride, &offset);
 		pContext->IASetIndexBuffer(g_pIndexBuffer, DXGI_FORMAT_R32_UINT, 0);
 		pContext->VSSetConstantBuffers(0, 1, &g_pConstantBuffer);
-
 		pContext->VSSetShader(g_pVertexShader, NULL, 0);
 		pContext->GSSetShader(g_pGeometryShader, NULL, 0);
 		pContext->PSSetShader(g_pPixelShader, NULL, 0);
-		pContext->DrawIndexed(VertexCount, 0, 0);
+		pContext->PSSetShaderResources(0, 1, &g_pTexSRV);
+		pContext->DrawIndexed(Count, 0, 0);
 		return true;
 	}
-	void  KDXHelper::Release()
+	void  KDXObject::Release()
 	{
 		if (g_pVertexBuffer) g_pVertexBuffer->Release();
 		if (g_pIndexBuffer) g_pIndexBuffer->Release();

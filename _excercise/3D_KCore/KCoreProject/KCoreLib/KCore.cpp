@@ -74,7 +74,7 @@ bool KCore::PreRender()
 	g_pImmediateContext->OMSetRenderTargets(1,
 		&m_DefaultRT.m_pRenderTargetView, m_DefaultRT.m_pDSV);
 
-	ApplyDSS(g_pImmediateContext, KDxState::g_pDepthEnable );
+	ApplyDSS(g_pImmediateContext, KDxState::g_pDepthStencilAddDSS );
 	
 	// Set primitive topology
 	g_pImmediateContext->IASetPrimitiveTopology(

@@ -64,12 +64,22 @@ bool KCore::PreRender()
 {
 	float ClearColor[4] = { 0.5f, 0.5f,1.0f, 1.0f }; //red,green,blue,alpha
 	g_pImmediateContext->ClearRenderTargetView(
-		g_pRenderTargetView,
+		m_DefaultRT.m_pRenderTargetView,
 		ClearColor);
-	g_pImmediateContext->OMSetRenderTargets(1, &g_pRenderTargetView, NULL);
+
+	g_pImmediateContext->ClearDepthStencilView(
+		m_DefaultRT.m_pDSV, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 
+		1.0f, 0);
+
+	g_pImmediateContext->OMSetRenderTargets(1,
+		&m_DefaultRT.m_pRenderTargetView, m_DefaultRT.m_pDSV);
+
+	ApplyDSS(g_pImmediateContext, KDxState::g_pDepthEnable );
+	
 	// Set primitive topology
 	g_pImmediateContext->IASetPrimitiveTopology(
 		D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	g_pImmediateContext->RSSetViewports(1, &m_vp);
 	return true;
 }
 bool KCore::PostRender()

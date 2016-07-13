@@ -8,13 +8,13 @@ namespace DX
 		static ID3D11RasterizerState*   g_pWireFrameRS;
 		static ID3D11RasterizerState*   g_pBackSolidRS;
 		static ID3D11RasterizerState*   g_pFrontSolidRS;
-		static ID3D11RasterizerState*   g_pNoneSolidRS;
+		static ID3D11RasterizerState*   g_pNoneSolidRS;		
 		static ID3D11RasterizerState*   g_pCullSolidRS[3];
 
-		static ID3D11DepthStencilState* g_pDepthEnable; // 깊이 버퍼링 할성화
-		static ID3D11DepthStencilState* g_pDepthDisable;// 비활성화
+		static ID3D11DepthStencilState* g_pDepthStencilAddDSS; // 깊이 버퍼링 할성화
+		static ID3D11DepthStencilState* g_pDepthStencilDisableDSS;// 비활성화
 		
-
+		static ID3D11SamplerState*		g_pSamplerState;
 		static HRESULT SetState(ID3D11Device* pDevice);
 		static bool Release();
 	};
@@ -29,7 +29,13 @@ namespace DX
 		ID3D11DeviceContext*    pContext,
 		ID3D11DepthStencilState*  pRasterState)
 	{
-		pContext->OMSetDepthStencilState(pRasterState, 0x00);
+		pContext->OMSetDepthStencilState(pRasterState, 0x01);
+	}
+	static void ApplySS(
+		ID3D11DeviceContext*    pContext,
+		ID3D11SamplerState*  pSamplerState)
+	{
+		pContext->PSSetSamplers(0, 1, &pSamplerState);
 	}
 	
 
@@ -38,7 +44,10 @@ namespace DX
 		ID3D11Device*  pd3dDevice,
 		TCHAR* pLoadShaderFile,
 		ID3DBlob** ppVSBlob);
-	ID3D11PixelShader*		LoadPixelShaderFile(ID3D11Device*  pd3dDevice, TCHAR* pLoadShaderFile);
+	ID3D11PixelShader*		LoadPixelShaderFile(
+		ID3D11Device*  pd3dDevice, 
+		TCHAR* pLoadShaderFile,
+		char* csEntry = 0);
 	ID3D11GeometryShader*   LoadGeometryShaderFile(
 		ID3D11Device*  pd3dDevice,
 		TCHAR* pLoadShaderFile);
@@ -56,11 +65,14 @@ namespace DX
 		D3D11_BIND_FLAG bindFlag,
 		bool bDynamic = false);
 
-	class KDXHelper
+	ID3D11ShaderResourceView* CreateShaderResourceView(
+		ID3D11Device*  pd3dDevice, 
+		TCHAR* szFileName);
+	class KDXObject
 	{
 	public:
-		KDXHelper::KDXHelper();
-		KDXHelper::~KDXHelper();
+		KDXObject::KDXObject();
+		KDXObject::~KDXObject();
 		ID3D11Buffer*		g_pVertexBuffer;
 		ID3D11Buffer*		g_pIndexBuffer;
 		ID3D11Buffer*		g_pConstantBuffer;
@@ -69,6 +81,12 @@ namespace DX
 		ID3D11GeometryShader*  g_pGeometryShader;
 		ID3D11InputLayout*  g_pInputlayout;
 		ID3DBlob*			g_pVSBlob;
+		ID3D11ShaderResourceView*   g_pTexSRV;
+
+		UINT    m_iNumVertex;
+		UINT    m_iNumIndex;
+		UINT    m_iVertexSize;
+
 		bool m_bWireFrameRender;
 		int m_iPrimitiveType;
 		int m_iCullMode;
