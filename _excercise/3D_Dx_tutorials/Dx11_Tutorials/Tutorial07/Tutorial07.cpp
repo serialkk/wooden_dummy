@@ -17,10 +17,36 @@
 //--------------------------------------------------------------------------------------
 // Structures
 //--------------------------------------------------------------------------------------
-struct SimpleVertex
+//struct SimpleVertex
+//{
+//	D3DXVECTOR3 Pos;
+//	D3DXVECTOR3 Normal;
+//	D3DXVECTOR4 Color;
+//    D3DXVECTOR2 Tex;
+//};
+
+struct PNCT_VERTEX
 {
-	D3DXVECTOR3 Pos;
-    D3DXVECTOR2 Tex;
+	D3DXVECTOR3		p;
+	D3DXVECTOR3		n;
+	D3DXVECTOR4		c;
+	D3DXVECTOR2     t;
+	bool operator == (const PNCT_VERTEX & Vertex)
+	{
+		if (p == Vertex.p  && n == Vertex.n && 	c == Vertex.c  &&	t == Vertex.t)
+		{
+			return true;
+		}
+		return  false;
+	}
+	PNCT_VERTEX() {}
+	PNCT_VERTEX(D3DXVECTOR3		vp,
+		D3DXVECTOR3		vn,
+		D3DXVECTOR4		vc,
+		D3DXVECTOR2     vt)
+	{
+		p = vp, n = vn, c = vc, t = vt;
+	}
 };
 
 struct CBNeverChanges
@@ -318,8 +344,12 @@ HRESULT InitDevice()
     // Define the input layout
     D3D11_INPUT_ELEMENT_DESC layout[] =
     {
-        { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-        { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+        //{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+        //{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0,  0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "NORMAL",   0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "COLOR",    0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 24, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT,    0, 40, D3D11_INPUT_PER_VERTEX_DATA, 0 },
     };
     UINT numElements = ARRAYSIZE( layout );
 
@@ -350,43 +380,43 @@ HRESULT InitDevice()
         return hr;
 
     // Create vertex buffer
-    SimpleVertex vertices[] =
+    PNCT_VERTEX vertices[] =
     {
-        { D3DXVECTOR3( -1.0f, 1.0f, -1.0f ), D3DXVECTOR2( 0.0f, 0.0f ) },
-        { D3DXVECTOR3( 1.0f, 1.0f, -1.0f ), D3DXVECTOR2( 1.0f, 0.0f ) },
-        { D3DXVECTOR3( 1.0f, 1.0f, 1.0f ), D3DXVECTOR2( 1.0f, 1.0f ) },
-        { D3DXVECTOR3( -1.0f, 1.0f, 1.0f ), D3DXVECTOR2( 0.0f, 1.0f ) },
+        { D3DXVECTOR3( -1.0f, 1.0f, -1.0f ),	D3DXVECTOR3( -1.0f, 1.0f, -1.0f ),	D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f),		D3DXVECTOR2( 0.0f, 0.0f ) },
+        { D3DXVECTOR3( 1.0f, 1.0f, -1.0f ),		D3DXVECTOR3( 1.0f, 1.0f, -1.0f ),	D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f),		D3DXVECTOR2( 1.0f, 0.0f ) },
+        { D3DXVECTOR3( 1.0f, 1.0f, 1.0f ),		D3DXVECTOR3( 1.0f, 1.0f, 1.0f ),	D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f),		D3DXVECTOR2( 1.0f, 1.0f ) },
+        { D3DXVECTOR3( -1.0f, 1.0f, 1.0f ),		D3DXVECTOR3( -1.0f, 1.0f, 1.0f ),	D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f),		D3DXVECTOR2( 0.0f, 1.0f ) },
 
-        { D3DXVECTOR3( -1.0f, -1.0f, -1.0f ), D3DXVECTOR2( 0.0f, 0.0f ) },
-        { D3DXVECTOR3( 1.0f, -1.0f, -1.0f ), D3DXVECTOR2( 1.0f, 0.0f ) },
-        { D3DXVECTOR3( 1.0f, -1.0f, 1.0f ), D3DXVECTOR2( 1.0f, 1.0f ) },
-        { D3DXVECTOR3( -1.0f, -1.0f, 1.0f ), D3DXVECTOR2( 0.0f, 1.0f ) },
+        { D3DXVECTOR3( -1.0f, -1.0f, -1.0f ),	D3DXVECTOR3( -1.0f, -1.0f, -1.0f ),	D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f),		D3DXVECTOR2( 0.0f, 0.0f ) },
+        { D3DXVECTOR3( 1.0f, -1.0f, -1.0f ),	D3DXVECTOR3( 1.0f, -1.0f, -1.0f ),	D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f),		D3DXVECTOR2( 1.0f, 0.0f ) },
+        { D3DXVECTOR3( 1.0f, -1.0f, 1.0f ),		D3DXVECTOR3( 1.0f, -1.0f, 1.0f ),	D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f),		D3DXVECTOR2( 1.0f, 1.0f ) },
+        { D3DXVECTOR3( -1.0f, -1.0f, 1.0f ),	D3DXVECTOR3( -1.0f, -1.0f, 1.0f ),	D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f),		D3DXVECTOR2( 0.0f, 1.0f ) },
 
-        { D3DXVECTOR3( -1.0f, -1.0f, 1.0f ), D3DXVECTOR2( 0.0f, 0.0f ) },
-        { D3DXVECTOR3( -1.0f, -1.0f, -1.0f ), D3DXVECTOR2( 1.0f, 0.0f ) },
-        { D3DXVECTOR3( -1.0f, 1.0f, -1.0f ), D3DXVECTOR2( 1.0f, 1.0f ) },
-        { D3DXVECTOR3( -1.0f, 1.0f, 1.0f ), D3DXVECTOR2( 0.0f, 1.0f ) },
+        { D3DXVECTOR3( -1.0f, -1.0f, 1.0f ),	D3DXVECTOR3( -1.0f, -1.0f, 1.0f ),	D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f),		D3DXVECTOR2( 0.0f, 0.0f ) },
+        { D3DXVECTOR3( -1.0f, -1.0f, -1.0f ),	D3DXVECTOR3( -1.0f, -1.0f, -1.0f ),	D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f),		D3DXVECTOR2( 1.0f, 0.0f ) },
+        { D3DXVECTOR3( -1.0f, 1.0f, -1.0f ),	D3DXVECTOR3( -1.0f, 1.0f, -1.0f ),	D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f),		D3DXVECTOR2( 1.0f, 1.0f ) },
+        { D3DXVECTOR3( -1.0f, 1.0f, 1.0f ),		D3DXVECTOR3( -1.0f, 1.0f, 1.0f ),	D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f),		D3DXVECTOR2( 0.0f, 1.0f ) },
 
-        { D3DXVECTOR3( 1.0f, -1.0f, 1.0f ), D3DXVECTOR2( 0.0f, 0.0f ) },
-        { D3DXVECTOR3( 1.0f, -1.0f, -1.0f ), D3DXVECTOR2( 1.0f, 0.0f ) },
-        { D3DXVECTOR3( 1.0f, 1.0f, -1.0f ), D3DXVECTOR2( 1.0f, 1.0f ) },
-        { D3DXVECTOR3( 1.0f, 1.0f, 1.0f ), D3DXVECTOR2( 0.0f, 1.0f ) },
+        { D3DXVECTOR3( 1.0f, -1.0f, 1.0f ),		D3DXVECTOR3( 1.0f, -1.0f, 1.0f ),	D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f),		D3DXVECTOR2( 0.0f, 0.0f ) },
+        { D3DXVECTOR3( 1.0f, -1.0f, -1.0f ),	D3DXVECTOR3( 1.0f, -1.0f, -1.0f ),	D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f),		D3DXVECTOR2( 1.0f, 0.0f ) },
+        { D3DXVECTOR3( 1.0f, 1.0f, -1.0f ),		D3DXVECTOR3( 1.0f, 1.0f, -1.0f ),	D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f),		D3DXVECTOR2( 1.0f, 1.0f ) },
+        { D3DXVECTOR3( 1.0f, 1.0f, 1.0f ),		D3DXVECTOR3( 1.0f, 1.0f, 1.0f ),	D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f),		D3DXVECTOR2( 0.0f, 1.0f ) },
 
-        { D3DXVECTOR3( -1.0f, -1.0f, -1.0f ), D3DXVECTOR2( 0.0f, 0.0f ) },
-        { D3DXVECTOR3( 1.0f, -1.0f, -1.0f ), D3DXVECTOR2( 1.0f, 0.0f ) },
-        { D3DXVECTOR3( 1.0f, 1.0f, -1.0f ), D3DXVECTOR2( 1.0f, 1.0f ) },
-        { D3DXVECTOR3( -1.0f, 1.0f, -1.0f ), D3DXVECTOR2( 0.0f, 1.0f ) },
+        { D3DXVECTOR3( -1.0f, -1.0f, -1.0f ),	D3DXVECTOR3( -1.0f, -1.0f, -1.0f ),	D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f),		D3DXVECTOR2( 0.0f, 0.0f ) },
+        { D3DXVECTOR3( 1.0f, -1.0f, -1.0f ),	D3DXVECTOR3( 1.0f, -1.0f, -1.0f ),	D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f),		D3DXVECTOR2( 1.0f, 0.0f ) },
+        { D3DXVECTOR3( 1.0f, 1.0f, -1.0f ),		D3DXVECTOR3( 1.0f, 1.0f, -1.0f ),	D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f),		D3DXVECTOR2( 1.0f, 1.0f ) },
+        { D3DXVECTOR3( -1.0f, 1.0f, -1.0f ),	D3DXVECTOR3( -1.0f, 1.0f, -1.0f ),	D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f),		D3DXVECTOR2( 0.0f, 1.0f ) },
 
-        { D3DXVECTOR3( -1.0f, -1.0f, 1.0f ), D3DXVECTOR2( 0.0f, 0.0f ) },
-        { D3DXVECTOR3( 1.0f, -1.0f, 1.0f ), D3DXVECTOR2( 1.0f, 0.0f ) },
-        { D3DXVECTOR3( 1.0f, 1.0f, 1.0f ), D3DXVECTOR2( 1.0f, 1.0f ) },
-        { D3DXVECTOR3( -1.0f, 1.0f, 1.0f ), D3DXVECTOR2( 0.0f, 1.0f ) },
+        { D3DXVECTOR3( -1.0f, -1.0f, 1.0f ),	D3DXVECTOR3( -1.0f, -1.0f, 1.0f ),	D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f),		D3DXVECTOR2( 0.0f, 0.0f ) },
+        { D3DXVECTOR3( 1.0f, -1.0f, 1.0f ),		D3DXVECTOR3( 1.0f, -1.0f, 1.0f ),	D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f),		D3DXVECTOR2( 1.0f, 0.0f ) },
+        { D3DXVECTOR3( 1.0f, 1.0f, 1.0f ),		D3DXVECTOR3( 1.0f, 1.0f, 1.0f ),	D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f),		D3DXVECTOR2( 1.0f, 1.0f ) },
+        { D3DXVECTOR3( -1.0f, 1.0f, 1.0f ),		D3DXVECTOR3( -1.0f, 1.0f, 1.0f ),	D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f),		D3DXVECTOR2( 0.0f, 1.0f ) },
     };
 
     D3D11_BUFFER_DESC bd;
     ZeroMemory( &bd, sizeof(bd) );
     bd.Usage = D3D11_USAGE_DEFAULT;
-    bd.ByteWidth = sizeof( SimpleVertex ) * 24;
+    bd.ByteWidth = sizeof(PNCT_VERTEX) * 24;
     bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
     bd.CPUAccessFlags = 0;
     D3D11_SUBRESOURCE_DATA InitData;
@@ -397,7 +427,7 @@ HRESULT InitDevice()
         return hr;
 
     // Set vertex buffer
-    UINT stride = sizeof( SimpleVertex );
+    UINT stride = sizeof(PNCT_VERTEX);
     UINT offset = 0;
     g_pImmediateContext->IASetVertexBuffers( 0, 1, &g_pVertexBuffer, &stride, &offset );
 
