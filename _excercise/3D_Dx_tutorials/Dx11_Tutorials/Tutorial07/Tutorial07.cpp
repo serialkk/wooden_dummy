@@ -9,8 +9,9 @@
 #include <d3d11.h>
 #include <d3dx11.h>
 #include <d3dcompiler.h>
-#include <xnamath.h>
+#include <D3DX10math.h>
 #include "resource.h"
+#include <xnamath.h>
 
 
 //--------------------------------------------------------------------------------------
@@ -18,24 +19,24 @@
 //--------------------------------------------------------------------------------------
 struct SimpleVertex
 {
-    XMFLOAT3 Pos;
-    XMFLOAT2 Tex;
+	D3DXVECTOR3 Pos;
+    D3DXVECTOR2 Tex;
 };
 
 struct CBNeverChanges
 {
-    XMMATRIX mView;
+    D3DXMATRIX mView;
 };
 
 struct CBChangeOnResize
 {
-    XMMATRIX mProjection;
+    D3DXMATRIX mProjection;
 };
 
 struct CBChangesEveryFrame
 {
-    XMMATRIX mWorld;
-    XMFLOAT4 vMeshColor;
+    D3DXMATRIX mWorld;
+    D3DXVECTOR4 vMeshColor;
 };
 
 
@@ -62,10 +63,10 @@ ID3D11Buffer*                       g_pCBChangeOnResize = NULL;
 ID3D11Buffer*                       g_pCBChangesEveryFrame = NULL;
 ID3D11ShaderResourceView*           g_pTextureRV = NULL;
 ID3D11SamplerState*                 g_pSamplerLinear = NULL;
-XMMATRIX                            g_World;
-XMMATRIX                            g_View;
-XMMATRIX                            g_Projection;
-XMFLOAT4                            g_vMeshColor( 0.7f, 0.7f, 0.7f, 1.0f );
+D3DXMATRIX                            g_World;
+D3DXMATRIX                            g_View;
+D3DXMATRIX                            g_Projection;
+D3DXVECTOR4                            g_vMeshColor( 0.7f, 0.7f, 0.7f, 1.0f );
 
 
 //--------------------------------------------------------------------------------------
@@ -351,35 +352,35 @@ HRESULT InitDevice()
     // Create vertex buffer
     SimpleVertex vertices[] =
     {
-        { XMFLOAT3( -1.0f, 1.0f, -1.0f ), XMFLOAT2( 0.0f, 0.0f ) },
-        { XMFLOAT3( 1.0f, 1.0f, -1.0f ), XMFLOAT2( 1.0f, 0.0f ) },
-        { XMFLOAT3( 1.0f, 1.0f, 1.0f ), XMFLOAT2( 1.0f, 1.0f ) },
-        { XMFLOAT3( -1.0f, 1.0f, 1.0f ), XMFLOAT2( 0.0f, 1.0f ) },
+        { D3DXVECTOR3( -1.0f, 1.0f, -1.0f ), D3DXVECTOR2( 0.0f, 0.0f ) },
+        { D3DXVECTOR3( 1.0f, 1.0f, -1.0f ), D3DXVECTOR2( 1.0f, 0.0f ) },
+        { D3DXVECTOR3( 1.0f, 1.0f, 1.0f ), D3DXVECTOR2( 1.0f, 1.0f ) },
+        { D3DXVECTOR3( -1.0f, 1.0f, 1.0f ), D3DXVECTOR2( 0.0f, 1.0f ) },
 
-        { XMFLOAT3( -1.0f, -1.0f, -1.0f ), XMFLOAT2( 0.0f, 0.0f ) },
-        { XMFLOAT3( 1.0f, -1.0f, -1.0f ), XMFLOAT2( 1.0f, 0.0f ) },
-        { XMFLOAT3( 1.0f, -1.0f, 1.0f ), XMFLOAT2( 1.0f, 1.0f ) },
-        { XMFLOAT3( -1.0f, -1.0f, 1.0f ), XMFLOAT2( 0.0f, 1.0f ) },
+        { D3DXVECTOR3( -1.0f, -1.0f, -1.0f ), D3DXVECTOR2( 0.0f, 0.0f ) },
+        { D3DXVECTOR3( 1.0f, -1.0f, -1.0f ), D3DXVECTOR2( 1.0f, 0.0f ) },
+        { D3DXVECTOR3( 1.0f, -1.0f, 1.0f ), D3DXVECTOR2( 1.0f, 1.0f ) },
+        { D3DXVECTOR3( -1.0f, -1.0f, 1.0f ), D3DXVECTOR2( 0.0f, 1.0f ) },
 
-        { XMFLOAT3( -1.0f, -1.0f, 1.0f ), XMFLOAT2( 0.0f, 0.0f ) },
-        { XMFLOAT3( -1.0f, -1.0f, -1.0f ), XMFLOAT2( 1.0f, 0.0f ) },
-        { XMFLOAT3( -1.0f, 1.0f, -1.0f ), XMFLOAT2( 1.0f, 1.0f ) },
-        { XMFLOAT3( -1.0f, 1.0f, 1.0f ), XMFLOAT2( 0.0f, 1.0f ) },
+        { D3DXVECTOR3( -1.0f, -1.0f, 1.0f ), D3DXVECTOR2( 0.0f, 0.0f ) },
+        { D3DXVECTOR3( -1.0f, -1.0f, -1.0f ), D3DXVECTOR2( 1.0f, 0.0f ) },
+        { D3DXVECTOR3( -1.0f, 1.0f, -1.0f ), D3DXVECTOR2( 1.0f, 1.0f ) },
+        { D3DXVECTOR3( -1.0f, 1.0f, 1.0f ), D3DXVECTOR2( 0.0f, 1.0f ) },
 
-        { XMFLOAT3( 1.0f, -1.0f, 1.0f ), XMFLOAT2( 0.0f, 0.0f ) },
-        { XMFLOAT3( 1.0f, -1.0f, -1.0f ), XMFLOAT2( 1.0f, 0.0f ) },
-        { XMFLOAT3( 1.0f, 1.0f, -1.0f ), XMFLOAT2( 1.0f, 1.0f ) },
-        { XMFLOAT3( 1.0f, 1.0f, 1.0f ), XMFLOAT2( 0.0f, 1.0f ) },
+        { D3DXVECTOR3( 1.0f, -1.0f, 1.0f ), D3DXVECTOR2( 0.0f, 0.0f ) },
+        { D3DXVECTOR3( 1.0f, -1.0f, -1.0f ), D3DXVECTOR2( 1.0f, 0.0f ) },
+        { D3DXVECTOR3( 1.0f, 1.0f, -1.0f ), D3DXVECTOR2( 1.0f, 1.0f ) },
+        { D3DXVECTOR3( 1.0f, 1.0f, 1.0f ), D3DXVECTOR2( 0.0f, 1.0f ) },
 
-        { XMFLOAT3( -1.0f, -1.0f, -1.0f ), XMFLOAT2( 0.0f, 0.0f ) },
-        { XMFLOAT3( 1.0f, -1.0f, -1.0f ), XMFLOAT2( 1.0f, 0.0f ) },
-        { XMFLOAT3( 1.0f, 1.0f, -1.0f ), XMFLOAT2( 1.0f, 1.0f ) },
-        { XMFLOAT3( -1.0f, 1.0f, -1.0f ), XMFLOAT2( 0.0f, 1.0f ) },
+        { D3DXVECTOR3( -1.0f, -1.0f, -1.0f ), D3DXVECTOR2( 0.0f, 0.0f ) },
+        { D3DXVECTOR3( 1.0f, -1.0f, -1.0f ), D3DXVECTOR2( 1.0f, 0.0f ) },
+        { D3DXVECTOR3( 1.0f, 1.0f, -1.0f ), D3DXVECTOR2( 1.0f, 1.0f ) },
+        { D3DXVECTOR3( -1.0f, 1.0f, -1.0f ), D3DXVECTOR2( 0.0f, 1.0f ) },
 
-        { XMFLOAT3( -1.0f, -1.0f, 1.0f ), XMFLOAT2( 0.0f, 0.0f ) },
-        { XMFLOAT3( 1.0f, -1.0f, 1.0f ), XMFLOAT2( 1.0f, 0.0f ) },
-        { XMFLOAT3( 1.0f, 1.0f, 1.0f ), XMFLOAT2( 1.0f, 1.0f ) },
-        { XMFLOAT3( -1.0f, 1.0f, 1.0f ), XMFLOAT2( 0.0f, 1.0f ) },
+        { D3DXVECTOR3( -1.0f, -1.0f, 1.0f ), D3DXVECTOR2( 0.0f, 0.0f ) },
+        { D3DXVECTOR3( 1.0f, -1.0f, 1.0f ), D3DXVECTOR2( 1.0f, 0.0f ) },
+        { D3DXVECTOR3( 1.0f, 1.0f, 1.0f ), D3DXVECTOR2( 1.0f, 1.0f ) },
+        { D3DXVECTOR3( -1.0f, 1.0f, 1.0f ), D3DXVECTOR2( 0.0f, 1.0f ) },
     };
 
     D3D11_BUFFER_DESC bd;
@@ -477,23 +478,23 @@ HRESULT InitDevice()
         return hr;
 
     // Initialize the world matrices
-    g_World = XMMatrixIdentity();
+     D3DXMatrixIdentity(&g_World);
 
     // Initialize the view matrix
-    XMVECTOR Eye = XMVectorSet( 0.0f, 3.0f, -6.0f, 0.0f );
-    XMVECTOR At = XMVectorSet( 0.0f, 1.0f, 0.0f, 0.0f );
-    XMVECTOR Up = XMVectorSet( 0.0f, 1.0f, 0.0f, 0.0f );
-    g_View = XMMatrixLookAtLH( Eye, At, Up );
+    D3DXVECTOR3 Eye = D3DXVECTOR3( 0.0f, 3.0f, -6.0f );
+	D3DXVECTOR3 At = D3DXVECTOR3( 0.0f, 1.0f, 0.0f );
+	D3DXVECTOR3 Up = D3DXVECTOR3( 0.0f, 1.0f, 0.0f );
+    D3DXMatrixLookAtLH(&g_View, &Eye, &At, &Up );
 
     CBNeverChanges cbNeverChanges;
-    cbNeverChanges.mView = XMMatrixTranspose( g_View );
+    D3DXMatrixTranspose( &cbNeverChanges.mView,&g_View );
     g_pImmediateContext->UpdateSubresource( g_pCBNeverChanges, 0, NULL, &cbNeverChanges, 0, 0 );
 
     // Initialize the projection matrix
-    g_Projection = XMMatrixPerspectiveFovLH( XM_PIDIV4, width / (FLOAT)height, 0.01f, 100.0f );
+    D3DXMatrixPerspectiveFovLH(&g_Projection, XM_PIDIV4, width / (FLOAT)height, 0.01f, 100.0f );
     
     CBChangeOnResize cbChangesOnResize;
-    cbChangesOnResize.mProjection = XMMatrixTranspose( g_Projection );
+    D3DXMatrixTranspose(&cbChangesOnResize.mProjection ,&g_Projection );
     g_pImmediateContext->UpdateSubresource( g_pCBChangeOnResize, 0, NULL, &cbChangesOnResize, 0, 0 );
 
     return S_OK;
@@ -574,7 +575,7 @@ void Render()
     }
 
     // Rotate cube around the origin
-    g_World = XMMatrixRotationY( t );
+    D3DXMatrixRotationY(&g_World, t );
 
     // Modify the color
     g_vMeshColor.x = ( sinf( t * 1.0f ) + 1.0f ) * 0.5f;
@@ -596,7 +597,7 @@ void Render()
     // Update variables that change once per frame
     //
     CBChangesEveryFrame cb;
-    cb.mWorld = XMMatrixTranspose( g_World );
+    D3DXMatrixTranspose(&cb.mWorld,&g_World );
     cb.vMeshColor = g_vMeshColor;
     g_pImmediateContext->UpdateSubresource( g_pCBChangesEveryFrame, 0, NULL, &cb, 0, 0 );
 
