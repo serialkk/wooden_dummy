@@ -1,0 +1,268 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectName>P010_TBasisLib_0</ProjectName>
+    <ProjectGuid>{C2320D8D-FB07-4F72-ABB9-364EDCF5EE4C}</ProjectGuid>
+    <RootNamespace>TBasisLib_0</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>11.0.50727.1</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>../output</OutDir>
+    <IntDir>../output/p090_TBasisLib_0</IntDir>
+    <IncludePath>$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>../../output</OutDir>
+    <IntDir>../../output/p090_TBasisLib_0</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;WIN32_LEAN_AND_MEAN;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader />
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <AdditionalIncludeDirectories>../include/dx;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Lib>
+      <OutputFile>TBasisLib32d_0.lib</OutputFile>
+      <AdditionalLibraryDirectories>../lib/dx/x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+    </Lib>
+    <PostBuildEvent />
+    <PostBuildEvent>
+      <Command>copy ".\\TBasisLib32d_0.lib" "..\\lib"
+copy "*.h" "..\\include\\Inc_0"
+copy ".\\map\\*.h" "..\\include\\Inc_0\\map"
+copy ".\\shader\\*.*" "..\\data\\Shader"</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeader />
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <AdditionalIncludeDirectories>../../include/dx;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Lib>
+      <AdditionalLibraryDirectories>../../lib/dx/x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <OutputFile>TBasisLib32d_0.lib</OutputFile>
+    </Lib>
+    <PostBuildEvent />
+    <PostBuildEvent>
+      <Command>copy "./TBasisLib32d_0.lib" "..\\..\\lib"
+copy "*.h" "..\\..\\include\\Inc_0"</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="map\TBspParser.cpp" />
+    <ClCompile Include="map\TBspRender.cpp" />
+    <ClCompile Include="map\TBspTree.cpp" />
+    <ClCompile Include="map\THeightMap.cpp" />
+    <ClCompile Include="map\TMap.cpp" />
+    <ClCompile Include="map\TMapLOD.cpp" />
+    <ClCompile Include="map\TMapObject.cpp" />
+    <ClCompile Include="map\TNode.cpp" />
+    <ClCompile Include="map\TNoise.cpp" />
+    <ClCompile Include="map\TNoiseMap.cpp" />
+    <ClCompile Include="map\TPolygonGen.cpp" />
+    <ClCompile Include="map\TQuadTree.cpp" />
+    <ClCompile Include="map\TQuadTreeIndex.cpp" />
+    <ClCompile Include="map\TSpaceDivision.cpp" />
+    <ClCompile Include="TAnimation.cpp" />
+    <ClCompile Include="TArcBall.cpp" />
+    <ClCompile Include="TAseObj.cpp" />
+    <ClCompile Include="TAseParser.cpp" />
+    <ClCompile Include="TBackViewCamera.cpp" />
+    <ClCompile Include="TBaseObj.cpp" />
+    <ClCompile Include="TBasisLib_0.cpp" />
+    <ClCompile Include="TBoneObj.cpp" />
+    <ClCompile Include="TBoxObj.cpp" />
+    <ClCompile Include="TDxRT.cpp" />
+    <ClCompile Include="TDxShader.cpp" />
+    <ClCompile Include="TMatrix.cpp" />
+    <ClCompile Include="TMiniMap.cpp" />
+    <ClCompile Include="TNormalMap.cpp" />
+    <ClCompile Include="TSelect.cpp" />
+    <ClCompile Include="TSkinObj.cpp" />
+    <ClCompile Include="TSkyObj.cpp" />
+    <ClCompile Include="TTbsObj.cpp" />
+    <ClCompile Include="TCamera.cpp" />
+    <ClCompile Include="TDevice.cpp" />
+    <ClCompile Include="TDirectWrite.cpp" />
+    <ClCompile Include="TDxHelper.cpp" />
+    <ClCompile Include="TDxHelperEx.cpp" />
+    <ClCompile Include="TDxState.cpp" />
+    <ClCompile Include="TFrustum.cpp" />
+    <ClCompile Include="TInput.cpp" />
+    <ClCompile Include="TLightObj.cpp" />
+    <ClCompile Include="TLoadToken.cpp" />
+    <ClCompile Include="TModel.cpp" />
+    <ClCompile Include="TModelViewCamera.cpp" />
+    <ClCompile Include="TObject.cpp" />
+    <ClCompile Include="TObjMgr.cpp" />
+    <ClCompile Include="TParser.cpp" />
+    <ClCompile Include="TDxSO.cpp" />
+    <ClCompile Include="TShape.cpp" />
+    <ClCompile Include="TSprite.cpp" />
+    <ClCompile Include="TSpriteMgr.cpp" />
+    <ClCompile Include="TTextureMgr.cpp" />
+    <ClCompile Include="TTimer.cpp" />
+    <ClCompile Include="TVector.cpp" />
+    <ClCompile Include="TWindow.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="map\TBspParser.h" />
+    <ClInclude Include="map\TBspRender.h" />
+    <ClInclude Include="map\TBspTree.h" />
+    <ClInclude Include="map\THeightMap.h" />
+    <ClInclude Include="map\TMap.h" />
+    <ClInclude Include="map\TMapLOD.h" />
+    <ClInclude Include="map\TMapObject.h" />
+    <ClInclude Include="map\TNode.h" />
+    <ClInclude Include="map\TNoise.h" />
+    <ClInclude Include="map\TNoiseMap.h" />
+    <ClInclude Include="map\TPolygonGen.h" />
+    <ClInclude Include="map\TQuadTree.h" />
+    <ClInclude Include="map\TQuadTreeIndex.h" />
+    <ClInclude Include="map\TSpaceDivision.h" />
+    <ClInclude Include="TAnimation.h" />
+    <ClInclude Include="TArcBall.h" />
+    <ClInclude Include="TAseObj.h" />
+    <ClInclude Include="TAseParser.h" />
+    <ClInclude Include="TBackViewCamera.h" />
+    <ClInclude Include="TBaseObj.h" />
+    <ClInclude Include="TBasisLib_0.h" />
+    <ClInclude Include="TBasisStd.h" />
+    <ClInclude Include="TBoneObj.h" />
+    <ClInclude Include="TBoxObj.h" />
+    <ClInclude Include="TDxRT.h" />
+    <ClInclude Include="TDxShader.h" />
+    <ClInclude Include="TMatrix.h" />
+    <ClInclude Include="TMiniMap.h" />
+    <ClInclude Include="TNormalMap.h" />
+    <ClInclude Include="TSelect.h" />
+    <ClInclude Include="TSkinObj.h" />
+    <ClInclude Include="TSkyObj.h" />
+    <ClInclude Include="TTbsObj.h" />
+    <ClInclude Include="TCamera.h" />
+    <ClInclude Include="TDevice.h" />
+    <ClInclude Include="TDirectWrite.h" />
+    <ClInclude Include="TDxHelper.h" />
+    <ClInclude Include="TDxHelperEx.h" />
+    <ClInclude Include="TDxState.h" />
+    <ClInclude Include="TFrustum.h" />
+    <ClInclude Include="TInput.h" />
+    <ClInclude Include="TLightObj.h" />
+    <ClInclude Include="TLoadMgr.h" />
+    <ClInclude Include="TLoadToken.h" />
+    <ClInclude Include="TMesh.h" />
+    <ClInclude Include="TModel.h" />
+    <ClInclude Include="TModelViewCamera.h" />
+    <ClInclude Include="TObject.h" />
+    <ClInclude Include="TObjMgr.h" />
+    <ClInclude Include="TObjStd.h" />
+    <ClInclude Include="TParser.h" />
+    <ClInclude Include="TDxSO.h" />
+    <ClInclude Include="TShape.h" />
+    <ClInclude Include="TSprite.h" />
+    <ClInclude Include="TSpriteMgr.h" />
+    <ClInclude Include="TTemplate.h" />
+    <ClInclude Include="TTextureMgr.h" />
+    <ClInclude Include="TTimer.h" />
+    <ClInclude Include="TUtils.h" />
+    <ClInclude Include="TVector.h" />
+    <ClInclude Include="TWindow.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="shader\Box.hlsl">
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">VS</EntryPointName>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../../data/shader/%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
+    <FxCompile Include="shader\BoxSO.hlsl">
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">VS</EntryPointName>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../../data/shader/%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
+    <FxCompile Include="shader\DiffuseLight.hlsl">
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">VS</EntryPointName>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../../data/shader/%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
+    <FxCompile Include="shader\Line.hlsl">
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">VS</EntryPointName>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../../data/shader/%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
+    <FxCompile Include="shader\Plane.hlsl">
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">VS</EntryPointName>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../../data/shader/%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
+    <FxCompile Include="shader\SkyObj.hlsl">
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">VS</EntryPointName>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../../data/shader/%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

@@ -70,3 +70,6 @@
 64.<2016-09-13> 3D MAX UTILITY 2, 피지큐 적용된 모델 export 할 수 있도록 구현 내용 포함.
 65.<2016-09-19> 3D MAX UTILITY 3
 66.<2016-09-20> 3D MAX UTILITY 4
+67.<2016-10-05> MFC Excercise 1 ( 메뉴 아이템추가, 다이얼로그 추가, OnInitDialog, 콤보박스, DDX/DDV, UpdateData, 트리컨트롤)
+68.<2016-10-06> MFC Excercise 2 ( Pane Window, Tab Pane, 리스트 컨트롤 탐색기 처럼 Report 스타일로 보이기, 리스트 컨트롤 이미지 추가 작업, 확장스타일)
+
