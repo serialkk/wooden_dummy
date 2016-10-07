@@ -26,6 +26,7 @@
 
 # VS generated files #
 ######################
+*.ipch
 *.sdf
 *.cdf
 *.cache
