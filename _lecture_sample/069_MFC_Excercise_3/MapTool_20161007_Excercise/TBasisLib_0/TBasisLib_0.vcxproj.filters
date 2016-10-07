@@ -1,0 +1,431 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="소스 파일">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="헤더 파일">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="리소스 파일">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
+    </Filter>
+    <Filter Include="Common">
+      <UniqueIdentifier>{209f3ff2-d92f-4c71-8206-339e64a2dbf0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\Object">
+      <UniqueIdentifier>{5179b499-4bd6-411c-8603-c4b528c84301}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\Shape">
+      <UniqueIdentifier>{54792983-2e95-411f-bc01-bcbea8a30a53}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\Camera">
+      <UniqueIdentifier>{07150801-8ec0-4ad8-8642-b5e2b590436e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\Sprite">
+      <UniqueIdentifier>{6c5bee6d-21e3-4515-b434-556ef916390a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\DXHelper">
+      <UniqueIdentifier>{2ef91f50-a9a0-43d6-93bc-743f1a89b794}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\Map">
+      <UniqueIdentifier>{26dd2da1-cbf9-4853-a2cc-cc533f7e6783}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\Texture">
+      <UniqueIdentifier>{c4d16f28-340c-4b2d-8eac-1aba23daa9a8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\Utils">
+      <UniqueIdentifier>{4c322fb8-0570-46e7-b07f-cb2833f8f2dc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\Light">
+      <UniqueIdentifier>{749098c1-5902-40f7-a162-5123216ae2a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shader">
+      <UniqueIdentifier>{f1e607bb-7bf0-4159-80fc-2b1696ff3c85}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\math">
+      <UniqueIdentifier>{83c72e03-3140-437e-bb27-33d13ff41d1d}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="TBasisLib_0.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="TDevice.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="TInput.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="TTimer.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="TWindow.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="TAseObj.cpp">
+      <Filter>Common\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="TTbsObj.cpp">
+      <Filter>Common\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="TModel.cpp">
+      <Filter>Common\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="TObject.cpp">
+      <Filter>Common\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="TObjMgr.cpp">
+      <Filter>Common\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="TShape.cpp">
+      <Filter>Common\Shape</Filter>
+    </ClCompile>
+    <ClCompile Include="TBackViewCamera.cpp">
+      <Filter>Common\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="TCamera.cpp">
+      <Filter>Common\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="TFrustum.cpp">
+      <Filter>Common\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="TModelViewCamera.cpp">
+      <Filter>Common\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="TAseParser.cpp">
+      <Filter>Common\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="TArcBall.cpp">
+      <Filter>Common\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="TBoxObj.cpp">
+      <Filter>Common\Shape</Filter>
+    </ClCompile>
+    <ClCompile Include="TLoadToken.cpp">
+      <Filter>Common\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="TSpriteMgr.cpp">
+      <Filter>Common\Sprite</Filter>
+    </ClCompile>
+    <ClCompile Include="TSprite.cpp">
+      <Filter>Common\Sprite</Filter>
+    </ClCompile>
+    <ClCompile Include="TDxHelperEx.cpp">
+      <Filter>Common\DXHelper</Filter>
+    </ClCompile>
+    <ClCompile Include="TDxState.cpp">
+      <Filter>Common\DXHelper</Filter>
+    </ClCompile>
+    <ClCompile Include="TTextureMgr.cpp">
+      <Filter>Common\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="TParser.cpp">
+      <Filter>Common\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="TLightObj.cpp">
+      <Filter>Common\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="TDxHelper.cpp">
+      <Filter>Common\DXHelper</Filter>
+    </ClCompile>
+    <ClCompile Include="TDirectWrite.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="TSkinObj.cpp">
+      <Filter>Common\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="TSkyObj.cpp">
+      <Filter>Common\Shape</Filter>
+    </ClCompile>
+    <ClCompile Include="TDxRT.cpp">
+      <Filter>Common\DXHelper</Filter>
+    </ClCompile>
+    <ClCompile Include="TDxSO.cpp">
+      <Filter>Common\DXHelper</Filter>
+    </ClCompile>
+    <ClCompile Include="TBoneObj.cpp">
+      <Filter>Common\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="TNormalMap.cpp">
+      <Filter>Common\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="TMiniMap.cpp">
+      <Filter>Common\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="map\THeightMap.cpp">
+      <Filter>Common\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="map\TMap.cpp">
+      <Filter>Common\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="map\TMapLOD.cpp">
+      <Filter>Common\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="map\TMapObject.cpp">
+      <Filter>Common\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="map\TNode.cpp">
+      <Filter>Common\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="map\TNoise.cpp">
+      <Filter>Common\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="map\TNoiseMap.cpp">
+      <Filter>Common\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="map\TQuadTree.cpp">
+      <Filter>Common\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="map\TQuadTreeIndex.cpp">
+      <Filter>Common\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="TBaseObj.cpp">
+      <Filter>Common\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="map\TBspParser.cpp">
+      <Filter>Common\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="map\TBspRender.cpp">
+      <Filter>Common\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="map\TBspTree.cpp">
+      <Filter>Common\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="map\TPolygonGen.cpp">
+      <Filter>Common\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="map\TSpaceDivision.cpp">
+      <Filter>Common\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="TSelect.cpp">
+      <Filter>Common\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="TDxShader.cpp">
+      <Filter>Common\DXHelper</Filter>
+    </ClCompile>
+    <ClCompile Include="TAnimation.cpp">
+      <Filter>Common\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="TMatrix.cpp">
+      <Filter>Common\math</Filter>
+    </ClCompile>
+    <ClCompile Include="TVector.cpp">
+      <Filter>Common\math</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="TBasisLib_0.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="TBasisStd.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="TDevice.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="TInput.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="TTimer.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="TWindow.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="TDirectWrite.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="TAseObj.h">
+      <Filter>Common\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="TTbsObj.h">
+      <Filter>Common\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="TMesh.h">
+      <Filter>Common\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="TModel.h">
+      <Filter>Common\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="TObject.h">
+      <Filter>Common\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="TObjMgr.h">
+      <Filter>Common\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="TObjStd.h">
+      <Filter>Common\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="TShape.h">
+      <Filter>Common\Shape</Filter>
+    </ClInclude>
+    <ClInclude Include="TBackViewCamera.h">
+      <Filter>Common\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="TCamera.h">
+      <Filter>Common\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="TFrustum.h">
+      <Filter>Common\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="TModelViewCamera.h">
+      <Filter>Common\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="TAseParser.h">
+      <Filter>Common\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="TArcBall.h">
+      <Filter>Common\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="TBoxObj.h">
+      <Filter>Common\Shape</Filter>
+    </ClInclude>
+    <ClInclude Include="TLoadToken.h">
+      <Filter>Common\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="TLoadMgr.h">
+      <Filter>Common\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="TSpriteMgr.h">
+      <Filter>Common\Sprite</Filter>
+    </ClInclude>
+    <ClInclude Include="TSprite.h">
+      <Filter>Common\Sprite</Filter>
+    </ClInclude>
+    <ClInclude Include="TDxHelper.h">
+      <Filter>Common\DXHelper</Filter>
+    </ClInclude>
+    <ClInclude Include="TDxHelperEx.h">
+      <Filter>Common\DXHelper</Filter>
+    </ClInclude>
+    <ClInclude Include="TDxState.h">
+      <Filter>Common\DXHelper</Filter>
+    </ClInclude>
+    <ClInclude Include="TTextureMgr.h">
+      <Filter>Common\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="TParser.h">
+      <Filter>Common\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="TTemplate.h">
+      <Filter>Common\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="TLightObj.h">
+      <Filter>Common\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="TSkinObj.h">
+      <Filter>Common\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="TSkyObj.h">
+      <Filter>Common\Shape</Filter>
+    </ClInclude>
+    <ClInclude Include="TDxRT.h">
+      <Filter>Common\DXHelper</Filter>
+    </ClInclude>
+    <ClInclude Include="TDxSO.h">
+      <Filter>Common\DXHelper</Filter>
+    </ClInclude>
+    <ClInclude Include="TBoneObj.h">
+      <Filter>Common\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="TNormalMap.h">
+      <Filter>Common\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="TMiniMap.h">
+      <Filter>Common\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="map\THeightMap.h">
+      <Filter>Common\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="map\TMap.h">
+      <Filter>Common\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="map\TMapLOD.h">
+      <Filter>Common\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="map\TMapObject.h">
+      <Filter>Common\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="map\TNode.h">
+      <Filter>Common\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="map\TNoise.h">
+      <Filter>Common\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="map\TNoiseMap.h">
+      <Filter>Common\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="map\TQuadTree.h">
+      <Filter>Common\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="map\TQuadTreeIndex.h">
+      <Filter>Common\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="TUtils.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="TBaseObj.h">
+      <Filter>Common\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="map\TBspParser.h">
+      <Filter>Common\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="map\TBspRender.h">
+      <Filter>Common\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="map\TBspTree.h">
+      <Filter>Common\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="map\TPolygonGen.h">
+      <Filter>Common\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="map\TSpaceDivision.h">
+      <Filter>Common\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="TSelect.h">
+      <Filter>Common\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="TDxShader.h">
+      <Filter>Common\DXHelper</Filter>
+    </ClInclude>
+    <ClInclude Include="TAnimation.h">
+      <Filter>Common\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="TMatrix.h">
+      <Filter>Common\math</Filter>
+    </ClInclude>
+    <ClInclude Include="TVector.h">
+      <Filter>Common\math</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="shader\Box.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="shader\BoxSO.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="shader\DiffuseLight.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="shader\Line.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="shader\Plane.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="shader\SkyObj.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+  </ItemGroup>
+</Project>
