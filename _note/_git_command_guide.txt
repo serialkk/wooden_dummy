@@ -1,0 +1,37 @@
+------------------------------------------------------------------------------------------
+[올리기]
+git status
+git add .
+git status
+git commit -m "update doc/_meeting_log.txt"
+git push -u origin master
+------------------------------------------------------------------------------------------
+[땡기기1]
+(주의할점 자신이 작업한게 있으면 아래 명령어 치면 날아가므로.. 커밋을 만든다)
+git status
+git add .
+git status
+git commit -m "update doc/_meeting_log.txt"
+------------------------------------------------------------------------------------------
+[땡기기2]
+git clean -xdf
+git checkout -f
+git pull
+------------------------------------------------------------------------------------------
+[컨플틱트 발생시]
+(git conflict는 2가지 가 있다) 이때 수동으로 merge하여 merge 커밋을 만들어야 한다.
+
+[1.binary conflict ]
+> git checkout FETCH_HEAD <file name> //서버(리모트)것을 적용할때
+> git checkout HEAD <file name> //로컬 것을 적용할때
+> git commit -a // 컨플릭트 작업 완료 시 해당 명령어를 친다.
+
+[2.code conflict]
+1.vi 창을 띄운다.
+> git mergetool -t vimdiff
+2.vi 창에서 / 입력해서 serch를 한다. <<<<< conflict 시작부분 >>>>> conflict 끝나는 부분   ============= 기준으로 위가 로컬 아래가 서버(리모트)
+3.vi 창에서 conflict난 부분을 지운거나 수정한다.(참고 라인 삭제: d 키)
+4.vi 창 작업이 끝나면 :를 입력 후 wqa! 입력 (저장하고 모두 닫기)
+5.cmd 창에서 git status를 쳐보면 불필요한 파일들이 생성되어있을 것이다 .orig 등 이것들을 아래 명령어로 날려준다
+> git clean -xdf
+6.그 이후 git commit -a  를 입력하여 머지 커밋 작성을 완료 한다.
