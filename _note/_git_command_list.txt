@@ -17,3 +17,20 @@
  git clone https://github.com/serialkk/wooden_dummy.git
 
  git checkout HEAD/FETCH_HEAD <file name>
+ 
+ 
+ 
+ 
+ 
+ //모든 태그 보기
+ git tag
+ 
+ //태그 붙이기
+ git tag -a v0.1.0 -m 'ENP Proj v0.1.0'
+ 
+ //태그 하나만 푸쉬하기
+ git push origin v0.1.0
+ 
+ //모든 태그 한번에 푸쉬하기
+ git push origin --tags
+ 
