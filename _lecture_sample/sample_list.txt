@@ -73,4 +73,5 @@
 67.<2016-10-05> MFC Excercise 1 ( 메뉴 아이템추가, 다이얼로그 추가, OnInitDialog, 콤보박스, DDX/DDV, UpdateData, 트리컨트롤)
 68.<2016-10-06> MFC Excercise 2 ( Pane Window, Tab Pane, 리스트 컨트롤 탐색기 처럼 Report 스타일로 보이기, 리스트 컨트롤 이미지 추가 작업, 확장스타일)
 69.<2016-10-07> MFC Excercise 3 ( 컨텍스트/팝업 메뉴, 리스트 컨트롤에 특정 디렉토리 파일 추가, 드래그 & 드롭, 리스트 컨트롤에 드래그 & 드롭, 비트맵 사용 이미지 리스트 생성.
+70.<2017-01-11> C# Excercise 1
 
