@@ -1,4 +1,4 @@
-{\rtf1\ansi\ansicpg949\deff0\deflang1033\deflangfe1042{\fonttbl{\f0\fnil\fcharset129 \'b8\'bc\'c0\'ba \'b0\'ed\'b5\'f1;}}
+{\rtf1\ansi\ansicpg949\deff0\deflang1033\deflangfe1042{\fonttbl{\f0\fnil\fcharset129 \'b8\'bc\'c0\'ba \'b0\'ed\'b5\'f1;}{\f1\fnil\fcharset2 Symbol;}}
 {\*\generator Msftedit 5.41.21.2510;}\viewkind4\uc1\pard\sa200\sl276\slmult1\lang18\f0\fs20 =============================================================================\par
 2017.01.16 \'bf\'f9\'bf\'e4\'c0\'cf\par
 \b\i <\'c3\'b9\'c2\'b0\'bd\'c3\'b0\'a3>\par
@@ -25407,6 +25407,48 @@ b11e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1eb36e1ff3f2f11f6eb11e1e1e1e1e1e1e1e
 1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e
 1e1e1e1e1e1e1e1e1e1e1e1e1e0000030000000000
 }\par
+\pard\sa200\sl276\slmult1 =============================================================================\par
+2017.01.17 \'c8\'ad\'bf\'e4\'c0\'cf\par
+\b\i <\'c3\'b9\'c2\'b0\'bd\'c3\'b0\'a3>\b0\i0\par
+MonoBehaviour\'b8\'a6 \'bb\'f3\'bc\'d3\'c7\'cf\'b8\'e9 \'bb\'fd\'bc\'ba\'c0\'da,\'bc\'d2\'b8\'ea\'c0\'da\'b8\'a6 \'be\'b2\'b8\'e9 \'be\'c8\'b5\'c8\'b4\'d9 Awake() \'c0\'e7\'c1\'a4\'c0\'c7\'c7\'d8\'bc\'ad \'bb\'fd\'bc\'ba\'c0\'da \'bf\'aa\'c7\'d2\'c0\'bb \'c7\'cf\'b8\'e9 \'b5\'c8\'b4\'d9.( \'b0\'b4\'c3\'bc \'bb\'fd\'bc\'ba\'bd\'c3 \'c8\'a3\'c3\'e2\'b5\'ca)\par
+LateUpdate() : \'b8\'f0\'b5\'e7 \'bf\'c0\'ba\'ea\'c1\'a7\'c6\'ae\'b5\'e9\'c0\'c7 \'be\'f7\'b5\'a5\'c0\'cc\'c6\'ae\'b0\'a1 \'b4\'d9 \'b5\'c7\'b0\'ed \'b3\'aa\'bc\'ad.. (PostFrame() \'b0\'fa \'b0\'b0\'c0\'ba \'bf\'aa\'c7\'d2)\par
+Debug.Log( "\'b9\'ae\'c0\'da\'bf\'ad"); // \'c0\'cc\'b0\'cd\'c0\'b8\'b7\'ce \'c3\'e2\'b7\'c2 \'c7\'cf\'b8\'e9 VS\'bf\'cd \'c0\'af\'b4\'cf\'c6\'bc \'be\'e7\'c2\'ca \'c4\'dc\'bc\'d6\'bf\'a1\'bc\'ad \'c3\'e2\'b7\'c2\'c0\'cc \'b5\'c8\'b4\'d9.\par
+Camera.main.transform.position = //\'c4\'ab\'b8\'de\'b6\'f3\'c0\'c7 \'c6\'f7\'c1\'f6\'bc\'c7\'c0\'bb \'ba\'af\'b0\'e6.\par
+\'c0\'ce\'c7\'b2 \'c3\'b3\'b8\'ae. \'c1\'c2\'bf\'ec \'c3\'b3\'b8\'ae \'c4\'da\'b5\'e5\par
+\pard{\pntext\f1\'B7\tab}{\*\pn\pnlvlblt\pnf1\pnindent0{\pntxtb\'B7}}\fi-360\li720\sa200\sl276\slmult1 Input.GetButton("Horizontal"));\par
+{\pntext\f1\'B7\tab}int iDir = Input.GetAxis("Horizontal") < 0 ? -1 : 1;\par
+\pard\sa200\sl276\slmult1\'b9\'b0\'b8\'ae\'c0\'fb\'bf\'eb(\'c4\'de\'c6\'f7\'b3\'cd\'c6\'ae Rigidbody \'c3\'df\'b0\'a1\'c8\'c4)\par
+\pard{\pntext\f1\'B7\tab}{\*\pn\pnlvlblt\pnf1\pnindent0{\pntxtb\'B7}}\fi-360\li720\sa200\sl276\slmult1 Rigidbody m_Rigidbody = GetComponent<Rigidbody>();\par
+{\pntext\f1\'B7\tab}Vector3 velocity = new Vector3(iDir * 3.0f, m_Rigidbody.velocity.y, 0);\par
+{\pntext\f1\'B7\tab}m_Rigidbody.velocity = velocity;\par
+\pard\sa200\sl276\slmult1\'c1\'a1\'c7\'c1 \'c5\'b0 \'c3\'b3\'b8\'ae\par
+\pard{\pntext\f1\'B7\tab}{\*\pn\pnlvlblt\pnf1\pnindent0{\pntxtb\'B7}}\fi-360\li720\sa200\sl276\slmult1 if(Input.GetButton("Jump"))\par
+\pard{\pntext\f1\'B7\tab}{\*\pn\pnlvlblt\pnf1\pnindent0{\pntxtb\'B7}}\fi-360\li720\sa200\sl276\slmult1\{  m_Rigidbody.velocity = new Vector3(m_Rigidbody.velocity.x, -Physics.gravity.y, 0); \}\par
+\pard\sa200\sl276\slmult1\b\i <\'b5\'d1\'c2\'b0\'bd\'c3\'b0\'a3>\b0\i0\par
+\'ba\'ae\'c0\'c7 Collision \'c3\'b3\'b8\'ae.(\'ba\'ae \'b0\'b4\'c3\'bc \'c5\'ac\'b7\'a1\'bd\'ba\'bf\'a1\'bc\'ad \'be\'c6\'b7\'a1 \'b8\'de\'bc\'ad\'b5\'e5 \'c0\'e7\'c1\'a4\'c0\'c7 \'c7\'d1\'b4\'d9. col\'b7\'ce \'ba\'ce\'b5\'fa\'c8\'f9 \'b0\'b4\'c3\'bc\'b0\'a1 \'c0\'fc\'b4\'de\'b5\'c8\'b4\'d9.)\par
+\pard{\pntext\f1\'B7\tab}{\*\pn\pnlvlblt\pnf1\pnindent0{\pntxtb\'B7}}\fi-360\li720\sa200\sl276\slmult1 public GameObject m_Player = null;\par
+{\pntext\f1\'B7\tab}public void OnCollisionEnter(Collision col)\{\par
+\pard{\pntext\f1\'B7\tab}{\*\pn\pnlvlblt\pnf1\pnindent0{\pntxtb\'B7}}\fi-360\li720\sa200\sl276\slmult1 if(col.gameObject.CompareTag("Player"))\{ // \'b6\'c7\'b4\'c2 if(col.gameObject.tag == "Player") // if(col.gameObject.name == "Player") \par
+\pard{\pntext\f1\'B7\tab}{\*\pn\pnlvlblt\pnf1\pnindent0{\pntxtb\'B7}}\fi-360\li720\sa200\sl276\slmult1           Player user = m_Player.GetComponet<Player>();\par
+{\pntext\f1\'B7\tab}          user.bJump = false; \par
+{\pntext\f1\'B7\tab}     \}\par
+{\pntext\f1\'B7\tab}\}\par
+\pard\sa200\sl276\slmult1\'bd\'ba\'c5\'a9\'b8\'b3\'c6\'ae\'bf\'a1 public\'c0\'b8\'b7\'ce \'b3\'f5\'c0\'ba \'b5\'a5\'c0\'cc\'c5\'cd\'b4\'c2 Unity\'c0\'c7 \'c0\'ce\'bd\'ba\'c6\'e5\'c5\'cd \'c3\'a2\'bf\'a1\'bc\'ad \'ba\'af\'b0\'e6 \'b0\'a1\'b4\'c9\'c7\'cf\'b4\'d9.\par
+Tag \'bc\'b3\'b8\'ed.\par
+Unity3d.pdf  Scripting API \'bc\'b3\'b8\'ed. \'bd\'bd\'b6\'f3\'c0\'cc\'b5\'e5 44p ~ \par
+OnCollisionStay,OnCollisionExit, OnCollisionEnter. \'c0\'e7\'c1\'a4\'c0\'c7\'c7\'d8\'bc\'ad \'c3\'e6\'b5\'b9\'c3\'b3\'b8\'ae \'b0\'a1\'b4\'c9\'c7\'cf\'b4\'d9.\par
+Box Collider\'c0\'c7 Is Trigger \'c3\'bc\'c5\'a9: Is Trigger\'b4\'c2 \'b4\'dc\'bc\'f8 \'c4\'b3\'c4\'a1 \'bf\'eb\'b5\'b5\'b7\'ce \'bb\'e7\'bf\'eb\'c7\'d1\'b4\'d9. ( OnCollisionEnter\'b4\'c2 \'b9\'b0\'b8\'ae\'bf\'c0\'ba\'ea\'c1\'a7\'c6\'ae \'b3\'a2\'b8\'ae \'bb\'e7\'bf\'eb\'b0\'a1\'b4\'c9\'c7\'d4.)\par
+\pard{\pntext\f1\'B7\tab}{\*\pn\pnlvlblt\pnf1\pnindent0{\pntxtb\'B7}}\fi-360\li720\sa200\sl276\slmult1 //IEnumerator OnTriggerEnter(Collider hit)\{\par
+{\pntext\f1\'B7\tab}void OnTriggerEnter(Collider hit)\{\par
+{\pntext\f1\'B7\tab}    if(hit.gameObject.tag == "Player")\{\par
+{\pntext\f1\'B7\tab}        Destroy(hit.gameObject); //Destroy(this, 1.0f); //1\'c3\'ca \'c1\'f6\'b3\'aa\'bc\'ad \'c0\'da\'b1\'e2 \'c0\'da\'bd\'c5\'c0\'bb \'bb\'e8\'c1\'a6. \'c0\'cc \'c4\'da\'b5\'e5\'b4\'c2 \'b5\'bf\'c0\'db\'c7\'cf\'c1\'f6 \'be\'ca\'be\'d2\'b4\'d9.\par
+{\pntext\f1\'B7\tab}    \}\par
+{\pntext\f1\'B7\tab}\}\par
+\pard\sa200\sl276\slmult1 prefab \'bc\'b3\'b8\'ed.\par
+UI: \'c8\'ad\'b8\'e9 \'bb\'e7\'c0\'cc\'c1\'ee\'b0\'a1 \'b4\'de\'b6\'f3\'c1\'fa\'b6\'a7\'b8\'a6 \'c0\'a7\'c7\'d8\'bc\'ad \'c0\'db\'be\'f7. heirachy\'ba\'e4\'bf\'a1\'bc\'ad  canvas \'bc\'b1\'c5\'c3\'c7\'cf\'b0\'ed Inspector view\'bf\'a1\'bc\'ad \'b0\'fc\'b7\'c3 \'bc\'d3\'bc\'ba \'ba\'af\'b0\'e6\'c7\'d1\'b4\'d9.\par
+Scene \'c0\'fc\'c8\'af \'b1\'b8\'c7\'f6.\par
+\pard{\pntext\f1\'B7\tab}{\*\pn\pnlvlblt\pnf1\pnindent0{\pntxtb\'B7}}\fi-360\li720\sa200\sl276\slmult1 using UnityEngine.SceneManager;\par
+{\pntext\f1\'B7\tab}SceneManager.LoadScene("game2d); // \'b6\'c7\'b4\'c2 LoadScene( 1 ); \'c0\'cc\'b7\'b8\'b0\'d4 \'c0\'ce\'b5\'a6\'bd\'ba \'b9\'f8\'c8\'a3\'b8\'a6 \'bb\'e7\'bf\'eb\'c7\'d2 \'bc\'f6 \'c0\'d6\'b4\'d9. \'c0\'ce\'b5\'a6\'bd\'ba \'b9\'f8\'c8\'a3\'b4\'c2 \'ba\'f4\'b5\'e5 \'bc\'c2\'c6\'c3\'bf\'a1\'bc\'ad \'c3\'df\'b0\'a1 \'c7\'d2 \'bc\'f6 \'c0\'d6\'b4\'d9.\par
 \pard\sa200\sl276\slmult1\par
 }
  
