@@ -1,0 +1,11 @@
+자기소개
+3d게임개발에지원하게된계기
+
+프로세스와 쓰레드의 차이
+리스트 벡터의 차이
+virtual설명
+unique_ptr shared_ptr weak_ptr
+static_cast const_cast dynamic_cast
+
+프로젝트를 하면서 문제가 있었을때 어떻게 대처하였는지
+회사질문
