@@ -1,4 +1,4 @@
-------------------------------------------------------------------------------------------
+﻿------------------------------------------------------------------------------------------
 [올리기]
 git status
 git add .
@@ -35,3 +35,15 @@ git pull
 5.cmd 창에서 git status를 쳐보면 불필요한 파일들이 생성되어있을 것이다 .orig 등 이것들을 아래 명령어로 날려준다
 > git clean -xdf
 6.그 이후 git commit -a  를 입력하여 머지 커밋 작성을 완료 한다.
+------------------------------------------------------------------------------------------
+patch 생성방법.
+
+git diff --binary <before commit id> <after commit id> > > <file name >
+ex)
+> git diff --binary abcdefghi qwertyui > ~/1.diff
+
+patch 적용방법.
+
+git apply --reject <file name>
+ex)
+> git apply --reject ~/1.diff
