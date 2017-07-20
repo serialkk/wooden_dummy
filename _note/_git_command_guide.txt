@@ -47,3 +47,11 @@ patch 적용방법.
 git apply --reject <file name>
 ex)
 > git apply --reject ~/1.diff
+------------------------------------------------------------------------------------------
+git windows 에서 bash home 위치 바꾸기.
+> vi .bashrc 
+
+편집기에서 아래 2줄 추가하고 저장한다.
+
+HOME=/d/_GitHome
+cd ~
