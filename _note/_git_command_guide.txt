@@ -78,3 +78,12 @@ $ git remote -v
 # Verify new remote URL
 origin  https://github.com/user/repo2.git (fetch)
 origin  https://github.com/user/repo2.git (push)
+------------------------------------------------------------------------------------------
+Git asks for username every time I push. 해결법 ( 출처: https://stackoverflow.com/questions/11403407/git-asks-for-username-every-time-i-push )
+
+$ git config credential.helper store
+$ git push http://example.com/repo.git
+Username: <type your username>
+Password: <type your password>
+
+
