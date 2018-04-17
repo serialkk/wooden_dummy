@@ -7,6 +7,8 @@
  git remote add origin https://github.com/serialkk/studentmanagement.git
  git push -u origin master
  git log
+ git log --deco
+ git log -p
  git commit --amend
  git push -u origin master
 
