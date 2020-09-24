@@ -85,5 +85,9 @@ $ git config credential.helper store
 $ git push http://example.com/repo.git
 Username: <type your username>
 Password: <type your password>
+------------------------------------------------------------------------------------------
+참고할만한 글. 우아한형제들 git flow.
+https://woowabros.github.io/experience/2017/10/30/baemin-mobile-git-branch-strategy.html
 
-
+쓸만한 툴. source tree.
+https://www.sourcetreeapp.com/
