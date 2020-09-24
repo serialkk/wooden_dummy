@@ -1,5 +1,5 @@
  git init
- git config --global user.email "serialkk@naver.com"
+ git config --global user.email "xxxxx@gmail.com"
  git config --global user.name "Tom Jaejoon Lee"
  
  git add .
@@ -7,7 +7,7 @@
  git remote add origin https://github.com/serialkk/studentmanagement.git
  git push -u origin master
  git log
- git log --deco
+ git log --decorate
  git log -p
  git show
  git blame <file name> <commit id>
@@ -39,3 +39,19 @@
  //모든 태그 한번에 푸쉬하기
  git push origin --tags
  
+git diff
+
+git stash
+git stash apply
+
+git log --author=xxxxx
+
+//깃헙 pull request 올리기
+git push origin HEAD:feature_<기능이름> 
+
+git clean -xdf
+git checkout -f
+
+git grep xxxxx
+
+git config -l
